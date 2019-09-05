@@ -15,21 +15,40 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_user_can_create_a_post()
     {
-        $this->WithoutExceptionHandling();
+        // $this->WithoutExceptionHandling();
 
-        // Given I'm a user who is logged in
-        $user = factory(User::class)->create();
+        $user = $this->signIn();
 
-        $post = factory(Post::class)->raw();
+        $this->followingRedirects()
+            ->post('/posts', $post = factory(Post::class)->raw(['user_id' => $user->id]))
+            ->assertSee($post['body']);
+    }
 
-        $this->actingAs($user);
+    /** @test */
+    public function a_guest_cannot_create_a_post()
+    {
+        $this->post('/posts')->assertRedirect('login');
+    }
 
-        $this->get('/posts/create')->assertStatus(200);
+    /** @test */
+    public function a_post_requires_a_body()
+    {
+        // $this->WithoutExceptionHandling();
+        $this->signIn();
+        
+        $this->post('/posts', factory(Post::class)->raw(['body' => '']))
+            ->assertSessionHasErrors('body');
+    }
 
-        // When they hit the end point /posts to create a new post, while passing the necessary data
-        $this->post('/posts', $post);
+    /** @test */
+    public function anyone_can_view_all_posts()
+    {
+        // Guest
+        $this->get('/')->assertStatus(200);
 
-        // Then there should be a new post in the database
-        $this->assertDatabaseHas('posts', $post);
+        // User
+        $this->signIn();
+        
+        $this->get('/')->assertStatus(200);
     }
 }

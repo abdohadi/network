@@ -7,13 +7,21 @@ use App\Post;
 
 class PostsController extends Controller
 {
-	public function create()
+	public function index()
 	{
-		return view('posts.create');
+		$posts = Post::latest()->get();
+
+		return view('posts.index', compact('posts'));
 	}
 
 	public function store()
 	{
-		Post::create(request(['body']));
+		$attributes = request()->validate([
+			'body' => 'required'
+		]);
+
+		auth()->user()->posts()->create($attributes);
+
+		return redirect('/');
 	}
 }

@@ -11,13 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'PostsController@index');
+
+Route::get('/home', function () {
+	return redirect('/');
+});
+Route::get('/posts', function () {
+	return redirect('/');
 });
 
+
+Route::post('/posts', 'PostsController@store')->middleware('auth');
+
+
+
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::post('/posts', 'PostsController@store');
-Route::get('/posts/create', 'PostsController@create');
