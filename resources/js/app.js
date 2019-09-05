@@ -19,7 +19,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('edit-post-modal', require('./components/EditPostModal.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,4 +29,38 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+});
+
+
+
+
+
+
+
+/**
+* Our custom jquery
+*/
+$(document).ready(function () {
+	// Show post options
+	$('#show-options').click(function () { 
+		$('#post-options').fadeToggle();
+	});
+
+	// Hide post options when clicking anywhere
+	$('body').click(function (element) {
+		if (element.target.id == 'show-options') {
+			return;
+		} 
+
+		$('#post-options').fadeOut(); 
+	});
+
+
+	// Show post data in modal
+	$('.open-modal').click(function () {
+		let post = $(this).data('post');
+
+		$('.modal').find('form').find('textarea').text(post.body);
+		$('.modal').find('form').attr('action', 'posts/' + post.id);
+	});
 });

@@ -22,6 +22,7 @@ Route::get('/posts', function () {
 
 
 Route::post('/posts', 'PostsController@store')->middleware('auth');
+Route::patch('/posts/{post}', 'PostsController@update')->middleware('auth');
 
 
 

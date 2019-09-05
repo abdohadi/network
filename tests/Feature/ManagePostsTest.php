@@ -16,11 +16,11 @@ class ManagePostsTest extends TestCase
     public function a_user_can_create_a_post()
     {
         // $this->WithoutExceptionHandling();
-
-        $user = $this->signIn();
+        $post = factory(Post::class)->create();
 
         $this->followingRedirects()
-            ->post('/posts', $post = factory(Post::class)->raw(['user_id' => $user->id]))
+            ->actingAs($post->owner)
+            ->post('/posts', $post->toArray())
             ->assertSee($post['body']);
     }
 
@@ -33,9 +33,8 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_post_requires_a_body()
     {
-        // $this->WithoutExceptionHandling();
         $this->signIn();
-        
+
         $this->post('/posts', factory(Post::class)->raw(['body' => '']))
             ->assertSessionHasErrors('body');
     }
@@ -50,5 +49,18 @@ class ManagePostsTest extends TestCase
         $this->signIn();
         
         $this->get('/')->assertStatus(200);
+    }
+
+    /** @test */
+    public function a_user_can_update_their_posts()
+    {
+        $this->WithoutExceptionHandling();
+
+        $post = factory(Post::class)->create();
+
+        $this->be($post->owner)
+            ->patch($post->path(), $attributes = ['body' => 'updated body']);
+
+        $this->assertDatabaseHas('posts', $attributes);
     }
 }

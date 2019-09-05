@@ -24,4 +24,15 @@ class PostsController extends Controller
 
 		return redirect('/');
 	}
+
+	public function update(Post $post)
+	{
+		$attributes = request()->validate([
+			'body' => 'required'
+		]);
+
+		$post->update($attributes);
+
+		return redirect('/');
+	}
 }

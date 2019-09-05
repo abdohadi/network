@@ -20,30 +20,19 @@
 			</div>
 
 			<div>
-				<input type="submit" name="create" class="button-primary" value="Create">
+				<input type="submit" name="create" class="button-primary" value="Post">
 			</div>
 		</form>
 	</div>
 
 	{{-- Show Posts --}}
 	@forelse($posts as $post)
-		<div class="card lg:w-1/2 mb-4 m-auto">
-			<div class="relative">
-				<div class="flex items-center ">
-					<img src="{{ gravatar($post->user->email) }}" class="rounded-full w-12 mr-2"> 
-					<span>{{ $post->user->name }}</span>
-				</div>
-
-				<span 
-					class="block text-gray-500 text-xs absolute"
-					style="left:53px; top:38px">{{ $post->created_at->diffForHumans() }}</span>
-			</div>
-
-
-			<div class="text-gray-600 px-6 pt-8 pb-4">{{ $post->body }}</div>
-		</div>
+		@include('posts.post')
 	@empty
-		No posts yet
+		<div class="card lg:w-1/2">No posts yet</div>
 	@endforelse
+
+
+	@include('posts.edit-modal')
 
 @endsection
