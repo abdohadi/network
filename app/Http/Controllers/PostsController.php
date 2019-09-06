@@ -14,6 +14,11 @@ class PostsController extends Controller
 		return view('posts.index', compact('posts'));
 	}
 
+	public function show(Post $post)
+	{
+		return view('posts.show', compact(['post']));
+	}
+
 	public function store()
 	{
 		$attributes = request()->validate([
@@ -27,11 +32,22 @@ class PostsController extends Controller
 
 	public function update(Post $post)
 	{
+		$this->authorize('update', $post);
+
 		$attributes = request()->validate([
 			'body' => 'required'
 		]);
 
 		$post->update($attributes);
+
+		return redirect('/');
+	}
+
+	public function destroy(Post $post)
+	{
+		$this->authorize('update', $post);
+
+		$post->delete();
 
 		return redirect('/');
 	}

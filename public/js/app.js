@@ -49323,8 +49323,9 @@ var app = new Vue({
 
 $(document).ready(function () {
   // Show post options
-  $('#show-options').click(function () {
-    $('#post-options').fadeToggle();
+  $('i#show-options').click(function () {
+    $(this).siblings('div#post-options').fadeToggle(100);
+    $('div#post-options').not($(this).parent().find('div#post-options')).fadeOut(100);
   }); // Hide post options when clicking anywhere
 
   $('body').click(function (element) {
@@ -49332,13 +49333,23 @@ $(document).ready(function () {
       return;
     }
 
-    $('#post-options').fadeOut();
+    $('div#post-options').fadeOut(100);
   }); // Show post data in modal
 
   $('.open-modal').click(function () {
     var post = $(this).data('post');
     $('.modal').find('form').find('textarea').text(post.body);
     $('.modal').find('form').attr('action', 'posts/' + post.id);
+  }); // Show errors when clicking submit button
+
+  $('#submit-update, #submit-create').click(function (e) {
+    var textarea = $(this).parents('form').find('textarea');
+
+    if (textarea.val() == '') {
+      textarea.addClass('border-red-300');
+      textarea.siblings('#error').show();
+      e.preventDefault();
+    }
   });
 });
 

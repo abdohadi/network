@@ -11442,7 +11442,7 @@ video {
 }
 
 *:hover {
-  transition: 0.7s;
+  transition: 0.5s;
 }
 
 .close-modal {

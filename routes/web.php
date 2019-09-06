@@ -11,19 +11,23 @@
 |
 */
 
-Route::get('/', 'PostsController@index');
 
-Route::get('/home', function () {
-	return redirect('/');
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('/', 'PostsController@index');
+
+	Route::get('/home', function () {
+		return redirect('/');
+	});
+	
+	Route::get('/posts', function () {
+		return redirect('/');
+	});
+
+	Route::post('/posts', 'PostsController@store');
+	Route::get('/posts/{post}', 'PostsController@show');
+	Route::patch('/posts/{post}', 'PostsController@update');
+	Route::delete('/posts/{post}', 'PostsController@destroy');
+
 });
-Route::get('/posts', function () {
-	return redirect('/');
-});
-
-
-Route::post('/posts', 'PostsController@store')->middleware('auth');
-Route::patch('/posts/{post}', 'PostsController@update')->middleware('auth');
-
-
 
 Auth::routes();
