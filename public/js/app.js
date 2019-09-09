@@ -49328,7 +49328,7 @@ $(document).ready(function () {
     $('div#post-options').not($(this).parent().find('div#post-options')).fadeOut(100);
   }); // Hide post options when clicking anywhere
 
-  $('body').click(function (element) {
+  $(document).click(function (element) {
     if (element.target.id == 'show-options') {
       return;
     }
@@ -49339,7 +49339,10 @@ $(document).ready(function () {
   $('.open-modal').click(function () {
     var post = $(this).data('post');
     $('.modal').find('form').find('textarea').text(post.body);
-    $('.modal').find('form').attr('action', 'posts/' + post.id);
+
+    if (window.location.pathname == '/' || window.location.pathname == '/home') {
+      $('.modal').find('form').attr('action', '/posts/' + post.id);
+    }
   }); // Show errors when clicking submit button
 
   $('#submit-update, #submit-create').click(function (e) {
@@ -49349,6 +49352,12 @@ $(document).ready(function () {
       textarea.addClass('border-red-300');
       textarea.siblings('#error').show();
       e.preventDefault();
+    }
+  }); // Redirect to post page when u click on it
+
+  $('.post').click(function (e) {
+    if (!$(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'open-modal') {
+      window.location = $(this).data('post');
     }
   });
 });

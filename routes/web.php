@@ -1,5 +1,7 @@
 <?php
 
+
+// dd($_SERVER);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,21 +15,20 @@
 
 
 Route::group(['middleware' => ['auth']], function () {
-	Route::get('/', 'PostsController@index');
-
-	Route::get('/home', function () {
-		return redirect('/');
-	});
+	// home routes
+	Route::get('/', 'HomeController@index');
+	Route::get('/home', 'HomeController@index');
 	
-	Route::get('/posts', function () {
-		return redirect('/');
-	});
 
+	// posts routes
 	Route::post('/posts', 'PostsController@store');
-	Route::get('/posts/{post}', 'PostsController@show');
 	Route::patch('/posts/{post}', 'PostsController@update');
 	Route::delete('/posts/{post}', 'PostsController@destroy');
-
 });
+
+Route::get('/posts/{post}', 'PostsController@show');
+
+Route::get('/users/{user}', 'UsersController@show');
+
 
 Auth::routes();

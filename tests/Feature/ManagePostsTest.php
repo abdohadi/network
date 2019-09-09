@@ -36,10 +36,13 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_user_can_view_the_home_page()
     {
+        $this->WithoutExceptionHandling();
         // User
         $this->signIn();
         
-        $this->get('/')->assertStatus(200);
+        $this->get('/')->assertOk();
+
+        $this->get('/home')->assertOk();
     }
 
     /** @test */
@@ -74,23 +77,29 @@ class ManagePostsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_posts()
+    public function a_user_can_view_a_post()
     {
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
             ->get($post->path())
-            ->assertSee($post->body);
+            ->assertOk();
+    }
+
+    /** @test */
+    public function a_guest_can_view_a_post()
+    {
+        $post = factory(Post::class)->create();
+
+        $this->be($post->owner)
+            ->get($post->path())
+            ->assertOk();
     }
 
     /** @test */
     public function guests_cannot_manage_posts()
     {
         $path = factory(Post::class)->create()->path();
-
-        $this->get('/posts')->assertRedirect('login');
-
-        $this->get($path)->assertRedirect('login');
 
         $this->post('/posts')->assertRedirect('login');
 

@@ -11469,6 +11469,27 @@ video {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.button-outline {
+  border-width: 1px;
+  border-color: #90cdf4;
+  margin-left: auto;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  color: #718096;
+  font-size: 0.75rem;
+}
+
+.post {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1rem;
+  margin: auto;
+  margin-bottom: 1rem;
+  border-width: 1px;
+  border-color: #edf2f7;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

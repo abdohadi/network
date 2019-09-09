@@ -1,23 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
+    <div class="lg:flex">
+        {{-- Make new friends --}}
+        @include('users.people')
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
+        <div class="lg:w-1/2 mx-2">
+            {{-- Create New Post --}}
+            <div class="card mb-4">
+                @include('posts.form', [
+                    'action' => '/posts',
+                    'submit_value' => 'Post',
+                    'submit_id' => 'submit-create',
+                ])
             </div>
+
+            {{-- Show Posts --}}
+            @forelse($posts as $post)
+                @include('posts.post')
+            @empty
+                <div class="card">No posts yet</div>
+            @endforelse
+        </div>
+
+        <div class="card lg:w-1/4 mx-2 sm:hidden lg:block">
+            right
         </div>
     </div>
-</div>
+
+
+    @include('posts.edit-modal')
+
 @endsection
