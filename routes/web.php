@@ -1,7 +1,6 @@
 <?php
 
 
-// dd($_SERVER);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,11 +23,18 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/posts', 'PostsController@store');
 	Route::patch('/posts/{post}', 'PostsController@update');
 	Route::delete('/posts/{post}', 'PostsController@destroy');
+
+
+	// groups routes
+	Route::post('/groups', 'GroupsController@store');
+
 });
 
 Route::get('/posts/{post}', 'PostsController@show');
 
 Route::get('/users/{user}', 'UsersController@show');
+
+Route::get('/groups/{group}', 'GroupsController@show');
 
 
 Auth::routes();

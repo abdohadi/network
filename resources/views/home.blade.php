@@ -2,8 +2,13 @@
 
 @section('content')
     <div class="lg:flex">
-        {{-- Make new friends --}}
-        @include('users.people')
+        <div class="lg:w-1/4 mx-2 sm:hidden lg:block">
+            {{-- Make new friends --}}
+            @include('users.people_you_may_know')
+
+            {{-- Join new groups --}}
+            @include('groups.groups_you_may_join')
+        </div>
 
         <div class="lg:w-1/2 mx-2">
             {{-- Create New Post --}}
@@ -11,7 +16,7 @@
                 @include('posts.form', [
                     'action' => '/posts',
                     'submit_value' => 'Post',
-                    'submit_id' => 'submit-create',
+                    'submit_id' => 'submit-create-post',
                 ])
             </div>
 
@@ -24,11 +29,13 @@
         </div>
 
         <div class="card lg:w-1/4 mx-2 sm:hidden lg:block">
-            right
+            <a href="#group-modal" rel="modal:open" class="button-primary open-group-modal">Create Group</a>
         </div>
     </div>
 
 
+    {{-- Modals --}}
     @include('posts.edit-modal')
+    @include('groups.create-modal')
 
 @endsection

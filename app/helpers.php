@@ -1,6 +1,7 @@
 <?php 
 
 use App\User;
+use App\Group;
 
 /****************
 *
@@ -16,5 +17,10 @@ function gravatar($email, $size = 40) {
 
 
 function peopleYouMayKnow() {
-	return User::latest()->get();
+	return User::latest()->get()->except([auth()->id()]);
+}
+
+
+function groupsYouMayJoin() {
+	return Group::latest()->whereNotIn('user_id', [auth()->id()])->get();		// we will need to except our groups 
 }

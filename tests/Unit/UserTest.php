@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
+use App\Group;
 
 class UserTest extends TestCase
 {
@@ -22,8 +23,12 @@ class UserTest extends TestCase
     /** @test */
     public function it_can_have_posts()
     {
-    	$user = factory(User::class)->create();
+        $this->assertInstanceOf(User::class, factory(User::class)->create());
+    }
 
-    	$this->assertInstanceOf(User::class, $user);
+    /** @test */
+    public function it_can_have_groups()
+    {
+        $this->assertInstanceOf(Group::class, factory(Group::class)->create());
     }
 }

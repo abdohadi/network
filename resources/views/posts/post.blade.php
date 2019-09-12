@@ -10,8 +10,8 @@
         <div id="post-options" class="bg-white rounded-lg shadow-lg p-4 absolute right-0 mr-10 w-40 text-center" style="top:-8px;display:none">
         	<ul>
                 <!-- Link to open the modal -->
-        		<a data-post="{{ $post }}" href="#ex1" rel="modal:open" class="open-modal">
-        			<li  class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-modal">Edit Post</li>
+        		<a data-post="{{ $post }}" href="#post-modal" rel="modal:open" class="open-post-modal">
+        			<li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">Edit Post</li>
         		</a>
 
                 <form action="{{ $post->path() }}" method="POST">
@@ -28,7 +28,7 @@
                 <img src="{{ gravatar($post->owner->email) }}" class="rounded-full w-12 mr-2">
             </a> 
             <a href="{{ $post->owner->path() }}">
-                <span class="text-gray-600 hover:text-gray-800">{{ $post->owner->name }}</span>
+                <span>{{ $post->owner->name }}</span>
             </a>
         </div>
 

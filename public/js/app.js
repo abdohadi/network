@@ -49336,28 +49336,57 @@ $(document).ready(function () {
     $('div#post-options').fadeOut(100);
   }); // Show post data in modal
 
-  $('.open-modal').click(function () {
+  $('.open-post-modal').click(function () {
     var post = $(this).data('post');
-    $('.modal').find('form').find('textarea').text(post.body);
+    $('.post-modal').find('form').find('textarea').text(post.body);
 
     if (window.location.pathname == '/' || window.location.pathname == '/home') {
-      $('.modal').find('form').attr('action', '/posts/' + post.id);
+      $('.post-modal').find('form').attr('action', '/posts/' + post.id);
     }
-  }); // Show errors when clicking submit button
+  }); // Show post errors when clicking submit button
 
-  $('#submit-update, #submit-create').click(function (e) {
+  $('#submit-update-post, #submit-create-post').click(function (e) {
     var textarea = $(this).parents('form').find('textarea');
 
     if (textarea.val() == '') {
       textarea.addClass('border-red-300');
       textarea.siblings('#error').show();
       e.preventDefault();
+    } else {
+      textarea.removeClass('border-red-300');
+      textarea.addClass('border-green-500');
+      textarea.siblings('#error').hide();
     }
   }); // Redirect to post page when u click on it
 
   $('.post').click(function (e) {
-    if (!$(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'open-modal') {
+    if (!$(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'open-post-modal') {
       window.location = $(this).data('post');
+    }
+  }); // Show group errors when clicking submit button
+
+  $('#submit-create-group').click(function (e) {
+    var nameInput = $(this).parents('form').find('#name');
+    var descriptionInput = $(this).parents('form').find('#description');
+
+    if (nameInput.val() == '') {
+      nameInput.addClass('border-red-300');
+      nameInput.siblings('#error').show();
+      e.preventDefault();
+    } else {
+      nameInput.removeClass('border-red-300');
+      nameInput.addClass('border-green-500');
+      nameInput.siblings('#error').hide();
+    }
+
+    if (descriptionInput.val() == '') {
+      descriptionInput.addClass('border-red-300');
+      descriptionInput.siblings('#error').show();
+      e.preventDefault();
+    } else {
+      descriptionInput.removeClass('border-red-300');
+      descriptionInput.addClass('border-green-500');
+      descriptionInput.siblings('#error').hide();
     }
   });
 });

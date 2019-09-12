@@ -13,6 +13,8 @@ class HomeController extends Controller
 
         $users = peopleYouMayKnow();
 
-        return view('home', compact(['posts', 'users']));
+        $groups = groupsYouMayJoin();
+
+        return view('home', compact(['posts', 'users', 'groups']));
     }
 }

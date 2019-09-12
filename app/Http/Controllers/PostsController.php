@@ -13,7 +13,9 @@ class PostsController extends Controller
 	{
 		$users = peopleYouMayKnow();
 
-		return view('posts.show', compact(['post', 'users']));
+    $groups = groupsYouMayJoin();
+
+		return view('posts.show', compact(['post', 'users', 'groups']));
 	}
 
 	public function store()
@@ -22,9 +24,9 @@ class PostsController extends Controller
 			'body' => 'required'
 		]);
 
-		auth()->user()->posts()->create($attributes);
+		$post = auth()->user()->posts()->create($attributes);
 
-		return redirect('/');
+		return redirect($post->path());
 	}
 
 	public function update(Post $post)

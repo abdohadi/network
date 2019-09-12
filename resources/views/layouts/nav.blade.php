@@ -32,7 +32,7 @@
                         </div>
 
                         <a href="users/{{ auth()->user()->id }}" class="flex items-center cursor-pointer">
-                            <span class="text-sm">{{ Auth::user()->name }}</span>
+                            <span class="text-sm text-gray-800">{{ Auth::user()->name }}</span>
                             <img src="{{ gravatar(auth()->user()->email) }}" class="rounded-full w-8 ml-2 h-8 text-sm"> 
                         </a>
                     </li>
