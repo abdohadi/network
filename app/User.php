@@ -53,4 +53,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Group::class);
     }
+
+    public function sendFriendRequest(self $user)
+    {
+        $this->sentFriendRequests()->attach($user);
+    }
+
+    public function sentFriendRequests()
+    {
+        return $this->belongsToMany(self::class, 'friend_requests', 'from_user_id', 'to_user_id')->withTimestamps();
+    }
+
 }

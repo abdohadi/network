@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +26,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 	// groups routes
 	Route::post('/groups', 'GroupsController@store');
+
+
+	// friend request
+	Route::get('/users/add/{user}', 'FriendRequestsController@send');
+
 
 });
 

@@ -15,7 +15,7 @@ module.exports = {
       black: '#000',
       white: '#fff',
 
-      main: '#fbfbfb',
+      primary: '#4399e0',
       // card: '#6f6f6f',
 
       gray: {

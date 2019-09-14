@@ -13,7 +13,19 @@
         <a href="{{ $user->path() }}">
             <span>{{ $user->name }}</span>
         </a>
-        <button class="button-outline ml-auto"><i class="fa fa-user-plus"></i> Add</button>
+        @if (auth()->user()->sentFriendRequests->contains($user))
+	        <a 
+	        	href="/users/cancel/{{ $user->id }}" 
+	        	class="button-outline-secondary ml-auto"
+	        	title="Click to cancel the request"
+	        ><i class="fa fa-check"></i> Sent</a>
+	      @else
+	        <a 
+	        	href="/users/add/{{ $user->id }}" 
+	        	class="button-outline-primary ml-auto"
+	        	title="Click to send a friend request"
+	        ><i class="fa fa-user-plus"></i> Add</a>
+	      @endif
     	</div>
 		@empty
 			<div>No users yet</div>

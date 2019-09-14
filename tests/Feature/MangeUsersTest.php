@@ -27,4 +27,17 @@ class MangeUsersTest extends TestCase
         $this->signIn();
         $this->get($user->path())->assertSee($user->name);
     }
+
+    /** @test */
+    public function a_user_can_send_a_friend_request_to_another_user()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $this->get('users/add/'.$anotherUser->id)->assertRedirect($anotherUser->path());
+
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+    }
 }

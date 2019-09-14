@@ -30,6 +30,12 @@
 
         <div class="card lg:w-1/4 mx-2 sm:hidden lg:block">
             <a href="#group-modal" rel="modal:open" class="button-primary open-group-modal">Create Group</a>
+            <ul>
+                <li><a href="">friends</a></li>
+                <li><a href="/groups">Groups <span>{{ count(auth()->user()->groups) }}</span></a></li>
+                <li><a href="">Pages</a></li>
+                <li><a href="">Sittings</a></li>
+            </ul>
         </div>
     </div>
 

@@ -13,7 +13,7 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_a_path()
+    public function a_user_has_a_path()
     {
     	$user = factory(User::class)->create();
 
@@ -21,14 +21,27 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_have_posts()
+    public function a_user_can_have_posts()
     {
         $this->assertInstanceOf(User::class, factory(User::class)->create());
     }
 
     /** @test */
-    public function it_can_have_groups()
+    public function a_user_can_have_groups()
     {
         $this->assertInstanceOf(Group::class, factory(Group::class)->create());
+    }
+
+    /** @test */
+    public function a_user_can_send_a_friend_request_to_another_user()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $user->sendFriendRequest($anotherUser);
+
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
     }
 }
