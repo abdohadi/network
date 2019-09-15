@@ -35,16 +35,16 @@
 }
 
 .button-primary {
-	@apply .text-white .px-4 .py-2 .rounded-lg .text-xs .cursor-pointer .shadow-lg .bg-primary;
+	@apply .text-white .px-4 .py-2 .rounded-lg .text-sm .cursor-pointer .shadow-lg .bg-primary;
 }
 
 .button-outline-primary {
-	@apply .border .px-4 .rounded-lg .shadow .text-primary .border-primary;
+	@apply .border .px-4 .rounded-lg .text-sm .shadow .text-primary .border-primary;
 }
 .button-outline-secondary {
-	@apply .border .px-4 .rounded-lg .shadow .border-gray-600 .text-gray-600;
+	@apply .border .px-4 .rounded-lg .text-sm .shadow .border-gray-600 .text-gray-600;
 }
-.button-outline:hover,
+.button-outline-primary:hover,
 .button-outline-secondary:hover {
 	@apply .shadow-lg;
 }

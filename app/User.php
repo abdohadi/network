@@ -59,6 +59,11 @@ class User extends Authenticatable
         $this->sentFriendRequests()->attach($user);
     }
 
+    public function cancelFriendRequest(self $user)
+    {
+        $this->sentFriendRequests()->detach($user);
+    }
+
     public function sentFriendRequests()
     {
         return $this->belongsToMany(self::class, 'friend_requests', 'from_user_id', 'to_user_id')->withTimestamps();

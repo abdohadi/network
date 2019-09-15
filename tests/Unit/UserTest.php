@@ -35,7 +35,7 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_send_a_friend_request_to_another_user()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $anotherUser = factory(User::class)->create();
@@ -43,5 +43,17 @@ class UserTest extends TestCase
         $user->sendFriendRequest($anotherUser);
 
         $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+    }
+
+    /** @test */
+    public function a_user_can_cancel_a_friend_request()
+    {
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $user->cancelFriendRequest($anotherUser);
+
+        $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
     }
 }

@@ -14,17 +14,19 @@
             <span>{{ $user->name }}</span>
         </a>
         @if (auth()->user()->sentFriendRequests->contains($user))
-	        <a 
-	        	href="/users/cancel/{{ $user->id }}" 
+	        <button 
+	        	data-user-id="{{ $user->id }}" 
+	        	id="cancel_friend_request" 
 	        	class="button-outline-secondary ml-auto"
 	        	title="Click to cancel the request"
-	        ><i class="fa fa-check"></i> Sent</a>
+	        ><i class="fa fa-check"></i> Sent</button>
 	      @else
-	        <a 
-	        	href="/users/add/{{ $user->id }}" 
+	        <button 
+	        	data-user-id="{{ $user->id }}" 
+	        	id="send_friend_request" 
 	        	class="button-outline-primary ml-auto"
 	        	title="Click to send a friend request"
-	        ><i class="fa fa-user-plus"></i> Add</a>
+	        ><i class="fa fa-user-plus"></i> Add</button>
 	      @endif
     	</div>
 		@empty

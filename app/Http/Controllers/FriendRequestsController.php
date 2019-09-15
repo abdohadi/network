@@ -10,7 +10,10 @@ class FriendRequestsController extends Controller
     public function send(User $user)
     {
     	auth()->user()->sendFriendRequest($user);
-    	
-    	return redirect($user->path());
+    }
+
+    public function cancel(User $user)
+    {
+    	auth()->user()->cancelFriendRequest($user);
     }
 }

@@ -11463,7 +11463,7 @@ video {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   border-radius: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   cursor: pointer;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   background-color: #4399e0;
@@ -11474,6 +11474,7 @@ video {
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 0.5rem;
+  font-size: 0.875rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   color: #4399e0;
   border-color: #4399e0;
@@ -11484,12 +11485,13 @@ video {
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 0.5rem;
+  font-size: 0.875rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   border-color: #718096;
   color: #718096;
 }
 
-.button-outline:hover,
+.button-outline-primary:hover,
 .button-outline-secondary:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

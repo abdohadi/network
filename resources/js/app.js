@@ -118,6 +118,26 @@ $(document).ready(function () {
 			descriptionInput.siblings('#error').hide();
 		}
 	});
+
+
+	// send friend request
+	$('button#send_friend_request, button#cancel_friend_request').click(function (e) {
+		e.preventDefault();
+
+		if ($(this).attr('id') == 'send_friend_request') {
+			$.get('/users/add/' + $(this).data('user-id'));
+			$(this).attr('id', 'cancel_friend_request');
+			$(this).attr('class', 'button-outline-secondary ml-auto');
+			$(this).attr('title', 'Click to cancel the request');
+			$(this).html('<i class="fa fa-check"></i> Sent');
+		} else {
+			$.get('/users/cancel/' + $(this).data('user-id'))
+			$(this).attr('id', 'send_friend_request');
+			$(this).attr('class', 'button-outline-primary ml-auto');
+			$(this).attr('title', 'Click to send a friend request');
+			$(this).html('<i class="fa fa-plus"></i> Add');
+		}
+	});
 });
 
 	

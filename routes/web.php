@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 	// friend request
 	Route::get('/users/add/{user}', 'FriendRequestsController@send');
+	Route::get('/users/cancel/{user}', 'FriendRequestsController@cancel');
 
 
 });
