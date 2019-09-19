@@ -56,4 +56,30 @@ class UserTest extends TestCase
 
         $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
     }
+
+    /** @test */
+    public function a_user_can_receive_a_friend_request_from_another_user()
+    {
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $anotherUser->sendFriendRequest($user);
+
+        $this->assertTrue($user->receivedFriendRequests->contains($anotherUser));
+    }
+
+    /** @test */
+    public function a_user_can_accept_a_friend_request_from_another_user()
+    {
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $anotherUser->sendFriendRequest($user);
+
+        $user->acceptFriendRequest($anotherUser);
+
+        $this->assertTrue($user->friends->contains($anotherUser));
+    }
 }

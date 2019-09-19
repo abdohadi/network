@@ -16,4 +16,14 @@ class FriendRequestsController extends Controller
     {
     	auth()->user()->cancelFriendRequest($user);
     }
+
+    public function accept(User $user)
+    {
+    	auth()->user()->acceptFriendRequest($user);
+    }
+
+    public function delete(User $user)
+    {
+    	auth()->user()->deleteFriendRequest($user);
+    }
 }

@@ -121,22 +121,44 @@ $(document).ready(function () {
 
 
 	// send friend request
-	$('button#send_friend_request, button#cancel_friend_request').click(function (e) {
-		e.preventDefault();
-
+	$('button#send_friend_request, button#cancel_friend_request, button#accept_friend_request, button#delete_friend_request').click(function () {
 		if ($(this).attr('id') == 'send_friend_request') {
-			$.get('/users/add/' + $(this).data('user-id'));
+			$.get('/users/request/send/' + $(this).data('user-id'));
 			$(this).attr('id', 'cancel_friend_request');
 			$(this).attr('class', 'button-outline-secondary ml-auto');
 			$(this).attr('title', 'Click to cancel the request');
 			$(this).html('<i class="fa fa-check"></i> Sent');
-		} else {
-			$.get('/users/cancel/' + $(this).data('user-id'))
+		} else if ($(this).attr('id') == 'cancel_friend_request') {
+			$.get('/users/request/cancel/' + $(this).data('user-id'))
 			$(this).attr('id', 'send_friend_request');
 			$(this).attr('class', 'button-outline-primary ml-auto');
 			$(this).attr('title', 'Click to send a friend request');
 			$(this).html('<i class="fa fa-plus"></i> Add');
+		} else if ($(this).attr('id') == 'accept_friend_request') {
+			$.get('/users/request/accept/' + $(this).data('user-id'));
+			$(this).parents('#friend-request').fadeOut(500);
+		} else if ($(this).attr('id') == 'delete_friend_request') {
+			$.get('/users/request/delete/' + $(this).data('user-id'));
+			$(this).parents('#friend-request').fadeOut(500);
 		}
+	});
+
+
+	// Show friend requests menue
+	$('#friend-requests-dropdown').css('top', $('nav').innerHeight());
+
+	$('#show-friend-requests').click(function () { 
+		$(this).children('i#show-friend-requests').toggleClass('text-gray-700').toggleClass('text-primary');
+		$(this).siblings('div#friend-requests-dropdown').slideToggle(200);
+	});
+
+	// Hide friend requests menue when clicking anywhere except the menue
+	$(document).click(function (e) {
+		if (e.target.id == 'friend-requests-dropdown' || e.target.parentElement.parentElement.id == 'friend-request' || e.target.id == 'show-friend-requests') {
+			return;
+		}
+		$('i#show-friend-requests').removeClass('text-primary').addClass('text-gray-700');
+		$('div#friend-requests-dropdown').slideUp(200);
 	});
 });
 

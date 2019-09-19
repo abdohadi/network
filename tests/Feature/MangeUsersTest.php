@@ -36,7 +36,7 @@ class MangeUsersTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get('users/add/'.$anotherUser->id);
+        $this->get('users/request/send/'.$anotherUser->id);
 
         $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
     }
@@ -44,13 +44,29 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_can_cancel_a_friend_request()
     {
+        $user = $this->signIn();
+
+        $anotherUser = factory(User::class)->create();
+
+        $this->get('users/request/cancel/'.$anotherUser->id);
+
+        $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
+    }
+
+    /** @test */
+    public function a_user_can_accept_a_friend_request()
+    {
         $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get('users/cancel/'.$anotherUser->id);
+        $this->get('users/request/send/'.$anotherUser->id);
 
-        $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
+        $this->signIn($anotherUser);
+
+        $this->get('users/request/accept/'.$user->id);
+
+        $this->assertTrue($anotherUser->friends->contains($user));
     }
 }

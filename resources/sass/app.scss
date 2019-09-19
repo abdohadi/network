@@ -19,11 +19,11 @@
 // 	background: #333;
 // }
 
-*:hover {
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-  transition: 0.5s;
+* {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .close-modal {
@@ -31,7 +31,7 @@
 }
 
 .card {
-	@apply .bg-white .rounded-lg .shadow-xl .p-4;
+	@apply .bg-white .rounded-lg .shadow-xl .p-4 .border .border-gray-200;
 }
 
 .button-primary {
@@ -51,4 +51,13 @@
 
 .post {
 	@apply .bg-white .rounded-lg .shadow-xl .p-4 .m-auto .mb-4 .border .border-gray-200;
+}
+
+.button-outline-primary,
+.button-outline-secondary 
+.post {
+	-webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }

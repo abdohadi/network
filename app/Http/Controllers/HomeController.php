@@ -11,8 +11,6 @@ class HomeController extends Controller
     {
         $posts = Post::latest()->get();
 
-        $users = peopleYouMayKnow();
-
         $groups = groupsYouMayJoin();
 
         return view('home', compact(['posts', 'users', 'groups']));

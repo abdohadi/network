@@ -5,7 +5,7 @@
 	>Make new friends</div>
 
 	<div>
-		@forelse($users as $user)
+		@forelse(peopleYouMayKnow() as $user)
 			<div class="flex items-center mb-4">
         <a href="{{ $user->path() }}">
             <img src="{{ gravatar($user->email) }}" class="rounded-full w-10 mr-2">

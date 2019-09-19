@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="lg:flex">
-        <div class="lg:w-1/4 mx-2 sm:hidden lg:block">
+        <div class="lg:w-2/6 mx-2 sm:hidden lg:block">
             {{-- Make new friends --}}
             @include('users.people_you_may_know')
 
@@ -10,7 +10,7 @@
             @include('groups.groups_you_may_join')
         </div>
 
-        <div class="lg:w-1/2 mx-2">
+        <div class="lg:w-3/5 mx-2">
             {{-- Create New Post --}}
             <div class="card mb-4">
                 @include('posts.form', [

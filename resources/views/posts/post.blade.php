@@ -7,7 +7,7 @@
             <i id="show-options" class="fa fa-ellipsis-h w-5 absolute right-0 mr-2 text-xl text-gray-500 hover:text-gray-600 cursor-pointer"></i>
         @endcan
 
-        <div id="post-options" class="bg-white rounded-lg shadow-lg p-4 absolute right-0 mr-10 w-40 text-center" style="top:-8px;display:none">
+        <div id="post-options" class="absolute card mr-10 right-0 text-center w-40" style="top:-8px;display:none">
         	<ul>
                 <!-- Link to open the modal -->
         		<a data-post="{{ $post }}" href="#post-modal" rel="modal:open" class="open-post-modal">
@@ -28,7 +28,7 @@
                 <img src="{{ gravatar($post->owner->email) }}" class="rounded-full w-12 mr-2">
             </a> 
             <a href="{{ $post->owner->path() }}">
-                <span>{{ $post->owner->name }}</span>
+                <span class="font-medium text-gray-700 text-lg">{{ $post->owner->name }}</span>
             </a>
         </div>
 

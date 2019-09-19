@@ -64,9 +64,32 @@ class User extends Authenticatable
         $this->sentFriendRequests()->detach($user);
     }
 
+    public function acceptFriendRequest(self $user)
+    {
+        $this->friends()->attach($user);
+        $user->friends()->attach($this);
+        $this->receivedFriendRequests()->detach($user);
+    }
+
+    public function deleteFriendRequest(self $user)
+    {
+        $this->receivedFriendRequests()->detach($user);
+    }
+
     public function sentFriendRequests()
     {
         return $this->belongsToMany(self::class, 'friend_requests', 'from_user_id', 'to_user_id')->withTimestamps();
+    }
+
+    public function receivedFriendRequests()
+    {
+        return $this->belongsToMany(self::class, 'friend_requests', 'to_user_id', 'from_user_id')->withTimestamps();
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
+        return $this->belongsToMany(self::class, 'friends', 'friend_id', 'user_id')->withTimestamps();
     }
 
 }
