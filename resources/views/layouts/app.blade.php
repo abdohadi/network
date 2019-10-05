@@ -22,8 +22,10 @@
     <div id="app">
         @include('layouts.nav')
 
-        <main class="py-4 px-10">
-            @yield('content')
+        <main class="py-1 px-10">
+            <div id="main" style="margin-top:51px">
+                @yield('content')
+            </div>
         </main>
     </div>
 

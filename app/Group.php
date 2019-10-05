@@ -17,4 +17,14 @@ class Group extends Model
     {
     	return '/groups/'.$this->id;
     }
+
+    public function join(User $user)
+    {
+    	$this->members()->attach($user);
+    }
+
+    public function members()
+    {
+    	return $this->belongsToMany(User::class, 'group_members');
+    }
 }

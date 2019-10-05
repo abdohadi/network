@@ -14,6 +14,7 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_and_a_guest_can_view_a_profile_of_any_user()
     {
+        // $this->withoutExceptionHandling();
         // guest
         $user = factory(User::class)->create();
         $this->get($user->path())->assertSee($user->name);
@@ -31,7 +32,6 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_can_send_a_friend_request_to_another_user()
     {
-        // $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $anotherUser = factory(User::class)->create();
@@ -56,7 +56,6 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_can_accept_a_friend_request()
     {
-        $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $anotherUser = factory(User::class)->create();
@@ -68,5 +67,19 @@ class MangeUsersTest extends TestCase
         $this->get('users/request/accept/'.$user->id);
 
         $this->assertTrue($anotherUser->friends->contains($user));
+    }
+
+    /** @test */
+    public function anyone_can_view_friends_list_of_another_user()
+    {
+        // guest
+        $user = factory(User::class)->create();
+
+        $this->get("users/{$user->id}/friends")->assertOk();
+
+        // user
+        $this->signIn();
+
+        $this->get("users/{$user->id}/friends")->assertOk();
     }
 }

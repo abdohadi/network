@@ -37,10 +37,12 @@ const app = new Vue({
 
 
 
+
 /**
 * Our custom jquery
 */
 $(document).ready(function () {
+
 	// Show post options
 	$('i#show-options').click(function () { 
 		$(this).siblings('div#post-options').fadeToggle(100);

@@ -43,4 +43,17 @@ class ManageGroupsTest extends TestCase
             ->post('/groups', $group->toArray())
             ->assertSessionHasErrors('description');
     }
+
+    /** @test */
+    public function a_user_can_join_a_group()
+    {
+        $this->WithoutExceptionHandling();
+        $user = $this->signIn();
+
+        $group = factory(Group::class)->create();
+
+        $this->get($group->path().'/join');
+
+        $this->assertTrue($group->members->contains($user));
+    }
 }

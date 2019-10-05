@@ -19,8 +19,7 @@ class CreateFriendRequestsTable extends Migration
             $table->unsignedBigInteger('to_user_id');
             $table->timestamps();
 
-            $table->foreign('from_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('to_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['from_user_id', 'to_user_id']);
         });
     }
 

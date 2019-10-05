@@ -23,4 +23,9 @@ class GroupsController extends Controller
     {
     	return view('groups.show', compact('group'));
     }
+
+    public function join(Group $group)
+    {
+        $group->join(auth()->user());
+    }
 }

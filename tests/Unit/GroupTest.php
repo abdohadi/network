@@ -24,4 +24,16 @@ class GroupTest extends TestCase
 
     	$this->assertEquals('/groups/'.$group->id, $group->path());
     }
+
+    /** @test */
+    public function it_can_have_members()
+    {
+        $user = $this->signIn();
+
+        $group = factory(Group::class)->create();
+
+        $group->join($user);
+
+        $this->assertCount(1, $group->members);
+    }
 }

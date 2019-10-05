@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// groups routes
 	Route::post('/groups', 'GroupsController@store');
 
+	Route::get('/groups/{group}/join', 'GroupsController@join');
 
 	// friend request
 	Route::get('/users/request/send/{user}', 'FriendRequestsController@send');
@@ -34,12 +35,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/users/request/accept/{user}', 'FriendRequestsController@accept');
 	Route::get('/users/request/delete/{user}', 'FriendRequestsController@delete');
 
-
 });
 
 Route::get('/posts/{post}', 'PostsController@show');
 
 Route::get('/users/{user}', 'UsersController@show');
+
+Route::get('/users/{user}/friends', 'FriendsController@show');
 
 Route::get('/groups/{group}', 'GroupsController@show');
 

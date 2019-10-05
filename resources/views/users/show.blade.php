@@ -2,7 +2,7 @@
 
 @section('content')
 	
-	<div class="lg:px-32" style="margin-top:-14px">
+	<div class="lg:px-32">
 		<div class="relative">
 			<img 
 				src="/images/709eaa849a687c2a5af946a35797f66c.jpg" 
@@ -18,39 +18,62 @@
 				<span class="text-2xl text-white font-bold ml-8 mt-16">{{ $user->name }}</span>
 			</div>
 
-			@if ($user->isNot(auth()->user()))
-				<div class="absolute px-5 py-2 bg-white rounded-sm" style="right:15px;bottom:20px">
-					@if (auth()->user()->sentFriendRequests->contains($user))
-		        <button 
-		        	data-user-id="{{ $user->id }}" 
-		        	id="cancel_friend_request" 
-		        	class="button-outline-secondary ml-auto"
-		        	title="Click to cancel the request"
-		        ><i class="fa fa-check"></i> Sent</button>
-		      @else
-		        <button 
-		        	data-user-id="{{ $user->id }}" 
-		        	id="send_friend_request" 
-		        	class="button-outline-primary ml-auto"
-		        	title="Click to send a friend request"
-		        ><i class="fa fa-user-plus"></i> Add</button>
-		      @endif
-		    </div>
-		  @endif
+			@if(auth()->check())
+				@if ($user->isNot(auth()->user()))
+					<div class="absolute px-5 py-2 bg-white rounded-sm" style="right:15px;bottom:20px">
+						@if (auth()->user()->sentFriendRequests->contains($user))
+			        <button 
+			        	data-user-id="{{ $user->id }}" 
+			        	id="cancel_friend_request" 
+			        	class="button-outline-secondary ml-auto"
+			        	title="Click to cancel the request"
+			        ><i class="fa fa-check"></i> Sent</button>
+			      @else
+			        <button 
+			        	data-user-id="{{ $user->id }}" 
+			        	id="send_friend_request" 
+			        	class="button-outline-primary ml-auto"
+			        	title="Click to send a friend request"
+			        ><i class="fa fa-user-plus"></i> Add</button>
+			      @endif
+			    </div>
+			  @endif
+			@endif
 		</div>
 
 		<div class="lg:flex mt-5">
 			<div class="lg:w-1/3 sm:my-5 lg:my-0">
-				<div class="card">
-					about
+				<div class="card mb-8">
+					<h3 class="text-lg text-gray-600">About</h3>
 				</div>
 
-				<div class="friends">
-					
+				{{-- Friends --}}
+				<div class="card friends">
+					<h3 class="text-lg text-gray-600 mb-4"><i class="fa fa-users text-gray-600"></i> Friends</h3>
+
+					<div class="flex">
+						@forelse(array_slice($user->friends->toArray(), 0, 3) as $friend)
+							<div class="m-auto text-center mx-1" style="height:150px;">
+            		<a href="{{ "/users/".$friend['id'] }}">
+  	            	<img src="{{ gravatar($friend['email']) }}" class="border my-2 w-full" style="padding:1px">
+           	 		</a>
+           	 		<a href="{{ "/users/".$friend['id'] }}">
+	             		<div>{{ substr($friend['name'], 0, 15) }}</div>
+	             	</a>
+							</div>
+
+						@empty
+							No Friends
+						@endforelse
+					</div>
+
+					<div class="text-center mt-4 text-primary">
+						<a href="{{ $user->path().'/friends' }}">See All Friends</a>	
+					</div>
 				</div>
 			</div>
 
-			<div class="lg:w-2/3 lg:ml-10">
+			<div class="lg:w-2/3 lg:ml-4">
 				@if ($user->is(auth()->user()))
 					{{-- Create New Post --}}
 	        <div class="card mb-4">

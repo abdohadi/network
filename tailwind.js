@@ -14,8 +14,9 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
+      link: '#385898',
 
-      primary: '#4399e0',
+      primary: '#1DA1F2',
       main: 'rgba(247, 247, 247, 0.35)',
       // card: '#6f6f6f',
 
