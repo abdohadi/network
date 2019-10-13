@@ -24,7 +24,11 @@
       	</div>
 
         <div class="text-center">
-	        <button class="button-outline-primary mt-4"><i class="fa fa-plus"></i> Join</button>
+	        <button 
+          class="button-outline-primary mt-4"
+          title="Click to send a join request">
+            <i class="fa fa-plus"></i> Join
+          </button>
         </div>
     	</div>
 		@empty

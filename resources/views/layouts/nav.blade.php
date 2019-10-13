@@ -1,4 +1,4 @@
-<nav id="nav" class="bg-white shadow py-2 fixed w-full z-10">
+<nav id="nav" class="bg-white shadow py-2 fixed w-full z-10 {{ isset($nav_visiblity) ? $nav_visiblity : '' }}">
     <div class="container flex justify-between m-auto flex-center items-center">
         <a class="text-xl" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}

@@ -20,11 +20,11 @@ class Group extends Model
 
     public function join(User $user)
     {
-    	$this->members()->attach($user);
+    	$this->groupJoinRequests()->attach($user);
     }
 
-    public function members()
+    public function groupJoinRequests()
     {
-    	return $this->belongsToMany(User::class, 'group_members');
+    	return $this->belongsToMany(User::class, 'group_join_requests');
     }
 }

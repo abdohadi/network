@@ -34,6 +34,6 @@ class GroupTest extends TestCase
 
         $group->join($user);
 
-        $this->assertCount(1, $group->members);
+        $this->assertCount(1, $group->groupJoinRequests);
     }
 }

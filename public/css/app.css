@@ -11666,6 +11666,38 @@ video {
   transition: all 0.3s ease-in-out;
 }
 
+.login-register-parent {
+  -o-perspective: 600px;
+  perspective: 600px;
+}
+
+.login-register {
+  height: 567px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease-in-out;
+}
+
+.login-register > div {
+  width: 100%;
+  height: 100%;
+  padding: 50px 0px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.login-register .register-card {
+  transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.login-register .login-card {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

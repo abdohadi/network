@@ -54,6 +54,6 @@ class ManageGroupsTest extends TestCase
 
         $this->get($group->path().'/join');
 
-        $this->assertTrue($group->members->contains($user));
+        $this->assertTrue($group->groupJoinRequests->contains($user));
     }
 }

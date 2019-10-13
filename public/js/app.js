@@ -49425,7 +49425,35 @@ $(document).ready(function () {
 
     $('i#show-friend-requests').removeClass('text-primary').addClass('text-gray-700');
     $('div#friend-requests-dropdown').slideUp(200);
+  }); // Login register card
+
+  $('.create-account-button').click(function () {
+    $(this).parents('.login-register').css({
+      '-webkit-transform': 'rotateY(180deg)',
+      '-moz-transform': 'rotateY(180deg)',
+      '-o-transform': 'rotateY(180deg)',
+      'transform': 'rotateY(180deg)'
+    });
+    $('.register-card').css('z-index', '2');
   });
+  $('.have-account').click(function () {
+    $(this).parents('.login-register').css({
+      '-webkit-transform': 'rotateY(0)',
+      '-moz-transform': 'rotateY(0)',
+      '-o-transform': 'rotateY(0)',
+      'transform': 'rotateY(0)'
+    });
+  }); // Show register card if a register request
+
+  if ($('.register-card').data('request') == 'register-request') {
+    $('.login-register').css({
+      '-webkit-transform': 'rotateY(180deg)',
+      '-moz-transform': 'rotateY(180deg)',
+      '-o-transform': 'rotateY(180deg)',
+      'transform': 'rotateY(180deg)'
+    });
+    $('.login-card form input[type=email]').val('');
+  }
 });
 
 /***/ }),
