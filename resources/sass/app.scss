@@ -1,4 +1,14 @@
-// tailwind
+// Fonts
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+//@import 'variables';
+
+// Bootstrap
+// @import '~bootstrap/scss/bootstrap';
+
+
+/* tailwind */
 @import "tailwindcss/base";
 
 @import "tailwindcss/components";
@@ -6,29 +16,19 @@
 @import "tailwindcss/utilities";
 
 
-// Fonts
-// @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-// Variables
-// @import 'variables';
 
-// // Bootstrap
-// @import '~bootstrap/scss/bootstrap';
-
-// body {
-// 	background: #333;
-// }
-
-* {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-}
-
-// a {
-// 	@apply .text-primary;
-// }
+/* custom css */
+/** {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}*/
+/*
+a {
+ 	@apply .text-primary;
+}*/
 
 .close-modal {
 	display: none;
@@ -48,22 +48,26 @@
 .button-outline-secondary {
 	@apply .border .px-4 .rounded-lg .text-sm .shadow .border-gray-600 .text-gray-600;
 }
+.button-outline-secondary, .button-outline-primary {
+  width: 81px;
+  padding: .2rem;
+}
 .button-outline-primary:hover,
 .button-outline-secondary:hover {
 	@apply .shadow-lg;
 }
 
-.post {
-	@apply .bg-white .rounded-lg .shadow-xl .p-4 .m-auto .mb-4 .border .border-gray-200;
-}
+// .post {
+// 	@apply .bg-white .rounded-lg .shadow-xl .p-4 .m-auto .mb-4 .border .border-gray-200;
+// }
 
 .button-outline-primary,
-.button-outline-secondary 
+.button-outline-secondary,
 .post {
-	-webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 
@@ -114,3 +118,42 @@
 	backface-visibility: hidden;
 }
 
+/* Start loader */
+/*
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  top: -48px;
+  left: -34px;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  width: 11px;
+  background: #aeacac;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+  left: 12px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 29px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 46px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 32px;
+    height: 26px;
+  }
+  50%, 100% {
+    top: 40px;
+    height: 8px;
+  }
+}
+*/
+/* End loader */

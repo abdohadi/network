@@ -17,33 +17,36 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@index');
 	Route::get('/home', 'HomeController@index');
 	
+	// user routes
+	Route::get('/users/{user}', 'UsersController@show');
 
-	// posts routes
-	Route::post('/posts', 'PostsController@store');
-	Route::patch('/posts/{post}', 'PostsController@update');
-	Route::delete('/posts/{post}', 'PostsController@destroy');
+	// post routes
+	Route::resource('posts', 'PostsController');
+	// Route::post('/posts', 'PostsController@store');
+	// Route::get('/posts/{post}', 'PostsController@show');
+	// Route::patch('/posts/{post}', 'PostsController@update');
+	// Route::delete('/posts/{post}', 'PostsController@destroy');
+	Route::get('/posts/{post}/liked', 'PostsController@liked');
 
-
-	// groups routes
+	// group routes
+	// Route::resource('groups', 'GroupsController');
 	Route::post('/groups', 'GroupsController@store');
-
+	Route::get('/groups/{group}', 'GroupsController@show');
 	Route::get('/groups/{group}/join', 'GroupsController@join');
 
-	// friend request
+
+	// friend request routes
 	Route::get('/users/request/send/{user}', 'FriendRequestsController@send');
 	Route::get('/users/request/cancel/{user}', 'FriendRequestsController@cancel');
 	Route::get('/users/request/accept/{user}', 'FriendRequestsController@accept');
 	Route::get('/users/request/delete/{user}', 'FriendRequestsController@delete');
+	// friends routes
+	Route::get('/users/{user}/friends', 'FriendsController@show');
+
+
+
+
 
 });
-
-Route::get('/posts/{post}', 'PostsController@show');
-
-Route::get('/users/{user}', 'UsersController@show');
-
-Route::get('/users/{user}/friends', 'FriendsController@show');
-
-Route::get('/groups/{group}', 'GroupsController@show');
-
 
 Auth::routes();

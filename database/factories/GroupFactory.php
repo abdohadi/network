@@ -11,6 +11,5 @@ $factory->define(Group::class, function (Faker $faker) {
     		'user_id' => factory(User::class),
         'name' => $faker->word,
         'description' => $faker->paragraph,
-        'cover' => $faker->image('public/storage/images',640,480, null, false)
     ];
 });

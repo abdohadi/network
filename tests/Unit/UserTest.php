@@ -7,14 +7,17 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Group;
+use App\Post;
+use App\Like;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     /** @test */
     public function a_user_has_a_path()
     {
+        // $this->withoutExceptionHandling();
     	$user = factory(User::class)->create();
 
     	$this->assertEquals('/users/'.$user->id, $user->path());
@@ -23,19 +26,33 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_have_posts()
     {
-        $this->assertInstanceOf(User::class, factory(User::class)->create());
+        $user = factory(User::class)->create();
+        $post = factory(Post::class)->create(['user_id'=>$user->id]);
+
+        $this->assertInstanceOf(Post::class, $user->posts->first());
     }
 
     /** @test */
     public function a_user_can_have_groups()
     {
-        $this->assertInstanceOf(Group::class, factory(Group::class)->create());
+        $user = factory(User::class)->create();
+        $group = factory(Group::class)->create(['user_id'=>$user->id]);
+
+        $this->assertInstanceOf(Group::class, $user->groups->first());
+    }
+
+    /** @test */
+    public function a_user_can_have_likes()
+    {
+        $user = factory(User::class)->create();
+        $like = factory(Like::class)->create(['user_id'=>$user->id]);
+
+        $this->assertInstanceOf(Like::class, $user->likes->first());
     }
 
     /** @test */
     public function a_user_can_send_a_friend_request_to_another_user()
     {
-        // $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $anotherUser = factory(User::class)->create();

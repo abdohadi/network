@@ -30,7 +30,7 @@
                             </li>
 
                             {{-- Friend requests menue --}}
-                            <div id="friend-requests-dropdown" class="absolute bg-white border p-4 shadow-2xl w-2/6 z-10 hidden" style="right:187px;height:600px">
+                            <div id="friend-requests-dropdown" class="absolute bg-white border p-4 shadow-2xl w-2/6 z-10 hidden" style="right:187px;height:600px;overflow: scroll;">
                                 <h4 class="mb-3 text-gray-500">Friend Requests</h4>
                                 <ul>
                                     @forelse(auth()->user()->receivedFriendRequests as $user)

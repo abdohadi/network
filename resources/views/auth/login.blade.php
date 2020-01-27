@@ -3,8 +3,9 @@
 @section('content')
 <div class="container">
     <div class="flex justify-content-center login-register-parent">
-        <div class="w-3/5 text-center">
-            <ul class="text-3xl font-bold mt-20 mr-20" style="color:#c2c2c7"> 
+        {{-- <div class="w-3/5 text-center">
+            <h1 class="text-center text-4xl font-bold mt-20 mr-20" style="color: rgba(133, 143, 158, 0.98);">Join our network and have fun</h1>
+            <ul class="text-3xl font-bold mt-16 mr-20" style="color:rgba(133, 143, 158, 0.98)"> 
                 <li class="mb-6">Share your posts with your friends</li>
                 <li class="mb-6">Enjoy chating with other people</li>
                 <li>Make new friends</li>
@@ -14,7 +15,8 @@
                 <li class="mb-2">High level of security and privacy</li>
                 <li>We will never share your data</li>
             </ul>
-        </div>
+        </div> --}}
+        <div class="w-3/5 text-center mt-20 mr-20 text-3xl hello-there" style="color: rgba(133, 143, 158, 0.98);"></div>
 
         <div class="login-register w-2/5">
             {{-- Register card --}}
