@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,7 +45,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/users/{user}/friends', 'FriendsController@show');
 
 
-
+	// comment routes
+	Route::post('/posts/{post}/comments', 'CommentsController@store');
+	Route::patch('/posts/{post}/comments/{comment}', 'CommentsController@update');
+	Route::get('/posts/{post}/comments/{comment}', 'CommentsController@destroy');
 
 
 });

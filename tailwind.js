@@ -16,7 +16,7 @@ module.exports = {
       white: '#fff',
       link: '#385898',
 
-      primary: '#1DA1F2',
+      primary: '#63b3ed',
       main: 'rgba(247, 247, 247, 0.35)',
       // card: '#6f6f6f',
 

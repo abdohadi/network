@@ -12,7 +12,7 @@
 			<div class="absolute flex items-center" style="left:52px;bottom:-15px;">
 				<img 
 					src="{{ gravatar($user->email) }}" 
-					class="bg-gray-100 border border-gray-700 p-1 rounded-full"
+					class="bg-gray-100 p-1 rounded-full"
 					style="width:170px;">
 
 				<span class="text-2xl text-white font-bold ml-8 mt-16">{{ $user->name }}</span>
@@ -74,21 +74,22 @@
 			</div>
 
 			<div class="lg:w-2/3 lg:ml-4">
+				{{-- Create New Post --}}
 				@if ($user->is(auth()->user()))
-					{{-- Create New Post --}}
-	        <div class="card mb-4">
-	          @include('posts.form', [
-	              'action' => '/posts',
-	              'submit_value' => 'Post',
-	              'submit_id' => 'submit-create-post',
-	          ])
-	        </div>
-	      @endif
+					<div class="card mb-4">
+						@include('posts._form', [
+							'action' => '/posts',
+							'type' => 'post',
+							'submit_value' => 'Post',
+							'submit_id' => 'submit-create-post',
+						])
+					</div>
+		      @endif
 
         <div class="text-lg text-gray-600 mb-2 mt-8 {{ $user->isNot(auth()->user()) ? 'hidden' : 'lg:block' }}">Posts</div>
 
 				@forelse($user->posts as $post) 
-					@include('posts.post')
+					@include('posts._post')
 				@empty
 					<div class="card">No posts yet.</div>
 				@endforelse

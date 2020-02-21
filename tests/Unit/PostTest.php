@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Post;
 use App\User;
 use App\Like;
+use App\Comment;
 
 class PostTest extends TestCase
 {
@@ -26,6 +27,15 @@ class PostTest extends TestCase
         $like = factory(Like::class)->create(['post_id'=>$post->id]);
 
         $this->assertInstanceOf(Like::class, $post->likes->first());
+    }
+
+    /** @test */
+    public function it_can_have_comments()
+    {
+        $post = factory(Post::class)->create();
+        factory(Comment::class)->create(['post_id'=>$post->id]);
+
+        $this->assertInstanceOf(Comment::class, $post->comments->first());
     }
 
     /** @test */

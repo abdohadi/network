@@ -9,6 +9,7 @@ use App\User;
 use App\Group;
 use App\Post;
 use App\Like;
+use App\Comment;
 
 class UserTest extends TestCase
 {
@@ -36,7 +37,7 @@ class UserTest extends TestCase
     public function a_user_can_have_groups()
     {
         $user = factory(User::class)->create();
-        $group = factory(Group::class)->create(['user_id'=>$user->id]);
+        factory(Group::class)->create(['user_id'=>$user->id]);
 
         $this->assertInstanceOf(Group::class, $user->groups->first());
     }
@@ -45,9 +46,18 @@ class UserTest extends TestCase
     public function a_user_can_have_likes()
     {
         $user = factory(User::class)->create();
-        $like = factory(Like::class)->create(['user_id'=>$user->id]);
+        factory(Like::class)->create(['user_id'=>$user->id]);
 
         $this->assertInstanceOf(Like::class, $user->likes->first());
+    }
+
+    /** @test */
+    public function a_user_can_have_comments()
+    {
+        $user = factory(User::class)->create();
+        factory(Comment::class)->create(['user_id'=>$user->id]);
+
+        $this->assertInstanceOf(Comment::class, $user->comments->first());
     }
 
     /** @test */

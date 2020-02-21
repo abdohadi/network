@@ -856,21 +856,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 * Our custom javascript & jquery
 */
 $(document).ready(function () {
+  var _this = this;
+
+  /**
+   *	Posts Section
+   */
   // Show post options
-  $('i#show-options').on('click', function () {
-    $(this).siblings('div#post-options').fadeToggle(100);
-    $('div#post-options').not($(this).parent().find('div#post-options')).fadeOut(100);
+  $(document).on('click', 'i.show-options', function () {
+    $(this).siblings('div.options').fadeToggle(100);
+    $('div.options').not($(this).parent().find('div.options')).fadeOut(100);
   }); // Hide post options when clicking anywhere
 
   $(document).click(function (e) {
-    if (e.target.id !== 'show-options' && e.target.id !== 'post-options') {
-      $('div#post-options').fadeOut(100);
+    if (!e.target.classList.contains('show-options') && !e.target.classList.contains('options')) {
+      $('div.options').fadeOut(100);
     }
   }); // Show post data in modal to edit the post
 
   $('.open-post-modal').click(function () {
     var post = $(this).data('post');
-    $('.post-modal').find('form').find('textarea').text(post.body);
+    $('.post-modal').find('textarea').text(post.body);
 
     if (window.location.pathname == '/' || window.location.pathname == '/home') {
       $('.post-modal').find('form').attr('action', '/posts/' + post.id);
@@ -882,20 +887,86 @@ $(document).ready(function () {
 
     if (textarea.val() == '') {
       textarea.addClass('border-red-300');
-      textarea.siblings('#error').show();
+      textarea.siblings('.post-error').show();
       e.preventDefault();
     } else {
       textarea.removeClass('border-red-300');
       textarea.addClass('border-green-500');
-      textarea.siblings('#error').hide();
+      textarea.siblings('.post-error').hide();
     }
   }); // Redirect to post page when u click on it
+  // $('.post').click(function (e) {
+  // 	if (! $(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'post-options' && e.target.id != 'open-post-modal') {
+  // 		window.location = $(this).data('post');
+  // 	}
+  // });
 
-  $('.post').click(function (e) {
-    if (!$(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'post-options' && e.target.id != 'open-post-modal') {
-      window.location = $(this).data('post');
+  /**
+   *	Comments Section
+   */
+  // Focus on comment input
+
+  $('.comment-span').on('click', function () {
+    $(_this).parents('.post-box').find('.comment-input').focus();
+  }); // Add comment
+
+  $('.add-comment-form').on('submit', function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action'),
+        data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    addComment($(this), data, url);
+  }); // Show comment data in modal to edit the comment
+
+  $(document).on('click', '.open-comment-modal', function () {
+    var commentId = $(this).data('comment-id');
+    var commentBody = $(this).parents('.user-comment').find('.comment-body').text();
+    var postId = $(this).data('post-id');
+    window.commentToEdit = $(this).parents('.user-comment').find('.comment-body');
+    $('.comment-modal').find('textarea').val(commentBody);
+
+    if (window.location.pathname == '/' || window.location.pathname == '/home') {
+      $('.comment-modal').find('form').attr('action', "posts/".concat(postId, "/comments/").concat(commentId));
     }
-  }); // Show group errors when clicking submit button
+  }); // Update comment
+
+  $('.update-comment-form').on('submit', function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action'),
+        data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    updateComment($(this), data, url);
+  }); // Delete comment using ajax
+
+  $(document).on('click', '.delete-comment', function (e) {
+    var _this2 = this;
+
+    e.preventDefault();
+    $.ajax({
+      url: $(this).data('comment-url'),
+      method: 'get',
+      success: function success() {
+        $(_this2).parents('.user-comment').remove();
+      },
+      error: function error(_error) {
+        console.log('error');
+      }
+    });
+  });
+  /**
+   *	Likes Section
+   */
+  // Like a post
+
+  $('.like-post').on('click', handlePostLikes);
+  /**
+   *	Groups Section
+   */
+  // Show group errors when clicking submit button
 
   $('#submit-create-group').click(function (e) {
     var nameInput = $(this).parents('form').find('#name');
@@ -903,24 +974,28 @@ $(document).ready(function () {
 
     if (nameInput.val() == '') {
       nameInput.addClass('border-red-300');
-      nameInput.siblings('#error').show();
+      nameInput.siblings('.group-error').show();
       e.preventDefault();
     } else {
       nameInput.removeClass('border-red-300');
       nameInput.addClass('border-green-500');
-      nameInput.siblings('#error').hide();
+      nameInput.siblings('.group-error').hide();
     }
 
     if (descriptionInput.val() == '') {
       descriptionInput.addClass('border-red-300');
-      descriptionInput.siblings('#error').show();
+      descriptionInput.siblings('.group-error').show();
       e.preventDefault();
     } else {
       descriptionInput.removeClass('border-red-300');
       descriptionInput.addClass('border-green-500');
-      descriptionInput.siblings('#error').hide();
+      descriptionInput.siblings('.group-error').hide();
     }
-  }); // Friend requests event handler
+  });
+  /**
+   *	Friend Requests Section
+   */
+  // Friend requests event handler
 
   $('button#send_friend_request, button#cancel_friend_request, button#accept_friend_request, button#delete_friend_request').click(function (e) {
     e.preventDefault();
@@ -938,13 +1013,19 @@ $(document).ready(function () {
       return;
     }
 
-    if (e.target.parentElement.id == 'friend-requests-dropdown' || e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
-      return;
+    if (e.target.parentElement) {
+      if (e.target.parentElement.id == 'friend-requests-dropdown' || e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
+        return;
+      }
     }
 
     $('i#show-friend-requests').removeClass('text-primary').addClass('text-gray-700');
     $('div#friend-requests-dropdown').hide();
-  }); // Login register card
+  });
+  /**
+   *	Login Section
+   */
+  // Login register card
 
   $('.create-account-button').click(function () {
     $(this).parents('.login-register').css({
@@ -993,10 +1074,7 @@ $(document).ready(function () {
         }
       }, 100);
     }
-  }; // Like a post
-
-
-  $('.like-post').on('click', handlePostLikes);
+  };
 });
 /**
 * Functions
@@ -1095,7 +1173,8 @@ function _handleFriendRequest() {
 
 function handlePostLikes() {
   return _handlePostLikes.apply(this, arguments);
-}
+} // handle adding comment request
+
 
 function _handlePostLikes() {
   _handlePostLikes = _asyncToGenerator(
@@ -1111,9 +1190,9 @@ function _handlePostLikes() {
 
           case 2:
             likesCount = _context2.sent;
-            $(this).toggleClass('text-primary text-gray-500'); // display & update likes count on post
+            $(this).toggleClass('text-primary text-gray-500 hover:text-gray-600'); // display & update likes count on post
 
-            likesBox = $(this).parents('.post-box').children('.post').children('.post-likes-count');
+            likesBox = $(this).parents('.post-box').find('.post-likes-count');
 
             if (likesBox.hasClass('hidden') || likesCount == 0) {
               likesBox.toggleClass('hidden');
@@ -1129,6 +1208,97 @@ function _handlePostLikes() {
     }, _callee2, this);
   }));
   return _handlePostLikes.apply(this, arguments);
+}
+
+function addComment(_x2, _x3, _x4) {
+  return _addComment.apply(this, arguments);
+} // Update comment
+
+
+function _addComment() {
+  _addComment = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(form, data, url) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return $.ajax({
+              url: url,
+              type: 'post',
+              data: data,
+              success: function success(_success) {
+                var userName = form.data('user-name');
+                var userPath = form.data('user-path');
+                var postId = form.data('post-id');
+                var commentId = _success.commentId;
+                var commentPath = _success.commentPath;
+                var userImgSrc = form.data('user-img-src');
+                var newComment = "\n\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t<div class=\"pl-4 mt-4\">\n\t             \t<div class=\"flex\">\n\t\t\t\t\t\t\t<div class=\"w-1/12\">\n\t\t\t\t\t\t\t   <a href=\"".concat(userPath, "\"><img src=\"").concat(userImgSrc, "\" class=\"rounded-full w-10 border\"></a>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative\"\n\t\t\t\t\t\t\t\t  style=\"word-wrap: break-word;border-radius: 1.25rem;\">\n                         <i class=\"show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl\"></i>\n\n                         <div class=\"options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10\" style=\"top:-8px;display:none\">\n                             <ul>\n                                 <a data-comment-id=\"").concat(commentId, "\"\n                                    data-post-id=\"").concat(postId, "\"\n                                    href=\"#comment-modal\"\n                                    rel=\"modal:open\" \n                                    class=\"open-comment-modal\"\n                                 >\n                                     <li class=\"cursor-pointer hover:text-gray-900 text-gray-600 py-1\" id=\"open-comment-modal\">Edit Comment</li>\n                                 </a>\n\n                                 <button class=\"delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1\"\n                                         data-comment-url=\"").concat(commentPath, "\"\n                                  >Delete Comment</button>\n                             </ul>\n                         </div>\n\n\t\t\t\t\t\t\t\t<p>\n\t                        <a href=\"").concat(userPath, "\" class=\"text-gray-700 text-lg\">\n\t                           ").concat(userName, "\n\t                        </a>\n\n\t                        <span class=\"text-gray-500 text-xs ml-2\">\n\t                           just now\n\t                        </span>\n\t                     </p>\n\n\t\t\t\t\t\t\t\t<p class=\"comment-body\">").concat(data.body, "</p>\n\t\t\t\t\t\t\t</div>\n\t             \t</div>\n\t          \t</div>\n          \t</div>\n\t\t\t");
+                form.parents('.comments-box').find('.user-comments').prepend(newComment);
+
+                if (form.find('textarea').hasClass('border-red-300')) {
+                  form.find('textarea').removeClass('border-red-300');
+                }
+
+                form.find('textarea').val('');
+                form.find('.comment-error').toggle();
+              },
+              error: function error(_error2) {
+                form.find('.comment-error').toggleClass('hidden').html(_error2.responseJSON.errors.body[0]);
+                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+  return _addComment.apply(this, arguments);
+}
+
+function updateComment(_x5, _x6, _x7) {
+  return _updateComment.apply(this, arguments);
+}
+
+function _updateComment() {
+  _updateComment = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(form, data, url) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.next = 2;
+            return $.ajax({
+              url: url,
+              type: 'post',
+              data: data,
+              success: function success(_success2) {
+                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+                form.find('textarea').val('');
+                form.find('.comment-error').toggle();
+                form.siblings('.close-modal').click();
+                window.commentToEdit.text(data.body);
+              },
+              error: function error(_error3) {
+                form.find('.comment-error').toggle().html(_error3.responseJSON.errors.body[0]);
+                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+  return _updateComment.apply(this, arguments);
 }
 
 /***/ }),

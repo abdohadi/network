@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Post;
 use App\Group;
 use App\Like;
+use App\Comment;
 
 class User extends Authenticatable
 {
@@ -60,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(Group::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function sendFriendRequest(self $user)
     {
         $this->sentFriendRequests()->attach($user);
@@ -95,6 +101,10 @@ class User extends Authenticatable
     public function friends()
     {
         return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
+    }
+
+    public function getNameAttribute($value) {
+        return ucfirst($value);
     }
 
 }

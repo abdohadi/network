@@ -64,7 +64,7 @@
                                 <h4 class="mb-3 text-gray-500 mt-8">Make New Friends</h4>
                                 <ul>
                                     @forelse(peopleYouMayKnow() as $user)
-                                        @include('users.people_you_may_know')
+                                        @include('users._people_you_may_know')
                                     @empty
                                         <div class="text-sm ml-6">No users yet</div>
                                     @endforelse

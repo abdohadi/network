@@ -12,21 +12,26 @@ class MangeUsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_and_a_guest_can_view_a_profile_of_any_user()
+    public function a_user_can_view_a_profile_of_any_user()
     {
         // $this->withoutExceptionHandling();
-        // guest
-        $user = factory(User::class)->create();
-        $this->get($user->path())->assertSee($user->name);
-
         // a user can view their profiles
+        $user = factory(User::class)->create();
         $this->be($user)
             ->get($user->path())
-            ->assertSee($user->name);
+            ->assertOk();
 
         // a user can view profiles of others
         $this->signIn();
-        $this->get($user->path())->assertSee($user->name);
+        $this->get($user->path())->assertOk();
+    }
+
+    /** @test */
+    public function a_gust_cannot_view_a_profile_of_any_user()
+    {
+        // guest
+        $user = factory(User::class)->create();
+        $this->get($user->path())->assertRedirect('login');
     }
 
     /** @test */
@@ -70,16 +75,11 @@ class MangeUsersTest extends TestCase
     }
 
     /** @test */
-    public function anyone_can_view_friends_list_of_another_user()
+    public function a_user_can_view_friends_list_of_another_user()
     {
-        // guest
-        $user = factory(User::class)->create();
-
-        $this->get("users/{$user->id}/friends")->assertOk();
-
-        // user
         $this->signIn();
 
+        $user = factory(User::class)->create();
         $this->get("users/{$user->id}/friends")->assertOk();
     }
 }

@@ -36,7 +36,6 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_user_can_view_the_home_page()
     {
-        // User
         $this->signIn();
         
         $this->get('/')->assertOk();
@@ -86,13 +85,11 @@ class ManagePostsTest extends TestCase
     }
 
     /** @test */
-    public function a_guest_can_view_a_post()
+    public function a_guest_cannot_view_a_post()
     {
         $post = factory(Post::class)->create();
 
-        $this->be($post->owner)
-            ->get($post->path())
-            ->assertOk();
+        $this->get($post->path())->assertRedirect('login');
     }
 
     /** @test */

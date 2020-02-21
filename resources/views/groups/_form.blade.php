@@ -3,7 +3,7 @@
 
 	<div class="mb-4">
 		<div class="mb-2">
-			<label for="name" class="text-light">Group Name</label>
+			<span for="name" class="text-light">Group Name</span>
 		</div>
   	
   	<div>
@@ -14,13 +14,13 @@
 				class="border w-full p-2 rounded"
 			>
 			
-			<label id="error" class="text-red-500 italic text-sm hidden">Name field is required.</label>
+			<span id="group-error" class="text-red-500 italic text-sm hidden">Name field is required.</span>
 		</div>
 	</div>
 
 	<div class="mb-4">
 		<div class="mb-2">
-			<label for="description" class="text-light">Group Description</label>
+			<span for="description" class="text-light">Group Description</span>
 		</div>
   	
   	<div>
@@ -31,13 +31,13 @@
 				class="border w-full p-2 rounded"
 				rows="4"></textarea>
 
-			<label id="error" class="text-red-500 italic text-sm hidden">Description field is required.</label>
+			<span id="group-error" class="text-red-500 italic text-sm hidden">Description field is required.</span>
 		</div>
 	</div>
 {{-- 
 	<div class="mb-4">
 		<div class="mb-2">
-			<label for="cover" class="text-light">Choose Cover</label>
+			<span for="cover" class="text-light">Choose Cover</span>
 		</div>
 		<div>
 			<input type="file" id="cover" name="cover">

@@ -5,22 +5,21 @@
 	@csrf
 
 	<div class="mb-4">
-  	<textarea 
+  		<textarea 
 			name="body" 
 			id="body" 
 			placeholder="What's in your mind?" 
 			class="border w-full p-2 rounded"
-			rows="5"></textarea>
+			rows="2"></textarea>
 
-		<label id="error" class="text-red-500 italic text-sm hidden">Your post can't be empty.</label>
+		<span class="{{ $type }}-error text-red-500 italic text-sm hidden">Your {{ $type }} can't be empty.</span>
 	</div>
 
 	<div class="flex justify-between items-center">
-		<input 
-			type="submit" 
-			name="create" 
-			class="button-primary" 
-			value="{{ $submit_value }}" 
+		<button
+			class="button-primary ml-auto" 
 			id="{{ $submit_id }}">
+			{{ $submit_value }}
+		</button>
 	</div>
 </form>

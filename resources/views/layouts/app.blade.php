@@ -9,10 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
@@ -21,7 +17,7 @@
 </head>
 <body class="bg-main">
     <div id="app">
-        @include('layouts.nav')
+        @include('layouts._nav')
 
         <main class="py-1 px-10">
             <div id="main" style="margin-top:51px">
@@ -30,13 +26,17 @@
         </main>
     </div>
 
+    {{-- Modals --}}
+    @include('posts._edit_post_modal')
+    @include('posts._edit_comment_modal')
+    
+
     @yield('footer')
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-
 
 </body>
 </html>

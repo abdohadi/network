@@ -1,14 +1,12 @@
 <div class="card">
 	<div 
-		class="p-2 bg-gray-400 text-center border font-bold text-gray-700 rounded-lg" 
-		style="margin:-16px;margin-bottom:16px;background:rgb(247, 247, 247);"
-	>Join New Groups</div>
+		class="font-bold text-gray-600 mb-4">Join New Groups</div>
 
 	<div>
 		@forelse(array_slice(groupsYouMayJoin(), 0, 2) as $group)
 			<div class="border mb-6 pb-3">
         <a href="{{ '/groups/'.$group['id'] }}">
-          <img src="/images/{{ $group['cover'] }}" class="h-32 mb-2 mr-2 w-full">
+          <img src="/uploads/images/group_covers/{{ $group['cover'] }}" class="h-32 mb-2 mr-2 w-full">
         </a>
 
         <div class="ml-2">

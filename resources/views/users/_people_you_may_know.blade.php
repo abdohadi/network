@@ -1,9 +1,9 @@
 <div class="flex items-center mb-4">
   <a href="{{ '/users/'.$user['id'] }}">
-      <img src="{{ gravatar($user['email']) }}" class="rounded-full w-16 mr-2" style="border:1px solid rgb(241, 239, 239);border-radius:50%">
+    <img src="{{ gravatar($user['email']) }}" class="rounded-full w-16 mr-2" style="border:1px solid rgb(241, 239, 239);border-radius:50%">
   </a> 
   <a href="{{ '/users/'.$user['id'] }}">
-      <span title="{{ $user['name'] }}">{{ substr($user['name'], 0, 15) }}</span>
+      <span title="{{ $user['name'] }}" class="text-gray-700">{{ substr($user['name'], 0, 15) }}</span>
   </a>
   @if (auth()->user()->sentFriendRequests->contains($user))
     <button 
