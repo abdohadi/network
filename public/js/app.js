@@ -940,7 +940,7 @@ $(document).ready(function () {
       return obj;
     }, {});
     updateComment($(this), data, url);
-  }); // Delete comment using ajax
+  }); // Delete comment 
 
   $(document).on('click', '.delete-comment', function (e) {
     var _this2 = this;

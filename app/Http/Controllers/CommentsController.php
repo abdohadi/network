@@ -39,7 +39,6 @@ class CommentsController extends Controller
         // create comment
         $comment = $post->addComment($request->all());
 
-        // return comment
         return [
             'commentBody' => $comment->body,
             'commentId' => $comment->id,
@@ -62,6 +61,8 @@ class CommentsController extends Controller
             'body' => 'required'
         ]);
 
+        abort_if(auth()->user()->cannot('update', $comment), 403);
+
         // update comment
         $comment->update($request->all());
     }
@@ -78,6 +79,8 @@ class CommentsController extends Controller
         // if ($comment->image) {
         //     Storage::disk('public_uploads')->delete("images/commment_images/{$comment->image}");
         // }
+
+        abort_if(auth()->user()->cannot('update', $comment), 403);
 
         $comment->delete();
     }

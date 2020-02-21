@@ -28,7 +28,7 @@ class ManageCommentsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_update_a_comment() {
+    public function a_user_can_update_their_comments() {
         // create a comment
         $comment = factory('App\Comment')->create();
 
@@ -40,7 +40,19 @@ class ManageCommentsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_delete_a_comment() {
+    public function an_authorized_user_cannot_update_other_users_comments() {
+        $this->signIn();
+
+        // create a comment
+        $comment = factory('App\Comment')->create();
+
+        // assert that a user cannot update a comment
+        $this->patch($comment->path(), $attributes = ['body' => 'new comment'])
+             ->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_delete_their_comments() {
         // create a comment
         $comment = factory('App\Comment')->create();
         
@@ -49,6 +61,18 @@ class ManageCommentsTest extends TestCase
             ->get($comment->path());
         
         $this->assertDatabaseMissing('comments', ['id' => $comment->id, 'body' => $comment->body]);
+    }
+
+    /** @test */
+    public function an_authorized_user_cannot_delete_other_users_comments() {
+        $this->signIn();
+
+        // create a comment
+        $comment = factory('App\Comment')->create();
+
+        // assert that a user cannot update a comment
+        $this->get($comment->path(), $attributes = ['body' => 'new comment'])
+             ->assertStatus(403);
     }
 
     /** @test */

@@ -104,7 +104,7 @@ $(document).ready(function() {
 		updateComment($(this), data, url);
 	});
 
-	// Delete comment using ajax
+	// Delete comment 
 	$(document).on('click', '.delete-comment', function(e) {
 		e.preventDefault();
 
