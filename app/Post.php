@@ -9,6 +9,8 @@ use App\Comment;
 
 class Post extends Model
 {
+    use likeablity;
+    
     protected $fillable = ['body'];
 
     public function owner()
@@ -23,7 +25,7 @@ class Post extends Model
 
     public function likes()
     {
-    	return $this->hasMany(Like::class);
+    	return $this->morphMany(Like::class, 'likeable');
     }
 
     public function comments()

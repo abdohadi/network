@@ -12,9 +12,19 @@ class MangeUsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_view_a_profile_of_any_user()
+    public function a_user_can_view_the_home_page()
     {
         // $this->withoutExceptionHandling();
+        $this->signIn();
+        
+        $this->get('/')->assertOk();
+
+        $this->get('/home')->assertOk();
+    }
+
+    /** @test */
+    public function a_user_can_view_a_profile_of_any_user()
+    {
         // a user can view their profiles
         $user = factory(User::class)->create();
         $this->be($user)

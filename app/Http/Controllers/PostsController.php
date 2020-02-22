@@ -58,16 +58,6 @@ class PostsController extends Controller
 
 	public function liked(Post $post)
 	{
-		$like = Like::where('user_id', auth()->id())->where('post_id', $post->id)->first();
-
-		if (! $like) { 
-			// if the logged in user didn't like this post yet
-			auth()->user()->likes()->create(['post_id' => $post->id]);
-		} else {
-			// if the logged in user liked this post before
-			$like->delete();
-		}
-
-		return $post->likes->count();
+		return $post->toggleLike();
 	}
 }

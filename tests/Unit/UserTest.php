@@ -16,7 +16,7 @@ class UserTest extends TestCase
     // use RefreshDatabase;
 
     /** @test */
-    public function a_user_has_a_path()
+    public function it_has_a_path()
     {
         // $this->withoutExceptionHandling();
     	$user = factory(User::class)->create();
@@ -25,7 +25,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_have_posts()
+    public function it_can_have_posts()
     {
         $user = factory(User::class)->create();
         $post = factory(Post::class)->create(['user_id'=>$user->id]);
@@ -34,7 +34,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_have_groups()
+    public function it_can_have_groups()
     {
         $user = factory(User::class)->create();
         factory(Group::class)->create(['user_id'=>$user->id]);
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_have_likes()
+    public function it_can_have_likes()
     {
         $user = factory(User::class)->create();
         factory(Like::class)->create(['user_id'=>$user->id]);
@@ -52,7 +52,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_have_comments()
+    public function it_can_have_comments()
     {
         $user = factory(User::class)->create();
         factory(Comment::class)->create(['user_id'=>$user->id]);
@@ -61,7 +61,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_send_a_friend_request_to_another_user()
+    public function it_can_send_a_friend_request_to_another_user()
     {
         $user = $this->signIn();
 
@@ -73,7 +73,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_cancel_a_friend_request()
+    public function it_can_cancel_a_friend_request()
     {
         $user = $this->signIn();
 
@@ -85,7 +85,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_receive_a_friend_request_from_another_user()
+    public function it_can_receive_a_friend_request_from_another_user()
     {
         $user = $this->signIn();
 
@@ -97,7 +97,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_accept_a_friend_request_from_another_user()
+    public function it_can_accept_a_friend_request_from_another_user()
     {
         $user = $this->signIn();
 

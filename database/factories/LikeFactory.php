@@ -8,6 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(Like::class, function (Faker $faker) {
     return [
         'user_id' => factory('App\User'),
-        'post_id' => factory('App\Post')
+        'likeable_id' => factory('App\Post'),
+        'likeable_type' => 'App\Post'
     ];
 });

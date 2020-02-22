@@ -34,16 +34,6 @@ class ManagePostsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_the_home_page()
-    {
-        $this->signIn();
-        
-        $this->get('/')->assertOk();
-
-        $this->get('/home')->assertOk();
-    }
-
-    /** @test */
     public function a_user_can_update_their_posts()
     {
         $post = factory(Post::class)->create();
@@ -102,22 +92,5 @@ class ManagePostsTest extends TestCase
         $this->patch($path)->assertRedirect('login');
 
         $this->delete($path)->assertRedirect('login');
-    }
-
-    /** @test */
-    public function a_user_can_like_and_dislike_a_post()
-    {
-        $user = $this->signIn();
-        $post = factory(Post::class)->create();
-
-        // like post
-        $this->get("/posts/{$post->id}/liked");
-            
-        $this->assertDatabaseHas('likes', ['post_id'=>$post->id, 'user_id'=>$user->id]);
-
-        // dislike post
-        $this->get("/posts/{$post->id}/liked");
-
-        $this->assertDatabaseMissing('likes', ['post_id'=>$post->id, 'user_id'=>$user->id]);
     }
 }

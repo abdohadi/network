@@ -44,15 +44,15 @@
         <div class="text-gray-800 px-6 pt-8 pb-4">{{ $post->body }}</div>
 
         {{-- post likes count --}}
-        <div class="text-gray-600 post-likes-count {{ $post->likes->count() ? '' : 'hidden' }}">
-            <i class="fa fa-thumbs-o-up"></i> <span class="text-sm likes-count">{{ $post->likes->count() }}</span>
+        <div class="text-gray-600 post-likes-count {{ $post->likesCount ? '' : 'hidden' }}">
+            <i class="fa fa-thumbs-o-up"></i> <span class="text-sm likes-count">{{ $post->likesCount }}</span>
         </div>
 
         {{-- middle box --}}
         <div class="flex text-center mt-2 py-1 bg-white rounded-lg border border-gray-200 text-gray-500">
             {{-- like --}}
             <div class="w-1/3">
-                <span class="like-post cursor-pointer py-2 px-1 {{ auth()->user()->likes()->where('post_id', $post->id)->first() ? 'text-primary' : 'text-gray-500 hover:text-gray-600' }}"
+                <span class="like-post cursor-pointer py-2 px-1 {{ $post->isLiked() ? 'text-primary' : 'text-gray-500 hover:text-gray-600' }}"
                      data-post-id="{{ $post->id }}">
                     <i class="fa fa-thumbs-o-up text-2xl" 
                         style="margin-top: 4px" aria-hidden="true">
