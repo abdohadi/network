@@ -10,14 +10,14 @@
     	data-user-id="{{ $user['id'] }}" 
     	id="cancel_friend_request" 
     	class="button-outline-secondary ml-auto"
-    	title="Click to cancel the request"
-    ><i class="fa fa-check"></i> Sent</button>
+    	title="@lang('site.click_to_cancel_the_request')"
+    ><i class="fa fa-check"></i> @lang('site.sent')</button>
   @else
     <button 
     	data-user-id="{{ $user['id'] }}" 
     	id="send_friend_request" 
     	class="button-outline-primary ml-auto"
-    	title="Click to send a friend request"
-    ><i class="fa fa-user-plus"></i> Add</button>
+    	title="@lang('site.click_to_send_a_friend_request')"
+    ><i class="fa fa-user-plus"></i> @lang('site.add')</button>
   @endif
 </div>

@@ -3,7 +3,7 @@
         {{-- <a href="#group-modal" rel="modal:open" class="button-primary open-group-modal">Create Group</a> --}}
         <ul class="left-side-ul">
             <li>
-                <a class="font-medium mt-4 mb-4" href="">friends 
+                <a class="font-medium mt-4 mb-4" href="">@lang('site.friends') 
                     @if (count(auth()->user()->friends))
                         <small>{{ count(auth()->user()->friends) }}</small>
                     @endif
@@ -12,7 +12,7 @@
 
             <li class="font-medium mt-4 mb-4">
                 <div>
-                    <a href="/groups">Groups 
+                    <a href="/groups">@lang('site.groups') 
                         @if (count(auth()->user()->groups))
                             <small>{{ count(auth()->user()->groups) }}</small>
                         @endif
@@ -28,14 +28,14 @@
             </li>
 
             <li class="font-medium mt-4 mb-4">
-                <a href="">Pages 
+                <a href="">@lang('site.pages') 
                     {{-- @if (count(auth()->user()->pages)) --}}
-                        <small>100</small>
+                        {{-- <small>100</small> --}}
                     {{-- @endif --}}
                 </a>
             </li>
 
-            <li class="font-medium mt-4 mb-4"><a href="">Sittings</a></li>
+            <li class="font-medium mt-4 mb-4"><a href="">@lang('site.settings')</a></li>
         </ul>
 
         @include('layouts._footer')

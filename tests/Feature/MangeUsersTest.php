@@ -17,9 +17,9 @@ class MangeUsersTest extends TestCase
         // $this->withoutExceptionHandling();
         $this->signIn();
         
-        $this->get('/')->assertOk();
+        $this->get(localizeURL('/'))->assertOk();
 
-        $this->get('/home')->assertOk();
+        $this->get(localizeURL('/home'))->assertOk();
     }
 
     /** @test */
@@ -28,12 +28,12 @@ class MangeUsersTest extends TestCase
         // a user can view their profiles
         $user = factory(User::class)->create();
         $this->be($user)
-            ->get($user->path())
+            ->get(localizeURL($user->path()))
             ->assertOk();
 
         // a user can view profiles of others
         $this->signIn();
-        $this->get($user->path())->assertOk();
+        $this->get(localizeURL($user->path()))->assertOk();
     }
 
     /** @test */
@@ -41,7 +41,7 @@ class MangeUsersTest extends TestCase
     {
         // guest
         $user = factory(User::class)->create();
-        $this->get($user->path())->assertRedirect('login');
+        $this->get(localizeURL($user->path()))->assertRedirect(localizeURL('login'));
     }
 
     /** @test */
@@ -51,7 +51,7 @@ class MangeUsersTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get('users/request/send/'.$anotherUser->id);
+        $this->get(localizeURL('users/request/send/'.$anotherUser->id));
 
         $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
     }
@@ -63,7 +63,7 @@ class MangeUsersTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get('users/request/cancel/'.$anotherUser->id);
+        $this->get(localizeURL('users/request/cancel/'.$anotherUser->id));
 
         $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
     }
@@ -75,11 +75,11 @@ class MangeUsersTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get('users/request/send/'.$anotherUser->id);
+        $this->get(localizeURL('users/request/send/'.$anotherUser->id));
 
         $this->signIn($anotherUser);
 
-        $this->get('users/request/accept/'.$user->id);
+        $this->get(localizeURL('users/request/accept/'.$user->id));
 
         $this->assertTrue($anotherUser->friends->contains($user));
     }
@@ -90,6 +90,6 @@ class MangeUsersTest extends TestCase
         $this->signIn();
 
         $user = factory(User::class)->create();
-        $this->get("users/{$user->id}/friends")->assertOk();
+        $this->get(localizeURL("users/{$user->id}/friends"))->assertOk();
     }
 }

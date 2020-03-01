@@ -19,7 +19,7 @@ class ManageGroupsTest extends TestCase
 
         $group = factory(Group::class)->create(['user_id' => $user->id]);
 
-        $this->post('/groups', $group->toArray());
+        $this->post(localizeURL('/groups'), $group->toArray());
 
         $this->assertDatabaseHas('groups', $group->toArray());
     }
@@ -30,7 +30,7 @@ class ManageGroupsTest extends TestCase
         $group = factory(Group::class)->create(['name' => '']);
 
         $this->actingAs($group->owner)
-            ->post('/groups', $group->toArray())
+            ->post(localizeURL('/groups'), $group->toArray())
             ->assertSessionHasErrors('name');
     }
 
@@ -40,7 +40,7 @@ class ManageGroupsTest extends TestCase
         $group = factory(Group::class)->create(['description' => '']);
 
         $this->actingAs($group->owner)
-            ->post('/groups', $group->toArray())
+            ->post(localizeURL('/groups'), $group->toArray())
             ->assertSessionHasErrors('description');
     }
 
@@ -52,7 +52,7 @@ class ManageGroupsTest extends TestCase
 
         $group = factory(Group::class)->create();
 
-        $this->get($group->path().'/join');
+        $this->get(localizeURL($group->path().'/join'));
 
         $this->assertTrue($group->groupJoinRequests->contains($user));
     }

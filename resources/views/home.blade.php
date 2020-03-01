@@ -10,19 +10,14 @@
         <div class="lg:w-3/6 mx-2 xl:px-8">
             {{-- Create New Post --}}
             <div class="card mb-4">
-                @include('posts._form', [
-                    'action' => '/posts',
-                    'type' => 'post',
-                    'submit_value' => 'Post',
-                    'submit_id' => 'submit-create-post',
-                ])
+                @include('posts._create_post_form')
             </div>
 
             {{-- Show Posts --}}
             @forelse($posts as $post)
                 @include('posts._post')
             @empty
-                <div class="card">No posts yet</div>
+                <div class="card">@lang('site.no_posts_yet')</div>
             @endforelse
         </div>
 

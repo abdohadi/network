@@ -18,10 +18,10 @@ class ManagePostsTest extends TestCase
         // $this->WithoutExceptionHandling();
         $post = factory(Post::class)->create();
 
-        $this->followingRedirects()
-            ->actingAs($post->owner)
-            ->post('/posts', $post->toArray())
-            ->assertSee($post['body']);
+        $this->actingAs($post->owner)
+             ->post(localizeURL('/posts'), $post->toArray());
+
+        $this->get(localizeURL($post->path()))->assertSee($post['body']);
     }
 
     /** @test */
@@ -29,8 +29,8 @@ class ManagePostsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post('/posts', factory(Post::class)->raw(['body' => '']))
-            ->assertSessionHasErrors('body');
+        $this->post(localizeURL('/posts'), factory(Post::class)->raw(['body' => '']))
+             ->assertSessionHasErrors('body');
     }
 
     /** @test */
@@ -39,7 +39,7 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-            ->patch($post->path(), $attributes = ['body' => 'updated body']);
+             ->patch(localizeURL($post->path()), $attributes = ['body' => 'updated body']);
 
         $this->assertDatabaseHas('posts', $attributes);
     }
@@ -50,8 +50,8 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-            ->delete($post->path())
-            ->assertRedirect('/');
+             ->delete(localizeURL($post->path()))
+             ->assertRedirect('/');
     }
 
     /** @test */
@@ -59,9 +59,11 @@ class ManagePostsTest extends TestCase
     {
         $this->signIn();
 
-        $this->patch(factory(Post::class)->create()->path())->assertStatus(403);
+        $this->patch(localizeURL(factory(Post::class)->create()->path()))
+             ->assertStatus(403);
 
-        $this->delete(factory(Post::class)->create()->path())->assertStatus(403);
+        $this->delete(localizeURL(factory(Post::class)->create()->path()))
+             ->assertStatus(403);
     }
 
     /** @test */
@@ -70,8 +72,8 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-            ->get($post->path())
-            ->assertOk();
+             ->get(localizeURL($post->path()))
+             ->assertOk();
     }
 
     /** @test */
@@ -79,7 +81,7 @@ class ManagePostsTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-        $this->get($post->path())->assertRedirect('login');
+        $this->get(localizeURL($post->path()))->assertRedirect(localizeURL('login'));
     }
 
     /** @test */
@@ -87,10 +89,10 @@ class ManagePostsTest extends TestCase
     {
         $path = factory(Post::class)->create()->path();
 
-        $this->post('/posts')->assertRedirect('login');
+        $this->post(localizeURL('/posts'))->assertRedirect(localizeURL('login'));
 
-        $this->patch($path)->assertRedirect('login');
+        $this->patch(localizeURL($path))->assertRedirect(localizeURL('login'));
 
-        $this->delete($path)->assertRedirect('login');
+        $this->delete(localizeURL($path))->assertRedirect(localizeURL('login'));
     }
 }

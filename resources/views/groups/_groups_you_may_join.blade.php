@@ -1,6 +1,6 @@
 <div class="card">
 	<div 
-		class="font-bold text-gray-600 mb-4">Join New Groups</div>
+		class="font-bold text-gray-600 mb-4">@lang('site.groups_you_may_join')</div>
 
 	<div>
 		@forelse(array_slice(groupsYouMayJoin(), 0, 2) as $group)
@@ -25,16 +25,16 @@
 	        <button 
           class="button-outline-primary mt-4"
           title="Click to send a join request">
-            <i class="fa fa-plus"></i> Join
+            <i class="fa fa-plus"></i> @lang('site.join')
           </button>
         </div>
     	</div>
 		@empty
-			<div>No groups yet</div>
+			<div>@lang('site.no_groups_yet')</div>
 		@endforelse
 
 		<div class="text-center text-primary mt-6">
-      <a href="/find_people">Find More</a>
+      <a href="/find_people">@lang('site.find_more')</a>
     </div>
 	</div>
 </div>

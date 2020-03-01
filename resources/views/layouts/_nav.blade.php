@@ -10,18 +10,18 @@
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('site.logout') }}</a>
                     </li>
                     @if (Route::has('register'))
                         <li class="ml-4">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('site.register') }}</a>
                         </li>
                     @endif
                 @else
                     <li>
                         <ul class="flex items-center">
                             <li>
-                                <a class="mx-3 flex text-gray-600 font-medium" href="/">Home</a>    
+                                <a class="mx-3 flex text-gray-600 font-medium" href="/">@lang('site.home')</a>    
                             </li>
 
                             {{-- Friend requests icon --}}
@@ -90,7 +90,7 @@
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    {{ __('site.logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

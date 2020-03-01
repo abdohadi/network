@@ -77,7 +77,7 @@
 				{{-- Create New Post --}}
 				@if ($user->is(auth()->user()))
 					<div class="card mb-4">
-						@include('posts._form', [
+						@include('posts._create_post_form', [
 							'action' => '/posts',
 							'type' => 'post',
 							'submit_value' => 'Post',

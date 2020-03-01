@@ -31,7 +31,7 @@ class PostsController extends Controller
 
 		$post = auth()->user()->posts()->create($attributes);
 
-		return redirect($post->path());
+		return ['redirect' => $post->path()];
 	}
 
 	public function update(Post $post)
@@ -44,7 +44,7 @@ class PostsController extends Controller
 
 		$post->update($attributes);
 
-		return back();
+		return ['redirect' => $post->path()];
 	}
 
 	public function destroy(Post $post)

@@ -13,7 +13,11 @@
 */
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(
+[
+	'prefix' => LaravelLocalization::setLocale(),
+	'middleware' => ['auth', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+], function () {
 	// home routes
 	Route::get('/', 'HomeController@index');
 	Route::get('/home', 'HomeController@index');
@@ -53,4 +57,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
-Auth::routes();
+
+Route::group(
+[
+	'prefix' => LaravelLocalization::setLocale(),
+	'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+], function () {
+	Auth::routes();
+});

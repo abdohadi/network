@@ -1,8 +1,7 @@
 @extends('layouts.app', ['nav_visiblity' => 'hidden'])
 
 @section('content')
-<div class="container">
-    <div class="flex justify-content-center login-register-parent">
+    <div class="login-register-parent">
         {{-- <div class="w-3/5 text-center">
             <h1 class="text-center text-4xl font-bold mt-20 mr-20" style="color: rgba(133, 143, 158, 0.98);">Join our network and have fun</h1>
             <ul class="text-3xl font-bold mt-16 mr-20" style="color:rgba(133, 143, 158, 0.98)"> 
@@ -16,19 +15,18 @@
                 <li>We will never share your data</li>
             </ul>
         </div> --}}
-        <div class="w-3/5 text-center mt-20 mr-20 text-3xl hello-there" style="color: rgba(133, 143, 158, 0.98);"></div>
 
-        <div class="login-register w-2/5">
+        <div class="login-register w-2/5 m-auto">
             {{-- Register card --}}
             <div class="card register-card" data-request="{{ old('register-request') ? 'register-request' : '' }}">
-                <div class="card-header"><h3 class="text-2xl text-center mb-8">{{ __('Register') }}</h3></div>
+                <div class="card-header"><h3 class="text-2xl text-center mb-8">{{ __('site.register') }}</h3></div>
 
                 <div class="card-body w-3/4 m-auto">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <div class="mb-4">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('site.name') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -50,7 +48,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('site.email_address') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -72,7 +70,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('site.password') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -91,7 +89,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('site.confirm_password') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -114,10 +112,10 @@
                         <div>
                             <div class="justify-between flex items-center">
                                 <button type="submit" class="button-primary">
-                                    {{ __('Register') }}
+                                    {{ __('site.register') }}
                                 </button>
 
-                                <span class="have-account ml-auto text-primary cursor-pointer">Already have account? login</span>
+                                <span class="have-account ml-auto text-primary cursor-pointer">{{ __('site.already_have_account') }}</span>
                             </div>
                         </div>
                     </form>
@@ -126,14 +124,14 @@
 
             {{-- Login card --}}
             <div class="card login-card">
-                <div><h3 class="text-2xl text-center mb-8">{{ __('Login') }}</h3></div>
+                <div><h3 class="text-2xl text-center mb-8">{{ __('site.login') }}</h3></div>
 
                 <div class="card-body w-3/4 m-auto">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="mb-4">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('site.email_address') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -155,7 +153,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('site.password') }}</label>
 
                             <div class="col-md-6">
                                 <input 
@@ -180,7 +178,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('site.remember_me') }}
                                     </label>
                                 </div>
                             </div>
@@ -189,12 +187,12 @@
                         <div class="form-group row mb-0">
                             <div class="flex justify-between items-center">
                                 <button type="submit" class="button-primary">
-                                    {{ __('Login') }}
+                                    {{ __('site.login') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link text-primary" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                                        {{ __('site.forgot_password') }}
                                     </a>
                                 @endif
                             </div>
@@ -203,18 +201,17 @@
                 </div>
 
                 <div class="text-center">
-                    <button class="button-outline-secondary create-account-button mt-10 px-10" style="padding:.4rem 2rem;">Create new account</button>
+                    <button class="button-outline-secondary create-account-button mt-10 px-10" style="padding:.4rem 2rem;">{{ __('site.create_new_account') }}</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 @endsection
 
 @section('footer')
 
-    <footer class="py-8 text-center mt-20" style="background-color:#f1f1f1;">
+    <footer class="py-8 text-center mt-20 relative b-0" style="background-color:#f1f1f1;">
         Abdelrahman &copy 2019
     </footer>
 

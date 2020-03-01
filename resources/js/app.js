@@ -26,40 +26,48 @@ $(document).ready(function() {
 		let post = $(this).data('post');
 
 		$('.post-modal').find('textarea').text(post.body);
+		$('.post-modal').find('textarea').val(post.body);
+		$('.post-modal').find('form').attr('action', '/posts/' + post.id);
 
 		if ((window.location.pathname == '/') || (window.location.pathname == '/home')) {
 			$('.post-modal').find('form').attr('action', '/posts/' + post.id);
 		}
 	});
 
-	// Show post errors when clicking submit button
-	$('#submit-update-post, #submit-create-post').click(function (e) {
-		let textarea = $(this).parents('form').find('textarea');
+	// Add post
+	$('#submit-create-post').on('submit', function(e) {
+		e.preventDefault();
 
-		if (textarea.val() == '') {
-			textarea.addClass('border-red-300');
-			textarea.siblings('.post-error').show();
-			e.preventDefault();
-		} else {
-			textarea.removeClass('border-red-300');
-			textarea.addClass('border-green-500');
-			textarea.siblings('.post-error').hide();
-		}
+		let textarea = $(this).find('textarea'),
+			 url = $(this).attr('action'),
+			 data = $(this).serializeArray().reduce((obj, item) => {
+			    obj[item.name] = item.value;
+			    return obj;
+			 }, {});
+
+		addOrUpdatePost(textarea, url, data, 'post');
 	});
 
-	// Redirect to post page when u click on it
-	// $('.post').click(function (e) {
-	// 	if (! $(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'post-options' && e.target.id != 'open-post-modal') {
-	// 		window.location = $(this).data('post');
-	// 	}
-	// });
+	// Update post
+	$('#submit-update-post').on('submit', function(e) {
+		e.preventDefault();
+
+		let textarea = $(this).find('textarea'),
+			 url = $(this).attr('action'),
+			 data = $(this).serializeArray().reduce((obj, item) => {
+			    obj[item.name] = item.value;
+			    return obj;
+			 }, {});
+
+		addOrUpdatePost(textarea, url, data, 'patch');
+	});
 
 
 	/**
 	 *	Comments Section
 	 */
 	// Focus on comment input
-	$('.comment-span').on('click', () => {
+	$('.comment-span').on('click', function() {
 		$(this).parents('.post-box').find('.comment-input').focus();
 	});
 
@@ -252,9 +260,30 @@ $(document).ready(function() {
 });
 
 
-/**
+
+/********************************
 * Functions
-*/
+********************************/
+// add or update post
+async function addOrUpdatePost(textarea, url, data, method) {
+	await $.ajax({
+			url: url,
+			method: method,
+			data: data,
+			success: function(success) {
+				textarea.removeClass('border-red-300');
+				textarea.addClass('border-green-500');
+				textarea.siblings('.post-error').hide();
+
+				window.location = success.redirect;
+			},
+			error: function(error) {
+				textarea.addClass('border-red-300');
+				textarea.siblings('.post-error').html(error.responseJSON.errors.body[0]);
+			}
+		});
+}
+
 // Send / cancel / delete / accept friend requests
 async function handleFriendRequest(el) {
 	if ($(el).attr('id') == 'send_friend_request') {

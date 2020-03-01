@@ -856,8 +856,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 * Our custom javascript & jquery
 */
 $(document).ready(function () {
-  var _this = this;
-
   /**
    *	Posts Section
    */
@@ -876,38 +874,42 @@ $(document).ready(function () {
   $('.open-post-modal').click(function () {
     var post = $(this).data('post');
     $('.post-modal').find('textarea').text(post.body);
+    $('.post-modal').find('textarea').val(post.body);
+    $('.post-modal').find('form').attr('action', '/posts/' + post.id);
 
     if (window.location.pathname == '/' || window.location.pathname == '/home') {
       $('.post-modal').find('form').attr('action', '/posts/' + post.id);
     }
-  }); // Show post errors when clicking submit button
+  }); // Add post
 
-  $('#submit-update-post, #submit-create-post').click(function (e) {
-    var textarea = $(this).parents('form').find('textarea');
+  $('#submit-create-post').on('submit', function (e) {
+    e.preventDefault();
+    var textarea = $(this).find('textarea'),
+        url = $(this).attr('action'),
+        data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    addOrUpdatePost(textarea, url, data, 'post');
+  }); // Update post
 
-    if (textarea.val() == '') {
-      textarea.addClass('border-red-300');
-      textarea.siblings('.post-error').show();
-      e.preventDefault();
-    } else {
-      textarea.removeClass('border-red-300');
-      textarea.addClass('border-green-500');
-      textarea.siblings('.post-error').hide();
-    }
-  }); // Redirect to post page when u click on it
-  // $('.post').click(function (e) {
-  // 	if (! $(this).data('in-show-page') && e.target.id != 'show-options' && e.target.id != 'post-options' && e.target.id != 'open-post-modal') {
-  // 		window.location = $(this).data('post');
-  // 	}
-  // });
-
+  $('#submit-update-post').on('submit', function (e) {
+    e.preventDefault();
+    var textarea = $(this).find('textarea'),
+        url = $(this).attr('action'),
+        data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    addOrUpdatePost(textarea, url, data, 'patch');
+  });
   /**
    *	Comments Section
    */
   // Focus on comment input
 
   $('.comment-span').on('click', function () {
-    $(_this).parents('.post-box').find('.comment-input').focus();
+    $(this).parents('.post-box').find('.comment-input').focus();
   }); // Add comment
 
   $('.add-comment-form').on('submit', function (e) {
@@ -943,14 +945,14 @@ $(document).ready(function () {
   }); // Delete comment 
 
   $(document).on('click', '.delete-comment', function (e) {
-    var _this2 = this;
+    var _this = this;
 
     e.preventDefault();
     $.ajax({
       url: $(this).data('comment-url'),
       method: 'get',
       success: function success() {
-        $(_this2).parents('.user-comment').remove();
+        $(_this).parents('.user-comment').remove();
       },
       error: function error(_error) {
         console.log('error');
@@ -1076,12 +1078,52 @@ $(document).ready(function () {
     }
   };
 });
-/**
+/********************************
 * Functions
-*/
-// Send / cancel / delete / accept friend requests
+********************************/
+// add or update post
 
-function handleFriendRequest(_x) {
+function addOrUpdatePost(_x, _x2, _x3, _x4) {
+  return _addOrUpdatePost.apply(this, arguments);
+} // Send / cancel / delete / accept friend requests
+
+
+function _addOrUpdatePost() {
+  _addOrUpdatePost = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(textarea, url, data, method) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return $.ajax({
+              url: url,
+              method: method,
+              data: data,
+              success: function success(_success) {
+                textarea.removeClass('border-red-300');
+                textarea.addClass('border-green-500');
+                textarea.siblings('.post-error').hide();
+                window.location = _success.redirect;
+              },
+              error: function error(_error2) {
+                textarea.addClass('border-red-300');
+                textarea.siblings('.post-error').html(_error2.responseJSON.errors.body[0]);
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _addOrUpdatePost.apply(this, arguments);
+}
+
+function handleFriendRequest(_x5) {
   return _handleFriendRequest.apply(this, arguments);
 } // handle post likes
 
@@ -1089,13 +1131,13 @@ function handleFriendRequest(_x) {
 function _handleFriendRequest() {
   _handleFriendRequest = _asyncToGenerator(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(el) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(el) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             if (!($(el).attr('id') == 'send_friend_request')) {
-              _context.next = 9;
+              _context2.next = 9;
               break;
             }
 
@@ -1103,59 +1145,59 @@ function _handleFriendRequest() {
             // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
             $(el).attr('class', 'button-outline-secondary ml-auto'); // send the request
 
-            _context.next = 4;
+            _context2.next = 4;
             return $.get('/users/request/send/' + $(el).data('user-id'));
 
           case 4:
             $(el).attr('id', 'cancel_friend_request');
             $(el).attr('title', 'Click to cancel the request');
             $(el).html('<i class="fa fa-check"></i> Sent');
-            _context.next = 30;
+            _context2.next = 30;
             break;
 
           case 9:
             if (!($(el).attr('id') == 'cancel_friend_request')) {
-              _context.next = 18;
+              _context2.next = 18;
               break;
             }
 
             // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
             $(el).attr('class', 'button-outline-primary ml-auto');
-            _context.next = 13;
+            _context2.next = 13;
             return $.get('/users/request/cancel/' + $(el).data('user-id'));
 
           case 13:
             $(el).attr('id', 'send_friend_request');
             $(el).attr('title', 'Click to send a friend request');
             $(el).html('<i class="fa fa-plus"></i> Add');
-            _context.next = 30;
+            _context2.next = 30;
             break;
 
           case 18:
             if (!($(el).attr('id') == 'accept_friend_request')) {
-              _context.next = 25;
+              _context2.next = 25;
               break;
             }
 
             // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
             $(el).attr('class', 'button-outline-primary ml-auto');
-            _context.next = 22;
+            _context2.next = 22;
             return $.get('/users/request/accept/' + $(el).data('user-id'));
 
           case 22:
             $(el).parents('#friend-request').fadeOut(500);
-            _context.next = 30;
+            _context2.next = 30;
             break;
 
           case 25:
             if (!($(el).attr('id') == 'delete_friend_request')) {
-              _context.next = 30;
+              _context2.next = 30;
               break;
             }
 
             // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
             $(el).attr('class', 'button-outline-primary ml-auto');
-            _context.next = 29;
+            _context2.next = 29;
             return $.get('/users/request/delete/' + $(el).data('user-id'));
 
           case 29:
@@ -1163,10 +1205,10 @@ function _handleFriendRequest() {
 
           case 30:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee);
+    }, _callee2);
   }));
   return _handleFriendRequest.apply(this, arguments);
 }
@@ -1179,17 +1221,17 @@ function handlePostLikes() {
 function _handlePostLikes() {
   _handlePostLikes = _asyncToGenerator(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
     var likesCount, likesBox;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.next = 2;
+            _context3.next = 2;
             return $.get('/posts/' + $(this).data('post-id') + '/liked');
 
           case 2:
-            likesCount = _context2.sent;
+            likesCount = _context3.sent;
             $(this).toggleClass('text-primary text-gray-500 hover:text-gray-600'); // display & update likes count on post
 
             likesBox = $(this).parents('.post-box').find('.post-likes-count');
@@ -1202,71 +1244,21 @@ function _handlePostLikes() {
 
           case 7:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee3, this);
   }));
   return _handlePostLikes.apply(this, arguments);
 }
 
-function addComment(_x2, _x3, _x4) {
+function addComment(_x6, _x7, _x8) {
   return _addComment.apply(this, arguments);
 } // Update comment
 
 
 function _addComment() {
   _addComment = _asyncToGenerator(
-  /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(form, data, url) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return $.ajax({
-              url: url,
-              type: 'post',
-              data: data,
-              success: function success(_success) {
-                var userName = form.data('user-name');
-                var userPath = form.data('user-path');
-                var postId = form.data('post-id');
-                var commentId = _success.commentId;
-                var commentPath = _success.commentPath;
-                var userImgSrc = form.data('user-img-src');
-                var newComment = "\n\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t<div class=\"pl-4 mt-4\">\n\t             \t<div class=\"flex\">\n\t\t\t\t\t\t\t<div class=\"w-1/12\">\n\t\t\t\t\t\t\t   <a href=\"".concat(userPath, "\"><img src=\"").concat(userImgSrc, "\" class=\"rounded-full w-10 border\"></a>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative\"\n\t\t\t\t\t\t\t\t  style=\"word-wrap: break-word;border-radius: 1.25rem;\">\n                         <i class=\"show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl\"></i>\n\n                         <div class=\"options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10\" style=\"top:-8px;display:none\">\n                             <ul>\n                                 <a data-comment-id=\"").concat(commentId, "\"\n                                    data-post-id=\"").concat(postId, "\"\n                                    href=\"#comment-modal\"\n                                    rel=\"modal:open\" \n                                    class=\"open-comment-modal\"\n                                 >\n                                     <li class=\"cursor-pointer hover:text-gray-900 text-gray-600 py-1\" id=\"open-comment-modal\">Edit Comment</li>\n                                 </a>\n\n                                 <button class=\"delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1\"\n                                         data-comment-url=\"").concat(commentPath, "\"\n                                  >Delete Comment</button>\n                             </ul>\n                         </div>\n\n\t\t\t\t\t\t\t\t<p>\n\t                        <a href=\"").concat(userPath, "\" class=\"text-gray-700 text-lg\">\n\t                           ").concat(userName, "\n\t                        </a>\n\n\t                        <span class=\"text-gray-500 text-xs ml-2\">\n\t                           just now\n\t                        </span>\n\t                     </p>\n\n\t\t\t\t\t\t\t\t<p class=\"comment-body\">").concat(data.body, "</p>\n\t\t\t\t\t\t\t</div>\n\t             \t</div>\n\t          \t</div>\n          \t</div>\n\t\t\t");
-                form.parents('.comments-box').find('.user-comments').prepend(newComment);
-
-                if (form.find('textarea').hasClass('border-red-300')) {
-                  form.find('textarea').removeClass('border-red-300');
-                }
-
-                form.find('textarea').val('');
-                form.find('.comment-error').toggle();
-              },
-              error: function error(_error2) {
-                form.find('.comment-error').toggleClass('hidden').html(_error2.responseJSON.errors.body[0]);
-                form.find('textarea').toggleClass('border-gray-300 border-red-300');
-              }
-            });
-
-          case 2:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3);
-  }));
-  return _addComment.apply(this, arguments);
-}
-
-function updateComment(_x5, _x6, _x7) {
-  return _updateComment.apply(this, arguments);
-}
-
-function _updateComment() {
-  _updateComment = _asyncToGenerator(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(form, data, url) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -1279,14 +1271,24 @@ function _updateComment() {
               type: 'post',
               data: data,
               success: function success(_success2) {
-                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+                var userName = form.data('user-name');
+                var userPath = form.data('user-path');
+                var postId = form.data('post-id');
+                var commentId = _success2.commentId;
+                var commentPath = _success2.commentPath;
+                var userImgSrc = form.data('user-img-src');
+                var newComment = "\n\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t<div class=\"pl-4 mt-4\">\n\t             \t<div class=\"flex\">\n\t\t\t\t\t\t\t<div class=\"w-1/12\">\n\t\t\t\t\t\t\t   <a href=\"".concat(userPath, "\"><img src=\"").concat(userImgSrc, "\" class=\"rounded-full w-10 border\"></a>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative\"\n\t\t\t\t\t\t\t\t  style=\"word-wrap: break-word;border-radius: 1.25rem;\">\n                         <i class=\"show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl\"></i>\n\n                         <div class=\"options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10\" style=\"top:-8px;display:none\">\n                             <ul>\n                                 <a data-comment-id=\"").concat(commentId, "\"\n                                    data-post-id=\"").concat(postId, "\"\n                                    href=\"#comment-modal\"\n                                    rel=\"modal:open\" \n                                    class=\"open-comment-modal\"\n                                 >\n                                     <li class=\"cursor-pointer hover:text-gray-900 text-gray-600 py-1\" id=\"open-comment-modal\">Edit Comment</li>\n                                 </a>\n\n                                 <button class=\"delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1\"\n                                         data-comment-url=\"").concat(commentPath, "\"\n                                  >Delete Comment</button>\n                             </ul>\n                         </div>\n\n\t\t\t\t\t\t\t\t<p>\n\t                        <a href=\"").concat(userPath, "\" class=\"text-gray-700 text-lg\">\n\t                           ").concat(userName, "\n\t                        </a>\n\n\t                        <span class=\"text-gray-500 text-xs ml-2\">\n\t                           just now\n\t                        </span>\n\t                     </p>\n\n\t\t\t\t\t\t\t\t<p class=\"comment-body\">").concat(data.body, "</p>\n\t\t\t\t\t\t\t</div>\n\t             \t</div>\n\t          \t</div>\n          \t</div>\n\t\t\t");
+                form.parents('.comments-box').find('.user-comments').prepend(newComment);
+
+                if (form.find('textarea').hasClass('border-red-300')) {
+                  form.find('textarea').removeClass('border-red-300');
+                }
+
                 form.find('textarea').val('');
                 form.find('.comment-error').toggle();
-                form.siblings('.close-modal').click();
-                window.commentToEdit.text(data.body);
               },
               error: function error(_error3) {
-                form.find('.comment-error').toggle().html(_error3.responseJSON.errors.body[0]);
+                form.find('.comment-error').toggleClass('hidden').html(_error3.responseJSON.errors.body[0]);
                 form.find('textarea').toggleClass('border-gray-300 border-red-300');
               }
             });
@@ -1297,6 +1299,46 @@ function _updateComment() {
         }
       }
     }, _callee4);
+  }));
+  return _addComment.apply(this, arguments);
+}
+
+function updateComment(_x9, _x10, _x11) {
+  return _updateComment.apply(this, arguments);
+}
+
+function _updateComment() {
+  _updateComment = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(form, data, url) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return $.ajax({
+              url: url,
+              type: 'post',
+              data: data,
+              success: function success(_success3) {
+                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+                form.find('textarea').val('');
+                form.find('.comment-error').toggle();
+                form.siblings('.close-modal').click();
+                window.commentToEdit.text(data.body);
+              },
+              error: function error(_error4) {
+                form.find('.comment-error').toggle().html(_error4.responseJSON.errors.body[0]);
+                form.find('textarea').toggleClass('border-gray-300 border-red-300');
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
   }));
   return _updateComment.apply(this, arguments);
 }

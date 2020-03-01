@@ -23,6 +23,7 @@ class CommentsController extends Controller
             'body' => 'required',
         ]);
 
+        // if we want to add image to comments
         // $attributes = ['body' => $request->body];
 
         // // resize & save image
@@ -52,18 +53,16 @@ class CommentsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @param  \App\Post  $post
      */
     public function update(Request $request, Post $post, Comment $comment)
     {
-        // validation
         request()->validate([
             'body' => 'required'
         ]);
 
         abort_if(auth()->user()->cannot('update', $comment), 403);
 
-        // update comment
         $comment->update($request->all());
     }
 

@@ -1,7 +1,5 @@
-<div class="rounded-lg m-auto mb-6 post-box">
-    <div 
-        class="card post" 
-        data-post="{{ $post->path() }}">
+<div class="post-box rounded-lg m-auto mb-6">
+    <div class="card post">
         <div class="relative">
             @can('update', $post)
                 <i class="show-options fa fa-ellipsis-h w-5 absolute right-0 mr-2 text-2xl text-gray-500 hover:text-gray-600 cursor-pointer"></i>
@@ -10,16 +8,20 @@
             {{-- Post options --}}
             <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto" style="top:-8px;display:none">
             	<ul>
-                    <!-- Link to open the modal -->
+                    <!-- Link to open the edit-post modal -->
             		<a data-post="{{ $post }}" href="#post-modal" rel="modal:open" class="open-post-modal">
-            			<li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">Edit Post</li>
+            			<li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">@lang('site.edit')</li>
             		</a>
 
-                    <form action="{{ $post->path() }}" method="POST">
-                        @method('DELETE')
+                    <form action="{{ localizeURL($post->path()) }}" method="post">
+                        @method("DELETE")
                         @csrf
 
-        			    <button id="delete-btn" class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" onclick="if (! confirm('Are you sure you want to delete your post?')) return false;">Delete Post</button>
+        			    <button id="delete-btn"
+                                class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" 
+                                onclick="if (! confirm('Are you sure you want to delete your post?')) return false;"
+                                >@lang('site.delete')
+                        </button>
                     </form>
             	</ul>
             </div>
@@ -58,7 +60,7 @@
                         style="margin-top: 4px" aria-hidden="true">
                     </i>
 
-                    <span class="text-sm"> Like</span>
+                    <span class="text-sm"> @lang('site.like')</span>
                 </span>
             </div>
 
@@ -67,7 +69,7 @@
                 <span class="comment-span cursor-pointer py-2 px-1 hover:text-gray-600">
                     <i class="fa fa-comment text-2xl" style="margin-top: 2px;"></i>
 
-                    <span class="text-sm"> Comment</span>
+                    <span class="text-sm"> @lang('site.comment')</span>
                 </span>
             </div>
 
@@ -76,7 +78,7 @@
                 <span class="cursor-pointer py-2 px-1 hover:text-gray-600">
                     <i class="fa fa-share share-post text-xl" style="margin-top: 6px" aria-hidden="true"></i>
 
-                    <span class="text-sm"> Share</span>
+                    <span class="text-sm"> @lang('site.share')</span>
                 </span>
             </div>
         </div>
@@ -94,7 +96,7 @@
                 <div class="w-11/12 ml-2">
                     <form 
                         class="flex add-comment-form" 
-                        action="{{ $post->path() . '/comments' }}" 
+                        action="{{ localizeURL($post->path() . '/comments') }}" 
                         method="post"
                         data-user-name="{{ auth()->user()->name }}"
                         data-post-id="{{ $post->id }}"
@@ -112,7 +114,7 @@
                         </div>
 
                         <div class="w-3/12">
-                            <button class="ml-4 mt-2 button-outline-secondary">Commet</button>
+                            <button class="ml-4 mt-2 button-outline-secondary">@lang('site.add_comment')</button>
                         </div>
                     </form>
                 </div>
@@ -122,7 +124,7 @@
             @if (request()->path() != $post->path())
                 @if ($post->comments->count() > 3)
                     <p class="mt-4 ml-6">
-                        <a href="{{ $post->path() }}" class="text-primary">View {{ $post->comments->count() - 3 }} other comments</a>
+                        <a href="{{ $post->path() }}" class="text-primary">@lang('site.view_other_comments', ['count' => $post->comments->count() - 3])</a>
                     </p>
                 @endif
             @endif
@@ -154,12 +156,12 @@
                                                        href="#comment-modal" 
                                                        rel="modal:open" 
                                                        class="open-comment-modal">
-                                                        <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">Edit Comment</li>
+                                                        <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">@lang('site.edit')</li>
                                                     </a>
 
                                                     <a class="delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1"
-                                                            data-comment-url="{{ $comment->path() }}"
-                                                    >Delete Comment</a>
+                                                        data-comment-url="{{ localizeURL($comment->path()) }}"
+                                                    >@lang('site.delete')</a>
                                                 </ul>
                                             </div>
                                         @endcan
