@@ -15,7 +15,7 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->index();
             $table->string('name');
             $table->text('description');
             $table->string('cover')->default('default.jpg');

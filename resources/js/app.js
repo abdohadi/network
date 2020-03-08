@@ -286,31 +286,37 @@ async function addOrUpdatePost(textarea, url, data, method) {
 
 // Send / cancel / delete / accept friend requests
 async function handleFriendRequest(el) {
+	$(el).toggleClass('button-outline-primary button-outline-secondary');
+	
 	if ($(el).attr('id') == 'send_friend_request') {
-		// loader
-		// $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-		$(el).attr('class', 'button-outline-secondary ml-auto');
+		let btnVal = $(el).data('btn-sent');
+
 		// send the request
 		await $.get('/users/request/send/' + $(el).data('user-id'));
+
 		$(el).attr('id', 'cancel_friend_request');
 		$(el).attr('title', 'Click to cancel the request');
-		$(el).html('<i class="fa fa-check"></i> Sent');
+		$(el).html(`<i class="fa fa-check"></i> ${btnVal}`);
 	} else if ($(el).attr('id') == 'cancel_friend_request') {
-		// $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-		$(el).attr('class', 'button-outline-primary ml-auto');
+		let btnVal = $(el).data('btn-add');
+
+		// cancel the request
 		await $.get('/users/request/cancel/' + $(el).data('user-id'));
+
 		$(el).attr('id', 'send_friend_request');
 		$(el).attr('title', 'Click to send a friend request');
-		$(el).html('<i class="fa fa-plus"></i> Add');
+		$(el).html(`<i class="fa fa-user-plus"></i> ${btnVal}`);
 	} else if ($(el).attr('id') == 'accept_friend_request') {
-		// $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-		$(el).attr('class', 'button-outline-primary ml-auto');
+		// accept the request
 		await $.get('/users/request/accept/' + $(el).data('user-id'));
+
+		$(el).attr('class', 'button-outline-primary ml-auto');
 		$(el).parents('#friend-request').fadeOut(500);
 	} else if ($(el).attr('id') == 'delete_friend_request') {
-		// $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-		$(el).attr('class', 'button-outline-primary ml-auto');
+		// delete the request
 		await $.get('/users/request/delete/' + $(el).data('user-id'));
+
+		$(el).attr('class', 'button-outline-primary ml-auto');
 		$(el).parents('#friend-request').fadeOut(500);
 	}
 }

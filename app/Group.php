@@ -25,6 +25,11 @@ class Group extends Model
 
     public function groupJoinRequests()
     {
-    	return $this->belongsToMany(User::class, 'group_join_requests');
+    	return $this->belongsToMany(User::class, 'join_group_requests');
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
     }
 }

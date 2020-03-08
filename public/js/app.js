@@ -1132,78 +1132,78 @@ function _handleFriendRequest() {
   _handleFriendRequest = _asyncToGenerator(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(el) {
+    var btnVal, _btnVal;
+
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            $(el).toggleClass('button-outline-primary button-outline-secondary');
+
             if (!($(el).attr('id') == 'send_friend_request')) {
-              _context2.next = 9;
+              _context2.next = 10;
               break;
             }
 
-            // loader
-            // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-            $(el).attr('class', 'button-outline-secondary ml-auto'); // send the request
+            btnVal = $(el).data('btn-sent'); // send the request
 
-            _context2.next = 4;
+            _context2.next = 5;
             return $.get('/users/request/send/' + $(el).data('user-id'));
 
-          case 4:
+          case 5:
             $(el).attr('id', 'cancel_friend_request');
             $(el).attr('title', 'Click to cancel the request');
-            $(el).html('<i class="fa fa-check"></i> Sent');
-            _context2.next = 30;
+            $(el).html("<i class=\"fa fa-check\"></i> ".concat(btnVal));
+            _context2.next = 31;
             break;
 
-          case 9:
+          case 10:
             if (!($(el).attr('id') == 'cancel_friend_request')) {
-              _context2.next = 18;
+              _context2.next = 19;
               break;
             }
 
-            // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-            $(el).attr('class', 'button-outline-primary ml-auto');
-            _context2.next = 13;
+            _btnVal = $(el).data('btn-add'); // cancel the request
+
+            _context2.next = 14;
             return $.get('/users/request/cancel/' + $(el).data('user-id'));
 
-          case 13:
+          case 14:
             $(el).attr('id', 'send_friend_request');
             $(el).attr('title', 'Click to send a friend request');
-            $(el).html('<i class="fa fa-plus"></i> Add');
-            _context2.next = 30;
+            $(el).html("<i class=\"fa fa-user-plus\"></i> ".concat(_btnVal));
+            _context2.next = 31;
             break;
 
-          case 18:
+          case 19:
             if (!($(el).attr('id') == 'accept_friend_request')) {
-              _context2.next = 25;
+              _context2.next = 26;
               break;
             }
 
-            // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-            $(el).attr('class', 'button-outline-primary ml-auto');
             _context2.next = 22;
             return $.get('/users/request/accept/' + $(el).data('user-id'));
 
           case 22:
+            $(el).attr('class', 'button-outline-primary ml-auto');
             $(el).parents('#friend-request').fadeOut(500);
-            _context2.next = 30;
+            _context2.next = 31;
             break;
 
-          case 25:
+          case 26:
             if (!($(el).attr('id') == 'delete_friend_request')) {
-              _context2.next = 30;
+              _context2.next = 31;
               break;
             }
 
-            // $(el).html('<div class="lds-facebook"><div></div><div></div><div></div></div>');
-            $(el).attr('class', 'button-outline-primary ml-auto');
             _context2.next = 29;
             return $.get('/users/request/delete/' + $(el).data('user-id'));
 
           case 29:
+            $(el).attr('class', 'button-outline-primary ml-auto');
             $(el).parents('#friend-request').fadeOut(500);
 
-          case 30:
+          case 31:
           case "end":
             return _context2.stop();
         }

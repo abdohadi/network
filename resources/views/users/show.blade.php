@@ -49,7 +49,7 @@
 
 				{{-- Friends --}}
 				<div class="card friends">
-					<h3 class="text-lg text-gray-600 mb-4"><i class="fa fa-users text-gray-600"></i> Friends</h3>
+					<h3 class="text-lg text-gray-600 mb-4"><i class="fa fa-user-friends text-gray-600"></i> Friends</h3>
 
 					<div class="flex">
 						@forelse(array_slice($user->friends->toArray(), 0, 3) as $friend)

@@ -57,29 +57,25 @@ a {
 }
 
 .button-outline-primary {
-	@apply .border .border-blue-500 .text-blue-500 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .px-5 .shadow-lg;
+	@apply .border .border-blue-500 .text-blue-500 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .shadow-lg;
 }
 
 .button-outline-secondary {
-	@apply .border .border-gray-500 .text-gray-600 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .px-5 .shadow-lg;
+	@apply .border .border-gray-500 .text-gray-600 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .shadow-lg;
 }
 
-.button-outline-secondary:hover {
-	@apply .border-blue-400;
-}
+// .button-outline-secondary:hover {
+// 	@apply .border-blue-400;
+// }
 
 .button-outline-primary:hover,
 .button-outline-secondary:hover {
 	@apply .shadow;
 }
 
-// .post {
-// 	@apply .bg-white .rounded-lg .shadow-xl .p-4 .m-auto .mb-4 .border .border-gray-200;
-// }
-
 .button-outline-primary,
-.button-outline-secondary,
-.post {
+.button-outline-secondary {
+	width: 75px;
 	-webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;

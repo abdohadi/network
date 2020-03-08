@@ -14,14 +14,14 @@ class ManageGroupsTest extends TestCase
     /** @test */
     public function a_user_can_create_a_group()
     {
-        // $this->WithoutExceptionHandling();
+        $this->WithoutExceptionHandling();
         $user = $this->signIn();
 
-        $group = factory(Group::class)->create(['user_id' => $user->id]);
+        $group = factory(Group::class)->raw(['user_id' => $user->id]);
 
-        $this->post(localizeURL('/groups'), $group->toArray());
+        $this->post(localizeURL('/groups'), $group);
 
-        $this->assertDatabaseHas('groups', $group->toArray());
+        $this->assertDatabaseHas('groups', $group);
     }
 
     /** @test */

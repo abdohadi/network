@@ -9,25 +9,19 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    @if (app()->getLocale() == 'ar')
-        <link href="https://fonts.googleapis.com/css?family=Cairo:600,600&display=swap" rel="stylesheet">
-
-        <style>
-            body {
-                font-family: Cairo;
-            }
-        </style>
-    @endif
+    
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 </head>
 <body class="bg-main">
     <div id="app">
-        @include('layouts._nav')
+        @auth
+            @include('layouts._nav')
+        @endauth
 
         <main class="py-1 px-10">
             <div id="main" style="margin-top:51px">

@@ -17,6 +17,7 @@ return [
  'groups' => 'اﻟﻤﺠﻤﻮﻋﺎﺕ',
  'pages' => 'اﻟﺼﻔﺤﺎﺕ',
  'settings' => 'اﻻﻋﺪاﺩاﺕ',
+ 'language' => 'اللغه',
  'add' => 'اﺿﻒ',
  'join' => 'اﻧﻀﻢ',
  'find_more' => 'المزيد',

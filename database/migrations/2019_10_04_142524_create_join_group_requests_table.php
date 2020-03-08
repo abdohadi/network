@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupJoinRequestsTable extends Migration
+class CreateJoinGroupRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateGroupJoinRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('group_join_requests', function (Blueprint $table) {
+        Schema::create('join_group_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('user_id');

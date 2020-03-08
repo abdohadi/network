@@ -16,11 +16,7 @@ class PostsController extends Controller
 
 	public function show(Post $post)
 	{
-		$users = peopleYouMayKnow();
-
-    	$groups = groupsYouMayJoin();
-
-		return view('posts.show', compact(['post', 'users', 'groups']));
+		return view('posts.show', compact('post'));
 	}
 
 	public function store()

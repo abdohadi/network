@@ -12,9 +12,15 @@ class MangeUsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_view_the_home_page()
+    public function a_guest_can_access_the_login_page()
     {
         // $this->withoutExceptionHandling();
+        $this->get(localizeURL('/login'))->assertOk();
+    }
+
+    /** @test */
+    public function a_user_can_view_the_home_page()
+    {
         $this->signIn();
         
         $this->get(localizeURL('/'))->assertOk();
