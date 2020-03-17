@@ -27,11 +27,9 @@ Route::group(
 
 	// post routes
 	Route::resource('posts', 'PostsController');
-	// Route::post('/posts', 'PostsController@store');
-	// Route::get('/posts/{post}', 'PostsController@show');
-	// Route::patch('/posts/{post}', 'PostsController@update');
-	// Route::delete('/posts/{post}', 'PostsController@destroy');
 	Route::get('/posts/{post}/liked', 'PostsController@liked');
+	Route::get('/posts/{post}/shared', 'PostsController@shared');
+	Route::post('/posts/{post}/shared', 'PostsController@shared');
 
 	// group routes
 	// Route::resource('groups', 'GroupsController');

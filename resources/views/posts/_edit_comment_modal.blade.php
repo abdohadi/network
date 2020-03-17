@@ -1,5 +1,5 @@
 <div id="comment-modal" class="modal comment-modal">
-  <h3 class="font-semibold mb-6 text-2xl text-center">Edit Your Comment</h3>
+  <h3 class="font-semibold mb-6 text-2xl text-center">@lang('site.edit_your_comment')</h3>
 
 	<form class="update-comment-form" action="" method="post">
 		@method('PATCH')

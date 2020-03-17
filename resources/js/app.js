@@ -9,14 +9,14 @@ $(document).ready(function() {
 	 *	Posts Section
 	 */
 	// Show post options
-	$(document).on('click', 'i.show-options', function () {
+	$(document).on('click', '.show-options', function () {
 		$(this).siblings('div.options').fadeToggle(100);
 		$('div.options').not($(this).parent().find('div.options')).fadeOut(100);
 	});
 
 	// Hide post options when clicking anywhere
 	$(document).click(function (e) {
-		if (! e.target.classList.contains('show-options') && ! e.target.classList.contains('options')) {
+		if (! e.target.classList.contains('show-options') && ! e.target.classList.contains('options') && ! e.target.parentElement.classList.contains('show-options')) {
 			$('div.options').fadeOut(100);
 		} 
 	});
@@ -45,7 +45,7 @@ $(document).ready(function() {
 			    return obj;
 			 }, {});
 
-		addOrUpdatePost(textarea, url, data, 'post');
+		createOrUpdatePost(textarea, url, data, 'post');
 	});
 
 	// Update post
@@ -59,7 +59,12 @@ $(document).ready(function() {
 			    return obj;
 			 }, {});
 
-		addOrUpdatePost(textarea, url, data, 'patch');
+		createOrUpdatePost(textarea, url, data, 'patch');
+	});
+
+	// Set the path for the action of share-post-form
+	$('.open-share-post-modal').on('click', function() {
+		$('#share-post-form').attr('action', $(this).data('post-path'));
 	});
 
 
@@ -68,20 +73,23 @@ $(document).ready(function() {
 	 */
 	// Focus on comment input
 	$('.comment-span').on('click', function() {
-		$(this).parents('.post-box').find('.comment-input').focus();
+		$(this).parents('.post-box').find('.comment-textarea').focus();
 	});
 
 	// Add comment
-	$('.add-comment-form').on('submit', function(e) {
-		e.preventDefault();
+	$('.comment-textarea').on('keydown', function(e) {
+		if (e.witch == 13 || e.charCode == 13 || e.keyCode == 13) {
+			e.preventDefault();
+			var form = $(this).parents('form');
 
-		let url = $(this).attr('action'),
-			 data = $(this).serializeArray().reduce((obj, item) => {
-			    obj[item.name] = item.value;
-			    return obj;
-			 }, {});
-		
-		addComment($(this), data, url);
+			let url = form.attr('action'),
+				 data = form.serializeArray().reduce((obj, item) => {
+				    obj[item.name] = item.value;
+				    return obj;
+				 }, {});
+			
+			addComment(form, data, url);
+		}
 	});
 
 	// Show comment data in modal to edit the comment
@@ -265,7 +273,7 @@ $(document).ready(function() {
 * Functions
 ********************************/
 // add or update post
-async function addOrUpdatePost(textarea, url, data, method) {
+async function createOrUpdatePost(textarea, url, data, method) {
 	await $.ajax({
 			url: url,
 			method: method,
@@ -345,6 +353,8 @@ async function addComment(form, data, url) {
 			let userName = form.data('user-name');
 			let userPath = form.data('user-path');
 			let postId = form.data('post-id');
+			let editTrans = form.data('edit-trans');
+			let deleteTrans = form.data('delete-trans');
 			let commentId = success.commentId;
 			let commentPath = success.commentPath;
 			let userImgSrc = form.data('user-img-src');
@@ -368,17 +378,17 @@ async function addComment(form, data, url) {
                                     rel="modal:open" 
                                     class="open-comment-modal"
                                  >
-                                     <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">Edit Comment</li>
+                                     <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">${editTrans}</li>
                                  </a>
 
                                  <button class="delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1"
                                          data-comment-url="${commentPath}"
-                                  >Delete Comment</button>
+                                  >${deleteTrans}</button>
                              </ul>
                          </div>
 
 								<p>
-	                        <a href="${userPath}" class="text-gray-700 text-lg">
+	                        <a href="${userPath}" class="text-gray-700">
 	                           ${userName}
 	                        </a>
 
@@ -387,7 +397,7 @@ async function addComment(form, data, url) {
 	                        </span>
 	                     </p>
 
-								<p class="comment-body">${data.body}</p>
+								<p class="comment-body text-sm">${data.body}</p>
 							</div>
 	             	</div>
 	          	</div>

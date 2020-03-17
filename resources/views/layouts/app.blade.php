@@ -34,6 +34,7 @@
 
     {{-- Modals --}}
     @include('posts._edit_post_modal')
+    @include('posts._share_post_modal')
     @include('posts._edit_comment_modal')
     
 

@@ -43,7 +43,7 @@ class PostTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-    	$this->assertEquals('/posts/'.$post->id, $post->path());
+    	$this->assertEquals('/posts/' . $post->id, $post->path());
     }
 
     /** @test */
@@ -104,5 +104,57 @@ class PostTest extends TestCase
         $post->toggleLike();
             
         $this->assertEquals(1, $post->likesCount);
+    }
+
+    /** @test */
+    public function it_can_share_a_post()
+    {
+        $post = factory(Post::class)->create();
+        $shared_post = factory(Post::class)->create();
+
+        $this->signIn($post->owner);
+
+        $post->sharePost($shared_post);
+
+        $this->assertDatabaseHas('posts', ['user_id' => $post->owner->id, 'shared_post_id' => $shared_post->id]);
+    }
+
+    /** @test */
+    public function it_can_have_a_shared_post()
+    {
+        $post = factory(Post::class)->create();
+        $shared_post = factory(Post::class)->create();
+
+        $this->signIn($post->owner);
+
+        $post->sharePost($shared_post);
+
+        $this->assertEquals($post->sharedPost, $shared_post);
+    }
+
+    /** @test */
+    public function it_can_be_shared_by_other_posts()
+    {
+        $post = factory(Post::class)->create();
+        $shared_post = factory(Post::class)->create();
+
+        $this->signIn($post->owner);
+
+        $post->sharePost($shared_post);
+
+        $this->assertEquals($shared_post->basePosts->first()->id, $post->id);
+    }
+
+    /** @test */
+    public function it_can_check_if_it_has_a_shared_post()
+    {
+        $post = factory(Post::class)->create();
+        $shared_post = factory(Post::class)->create();
+
+        $this->signIn($post->owner);
+
+        $post->sharePost($shared_post);
+
+        $this->assertTrue($post->isSharing());
     }
 }

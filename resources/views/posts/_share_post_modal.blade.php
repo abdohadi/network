@@ -1,18 +1,17 @@
-<div id="post-modal" class="modal post-modal">
-  <h3 class="font-semibold mb-6 text-2xl text-center">@lang('site.edit_your_post')</h3>
+<div id="share-post-modal" class="modal share-post-modal">
+  <h3 class="font-semibold mb-6 text-2xl text-center">@lang('site.add_something')</h3>
 
-	<form id="submit-update-post" 
+	<form id="share-post-form"
 			action=""
 			method="POST"
 	>
-		@method('PATCH')
 		@csrf
 
 		<div class="mb-4">
 	  		<textarea 
 				name="body" 
 				id="body" 
-				placeholder="What's in your mind?" 
+				placeholder="Add something..." 
 				class="border w-full p-2 rounded"
 				rows="2"></textarea>
 

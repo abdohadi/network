@@ -5,9 +5,9 @@ return [
  'home' => 'اﻟﺼﻔﺤﻪ اﻟﺮﺋﻴﺴﻴﻪ',
  'people_you_may_know' => 'اﺷﺨﺎﺹ ﻗﺪ ﺗﻌﺮﻓﻬﻢ',
  'groups_you_may_join' => 'ﻣﺠﻤﻮﻋﺎﺕ ﻗﺪ ﺗﺮﻳﺪ اﻻﻧﻀﻤﺎﻡ اﻟﻴﻬﺎ',
- 'no_groups_yet' => 'لا يوجد ﻣﺠﻤﻮﻋﺎﺕ ﺣﺘﻲ اﻻﻥ',
- 'no_posts_yet' => 'لا يوجد منشورات حتي الان',
- 'no_pages_yet' => 'لا توجد صفحات حتي الان',
+ 'no_groups_yet' => 'ﻻ ﻳﻮﺟﺪ ﻣﺠﻤﻮﻋﺎﺕ ﺣﺘﻲ اﻻﻥ',
+ 'no_posts_yet' => 'ﻻ ﻳﻮﺟﺪ ﻣﻨﺸﻮﺭاﺕ ﺣﺘﻲ اﻻﻥ',
+ 'no_pages_yet' => 'ﻻ ﺗﻮﺟﺪ ﺻﻔﺤﺎﺕ ﺣﺘﻲ اﻻﻥ',
  'notifications' => 'اﻻﺷﻌﺎﺭاﺕ',
  'messages' => 'اﻟﺮﺳﺎﺋﻞ',
  'friend_requests' => 'ﻃﻠﺒﺎﺕ اﻟﺼﺪاﻗﻪ',
@@ -17,25 +17,29 @@ return [
  'groups' => 'اﻟﻤﺠﻤﻮﻋﺎﺕ',
  'pages' => 'اﻟﺼﻔﺤﺎﺕ',
  'settings' => 'اﻻﻋﺪاﺩاﺕ',
- 'language' => 'اللغه',
+ 'language' => 'اﻟﻠﻐﻪ',
  'add' => 'اﺿﻒ',
  'join' => 'اﻧﻀﻢ',
- 'find_more' => 'المزيد',
+ 'find_more' => 'اﻟﻤﺰﻳﺪ',
  'sent' => 'ﺗﻢ',
- 'save' => 'حفظ',
+ 'save' => 'ﺣﻔﻆ',
 
  
 
  // post
- 'post' => 'منشور',
+ 'post' => 'ﻣﻨﺸﻮﺭ',
  'post_it' => 'ﻧﺸﺮ',
  'like' => 'اﻋﺠﺎﺏ',
  'comment' => 'ﺗﻌﻠﻴﻖ',
  'share' => 'ﻣﺸﺎﺭﻛﻪ',
+ 'share_now' => 'ﻣﺸﺎﺭﻛﻪ اﻻﻥ',
  'add_comment' => 'اﺿﻒ',
- 'edit' => 'ﺗﻌﺪﻳل',
- 'delete' => 'حذف',
+ 'edit' => 'ﺗﻌﺪﻳﻝ',
+ 'delete' => 'ﺣﺬﻑ',
  'view_other_comments' => 'ﻋﺮﺽ :count ﻣﻦ اﻟﺘﻌﻠﻴﻘﺎﺕ اﻻﺧﺮﻱ',
+ 'edit_your_comment' => 'ﺗﻌﺪﻳﻞ اﻟﺘﻌﻠﻴﻖ',
+ 'edit_your_post' => 'ﺗﻌﺪﻳﻞ اﻟﻤﻨﺸﻮﺭ',
+ 'add_something' => 'اﺿﻒ ﺷﻴﺌﺎ',
 
 
 

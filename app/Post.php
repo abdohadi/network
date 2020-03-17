@@ -49,8 +49,30 @@ class Post extends Model
         return $this->comments()->get();
     }
 
+    public function basePosts()
+    {
+        return $this->hasMany(Post::class, 'shared_post_id');
+    }
+
+    public function sharedPost()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
+    public function isSharing()
+    {
+        return !! $this->sharedPost()->count();
+    }
+
     public function addComment($attributes)
     {
         return $this->comments()->create(array_merge(['user_id' => auth()->id()], $attributes));
+    }
+
+    public function sharePost(Post $shared_post)
+    {
+        $this->sharedPost()->associate($shared_post);
+
+        $this->save();
     }
 }

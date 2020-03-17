@@ -85,7 +85,7 @@ class ManagePostsTest extends TestCase
     }
 
     /** @test */
-    public function guests_cannot_manage_posts()
+    public function a_guest_cannot_manage_posts()
     {
         $path = factory(Post::class)->create()->path();
 
@@ -94,5 +94,27 @@ class ManagePostsTest extends TestCase
         $this->patch(localizeURL($path))->assertRedirect(localizeURL('login'));
 
         $this->delete(localizeURL($path))->assertRedirect(localizeURL('login'));
+    }
+
+    /** @test */
+    public function a_user_can_share_a_post()
+    {
+        // $this->WithoutExceptionHandling();
+        $this->signIn();
+
+        $shared_post = factory(Post::class)->create();
+
+        // share a post without adding a body
+        $this->get(localizeURL($shared_post->path() . '/shared'));
+        
+        $this->assertDatabaseHas('posts', ['user_id' => auth()->id(), 'shared_post_id' => $shared_post->id]);
+
+        // share a post with adding a body
+        $this->followingRedirects()
+             ->post(localizeURL($shared_post->path() . '/shared'), ['body' => 'post body'])
+             ->assertSee('post body')
+             ->assertSee($shared_post['body']);
+        
+        $this->assertDatabaseHas('posts', ['user_id' => auth()->id(), 'shared_post_id' => $shared_post->id]);
     }
 }

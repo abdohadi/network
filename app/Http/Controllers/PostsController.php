@@ -56,4 +56,15 @@ class PostsController extends Controller
 	{
 		return $post->toggleLike();
 	}
+
+	public function shared(Post $post)
+	{
+		$shared_post = $post;
+
+		$post = auth()->user()->posts()->create(request()->all());
+
+		$post->sharePost($shared_post);
+
+		return redirect(localizeURL($post->path()));
+	}
 }

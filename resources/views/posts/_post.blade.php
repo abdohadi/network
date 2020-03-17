@@ -8,11 +8,12 @@
             {{-- Post options --}}
             <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto" style="top:-8px;display:none">
             	<ul>
-                    <!-- Link to open the edit-post modal -->
+                    {{-- Link to open the edit-post modal --}}
             		<a data-post="{{ $post }}" href="#post-modal" rel="modal:open" class="open-post-modal">
             			<li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">@lang('site.edit')</li>
             		</a>
 
+                    {{-- Delete Post --}}
                     <form action="{{ localizeURL($post->path()) }}" method="post">
                         @method("DELETE")
                         @csrf
@@ -43,7 +44,18 @@
         </div>
 
         {{-- post body --}}
-        <div class="text-gray-800 px-6 pt-8 pb-4">{{ $post->body }}</div>
+        @if ($post->body)
+            <div class="text-gray-800 px-6 pt-8 pb-4">{{ $post->body }}</div>
+        @else
+            <div class="mb-8"></div>
+        @endif
+
+
+        {{-- include shared post if exist --}}
+        @if ($post->isSharing())
+            @include('posts._shared_post')
+        @endif
+
 
         {{-- post likes count --}}
         <div class="text-gray-600 post-likes-count {{ $post->likesCount ? '' : 'hidden' }}">
@@ -56,8 +68,8 @@
             <div class="w-1/3">
                 <span class="like-post cursor-pointer py-2 px-1 {{ $post->isLiked() ? 'text-primary' : 'text-gray-500 hover:text-gray-600' }}"
                      data-post-id="{{ $post->id }}">
-                    <i class="far fa-thumbs-up text-2xl" 
-                        style="margin-top: 4px" aria-hidden="true">
+                    <i class="far fa-thumbs-up" 
+                        style="margin-top: 4px;font-size: 22px;" aria-hidden="true">
                     </i>
 
                     <span class="text-sm"> @lang('site.like')</span>
@@ -74,12 +86,32 @@
             </div>
 
             {{-- share --}}
-            <div class="w-1/3">
-                <span class="cursor-pointer py-2 px-1 hover:text-gray-600">
+            <div class="w-1/3 relative">
+                <span class="show-options cursor-pointer py-2 px-1 hover:text-gray-600">
                     <i class="far fa-share-square share-post text-xl" style="margin-top: 6px" aria-hidden="true"></i>
 
                     <span class="text-sm"> @lang('site.share')</span>
                 </span>
+
+                {{-- share options --}}
+                <div 
+                    class="options absolute card right-0 text-center w-40 cursor-auto" 
+                    style="top:-17px;right: 147px;display:none">
+                    <ul>
+                        {{-- Share the post wihtout adding a body --}}
+                        <a href="{{ localizeURL(($post->isSharing() ? $post->sharedPost->path() : $post->path()) . '/shared') }}">
+                            <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1">@lang('site.share_now')</li>
+                        </a>
+                        
+                        {{-- Link to open the share-post modal to add a body --}}
+                        <a href="#share-post-modal" rel="modal:open" 
+                           class="open-share-post-modal" 
+                           data-post-path="{{ localizeURL(($post->isSharing() ? $post->sharedPost->path() : $post->path()) . '/shared') }}"
+                        >
+                            <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">@lang('site.add_something')</li>
+                        </a>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -101,20 +133,22 @@
                         data-user-name="{{ auth()->user()->name }}"
                         data-post-id="{{ $post->id }}"
                         data-user-path="{{ auth()->user()->path() }}"
-                        data-user-img-src="{{ gravatar(auth()->user()->email) }}">
+                        data-user-img-src="{{ gravatar(auth()->user()->email) }}"
+                        data-edit-trans="@lang('site.edit')"
+                        data-delete-trans="@lang('site.delete')"
+                    >
                         @csrf
 
-                        <div class="w-9/12">
-                            <textarea name="body" 
-                                class="comment-input w-full text-gray-600 px-3 py-2 border border-gray-300 focus:border-primary bg-main" 
+                        <div class="w-full">
+                            <textarea 
+                                name="body" 
+                                class="comment-textarea w-full text-gray-600 px-3 py-2 border border-gray-300 focus:border-primary bg-main" 
                                 placeholder="Write your comment"
-                                style="height: 58px;border-radius: 1.25rem;"></textarea>
+                                style="border-radius: 1.25rem;"
+                                rows="1"
+                            ></textarea>
 
                             <span class="comment-error text-red-500 italic text-sm hidden"></span>
-                        </div>
-
-                        <div class="w-3/12">
-                            <button class="ml-4 mt-2 button-outline-secondary">@lang('site.add_comment')</button>
                         </div>
                     </form>
                 </div>
@@ -142,7 +176,7 @@
                                         </a>
                                     </div>
                                     
-                                    <div class="w-11/12 bg-main py-2 px-4 border border-gray-200 text-gray-600 ml-2 relative"
+                                    <div class="w-11/12 bg-main py-2 px-4 border border-gray-200 ml-2 relative"
                                          style="word-wrap: break-word;border-radius: 1.25rem;">
                                         @can('update', $comment)
                                             <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl"></i>
@@ -167,7 +201,7 @@
                                         @endcan
 
                                         <p>
-                                            <a href="{{ $comment->owner->path() }}" class="text-gray-700 text-lg">
+                                            <a href="{{ $comment->owner->path() }}" class="text-gray-700">
                                                 {{ $comment->owner->name }}
                                             </a>
 
@@ -176,7 +210,7 @@
                                             </span>
                                         </p>
 
-                                        <p class="comment-body">{{ $comment->body }}</p>
+                                        <p class="comment-body text-sm">{{ $comment->body }}</p>
                                     </div>
                                 </div>
                             </div>

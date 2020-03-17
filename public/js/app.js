@@ -860,13 +860,13 @@ $(document).ready(function () {
    *	Posts Section
    */
   // Show post options
-  $(document).on('click', 'i.show-options', function () {
+  $(document).on('click', '.show-options', function () {
     $(this).siblings('div.options').fadeToggle(100);
     $('div.options').not($(this).parent().find('div.options')).fadeOut(100);
   }); // Hide post options when clicking anywhere
 
   $(document).click(function (e) {
-    if (!e.target.classList.contains('show-options') && !e.target.classList.contains('options')) {
+    if (!e.target.classList.contains('show-options') && !e.target.classList.contains('options') && !e.target.parentElement.classList.contains('show-options')) {
       $('div.options').fadeOut(100);
     }
   }); // Show post data in modal to edit the post
@@ -890,7 +890,7 @@ $(document).ready(function () {
       obj[item.name] = item.value;
       return obj;
     }, {});
-    addOrUpdatePost(textarea, url, data, 'post');
+    createOrUpdatePost(textarea, url, data, 'post');
   }); // Update post
 
   $('#submit-update-post').on('submit', function (e) {
@@ -901,7 +901,11 @@ $(document).ready(function () {
       obj[item.name] = item.value;
       return obj;
     }, {});
-    addOrUpdatePost(textarea, url, data, 'patch');
+    createOrUpdatePost(textarea, url, data, 'patch');
+  }); // Set the path for the action of share-post-form
+
+  $('.open-share-post-modal').on('click', function () {
+    $('#share-post-form').attr('action', $(this).data('post-path'));
   });
   /**
    *	Comments Section
@@ -909,17 +913,20 @@ $(document).ready(function () {
   // Focus on comment input
 
   $('.comment-span').on('click', function () {
-    $(this).parents('.post-box').find('.comment-input').focus();
+    $(this).parents('.post-box').find('.comment-textarea').focus();
   }); // Add comment
 
-  $('.add-comment-form').on('submit', function (e) {
-    e.preventDefault();
-    var url = $(this).attr('action'),
-        data = $(this).serializeArray().reduce(function (obj, item) {
-      obj[item.name] = item.value;
-      return obj;
-    }, {});
-    addComment($(this), data, url);
+  $('.comment-textarea').on('keydown', function (e) {
+    if (e.witch == 13 || e.charCode == 13 || e.keyCode == 13) {
+      e.preventDefault();
+      var form = $(this).parents('form');
+      var url = form.attr('action'),
+          data = form.serializeArray().reduce(function (obj, item) {
+        obj[item.name] = item.value;
+        return obj;
+      }, {});
+      addComment(form, data, url);
+    }
   }); // Show comment data in modal to edit the comment
 
   $(document).on('click', '.open-comment-modal', function () {
@@ -1083,13 +1090,13 @@ $(document).ready(function () {
 ********************************/
 // add or update post
 
-function addOrUpdatePost(_x, _x2, _x3, _x4) {
-  return _addOrUpdatePost.apply(this, arguments);
+function createOrUpdatePost(_x, _x2, _x3, _x4) {
+  return _createOrUpdatePost.apply(this, arguments);
 } // Send / cancel / delete / accept friend requests
 
 
-function _addOrUpdatePost() {
-  _addOrUpdatePost = _asyncToGenerator(
+function _createOrUpdatePost() {
+  _createOrUpdatePost = _asyncToGenerator(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(textarea, url, data, method) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1120,7 +1127,7 @@ function _addOrUpdatePost() {
       }
     }, _callee);
   }));
-  return _addOrUpdatePost.apply(this, arguments);
+  return _createOrUpdatePost.apply(this, arguments);
 }
 
 function handleFriendRequest(_x5) {
@@ -1274,10 +1281,12 @@ function _addComment() {
                 var userName = form.data('user-name');
                 var userPath = form.data('user-path');
                 var postId = form.data('post-id');
+                var editTrans = form.data('edit-trans');
+                var deleteTrans = form.data('delete-trans');
                 var commentId = _success2.commentId;
                 var commentPath = _success2.commentPath;
                 var userImgSrc = form.data('user-img-src');
-                var newComment = "\n\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t<div class=\"pl-4 mt-4\">\n\t             \t<div class=\"flex\">\n\t\t\t\t\t\t\t<div class=\"w-1/12\">\n\t\t\t\t\t\t\t   <a href=\"".concat(userPath, "\"><img src=\"").concat(userImgSrc, "\" class=\"rounded-full w-10 border\"></a>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative\"\n\t\t\t\t\t\t\t\t  style=\"word-wrap: break-word;border-radius: 1.25rem;\">\n                         <i class=\"show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl\"></i>\n\n                         <div class=\"options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10\" style=\"top:-8px;display:none\">\n                             <ul>\n                                 <a data-comment-id=\"").concat(commentId, "\"\n                                    data-post-id=\"").concat(postId, "\"\n                                    href=\"#comment-modal\"\n                                    rel=\"modal:open\" \n                                    class=\"open-comment-modal\"\n                                 >\n                                     <li class=\"cursor-pointer hover:text-gray-900 text-gray-600 py-1\" id=\"open-comment-modal\">Edit Comment</li>\n                                 </a>\n\n                                 <button class=\"delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1\"\n                                         data-comment-url=\"").concat(commentPath, "\"\n                                  >Delete Comment</button>\n                             </ul>\n                         </div>\n\n\t\t\t\t\t\t\t\t<p>\n\t                        <a href=\"").concat(userPath, "\" class=\"text-gray-700 text-lg\">\n\t                           ").concat(userName, "\n\t                        </a>\n\n\t                        <span class=\"text-gray-500 text-xs ml-2\">\n\t                           just now\n\t                        </span>\n\t                     </p>\n\n\t\t\t\t\t\t\t\t<p class=\"comment-body\">").concat(data.body, "</p>\n\t\t\t\t\t\t\t</div>\n\t             \t</div>\n\t          \t</div>\n          \t</div>\n\t\t\t");
+                var newComment = "\n\t\t\t\t<div class=\"user-comment\">\n\t\t\t\t\t<div class=\"pl-4 mt-4\">\n\t             \t<div class=\"flex\">\n\t\t\t\t\t\t\t<div class=\"w-1/12\">\n\t\t\t\t\t\t\t   <a href=\"".concat(userPath, "\"><img src=\"").concat(userImgSrc, "\" class=\"rounded-full w-10 border\"></a>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative\"\n\t\t\t\t\t\t\t\t  style=\"word-wrap: break-word;border-radius: 1.25rem;\">\n                         <i class=\"show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl\"></i>\n\n                         <div class=\"options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10\" style=\"top:-8px;display:none\">\n                             <ul>\n                                 <a data-comment-id=\"").concat(commentId, "\"\n                                    data-post-id=\"").concat(postId, "\"\n                                    href=\"#comment-modal\"\n                                    rel=\"modal:open\" \n                                    class=\"open-comment-modal\"\n                                 >\n                                     <li class=\"cursor-pointer hover:text-gray-900 text-gray-600 py-1\" id=\"open-comment-modal\">").concat(editTrans, "</li>\n                                 </a>\n\n                                 <button class=\"delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1\"\n                                         data-comment-url=\"").concat(commentPath, "\"\n                                  >").concat(deleteTrans, "</button>\n                             </ul>\n                         </div>\n\n\t\t\t\t\t\t\t\t<p>\n\t                        <a href=\"").concat(userPath, "\" class=\"text-gray-700\">\n\t                           ").concat(userName, "\n\t                        </a>\n\n\t                        <span class=\"text-gray-500 text-xs ml-2\">\n\t                           just now\n\t                        </span>\n\t                     </p>\n\n\t\t\t\t\t\t\t\t<p class=\"comment-body text-sm\">").concat(data.body, "</p>\n\t\t\t\t\t\t\t</div>\n\t             \t</div>\n\t          \t</div>\n          \t</div>\n\t\t\t");
                 form.parents('.comments-box').find('.user-comments').prepend(newComment);
 
                 if (form.find('textarea').hasClass('border-red-300')) {
