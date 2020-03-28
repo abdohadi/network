@@ -7,7 +7,9 @@ return [
  'groups_you_may_join' => 'ﻣﺠﻤﻮﻋﺎﺕ ﻗﺪ ﺗﺮﻳﺪ اﻻﻧﻀﻤﺎﻡ اﻟﻴﻬﺎ',
  'no_groups_yet' => 'ﻻ ﻳﻮﺟﺪ ﻣﺠﻤﻮﻋﺎﺕ ﺣﺘﻲ اﻻﻥ',
  'no_posts_yet' => 'ﻻ ﻳﻮﺟﺪ ﻣﻨﺸﻮﺭاﺕ ﺣﺘﻲ اﻻﻥ',
- 'no_pages_yet' => 'ﻻ ﺗﻮﺟﺪ ﺻﻔﺤﺎﺕ ﺣﺘﻲ اﻻﻥ',
+ 'no_pages_yet' => 'ﻻ ﻱﻮﺟﺪ ﺻﻔﺤﺎﺕ ﺣﺘﻲ اﻻﻥ',
+ 'no_friends' => 'ﻻ ﻳﻮﺟﺪ اﺻﺪﻗﺎء',
+ 'see_all_friends' => 'ﺭﺅﻳﺔ ﺟﻤﻴﻊ اﻻﺻﺪﻗﺎء',
  'notifications' => 'اﻻﺷﻌﺎﺭاﺕ',
  'messages' => 'اﻟﺮﺳﺎﺋﻞ',
  'friend_requests' => 'ﻃﻠﺒﺎﺕ اﻟﺼﺪاﻗﻪ',
@@ -23,6 +25,7 @@ return [
  'find_more' => 'اﻟﻤﺰﻳﺪ',
  'sent' => 'ﺗﻢ',
  'save' => 'ﺣﻔﻆ',
+ 'about' => 'ﺣﻮﻝ',
 
  
 
@@ -50,9 +53,30 @@ return [
  'forgot_password' => 'ﻫﻞ ﻧﺴﻴﺖ ﻛﻠﻤﺔ اﻟﺴﺮ؟',
  'create_new_account' => 'اﻧﺸﺎء ﺣﺴﺎﺏ ﺟﺪﻳﺪ',
  'already_have_account' => 'ﻟﺪﻳﻚ ﺣﺴﺎﺏ ﺑﺎﻟﻔﻌﻞ؟ ﺗﺴﺠﻴﻞ',
- 'name' => 'اﻻﺳﻢ',
- 'email_address' => 'اﻟﺒﺮﻳﺪ اﻻﻟﻜﺘﺮﻭﻧﻲ',
  'password' => 'ﻛﻠﻤﺔ اﻟﺴﺮ',
  'confirm_password' => 'ﺗﺄﻛﻴﺪ ﻛﻠﻤﺔ اﻟﺴﺮ', 
  'remember_me' => 'ﺗﺬﻛﺮﻧﻲ',
+
+
+ // user
+ 'name' => 'اﻻﺳﻢ',
+ 'email_address' => 'اﻟﺒﺮﻳﺪ اﻻﻟﻜﺘﺮﻭﻧﻲ',
+ 'bio' => 'ﻧﺒﺬﻩ ﻣﺨﺘﺼﺮﻩ',
+ 'gender' => 'اﻟﺠﻨﺲ',
+ 'birth_date' => 'ﺗﺎﺭﻳﺦ اﻟﻤﻴﻼﺩ',
+ 'college' => 'اﻟﻜﻠﻴﻪ / اﻟﻤﺪﺭﺳﻪ',
+ 'address' => 'اﻟﻌﻨﻮاﻥ',
+ 'phone' => 'اﻟﻬﺎﺗﻒ',
+ 'male' => 'ذكر',
+ 'female' => 'انثي',
+ 'your_name' => 'اﺿﻒ اﺳﻤﻚ',
+ 'your_email_address' => 'اﺿﻒ اﻟﺒﺮﻳﺪ اﻻﻟﻜﺘﺮﻭﻧﻲ اﻟﺨﺎﺹ ﺑﻚ',
+ 'your_bio' => 'اﺿﻒ ﻧﺒﺬﻩ ﻣﺨﺘﺼﺮﻩ ﻋﻨﻚ',
+ 'choose_your_gender' => 'اختر الجنس',
+ 'your_birth_date' => 'اﺿﻒ ﺗﺎﺭﻳﺦ ﻣﻴﻼﺩﻙ',
+ 'your_college' => 'اﺿﻒ اﻟﻜﻠﻴﻪ اﻭ اﻟﻤﺪﺭﺳﻪ',
+ 'your_address' => 'اضف عنوانك',
+ 'your_phone' => 'اضف رقم هاتفك',
+ 'edit_your_info' => 'ﺗﻌﺪﻳﻞ ﻣﻌﻠﻮﻣﺎﺗﻚ',
+
 ];

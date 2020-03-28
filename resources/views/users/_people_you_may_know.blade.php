@@ -13,6 +13,6 @@
     data-btn-sent="{{ __('site.sent') }}" 
   	id="send_friend_request" 
   	class="button-outline-primary ml-auto"
-  	title="@lang('site.click_to_send_a_friend_request')"
+  	title="{{ __('site.click_to_send_a_friend_request') }}"
   ><i class="fa fa-user-plus"></i> @lang('site.add')</button>
 </div>

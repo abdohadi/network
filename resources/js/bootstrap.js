@@ -1,4 +1,4 @@
-window._ = require('lodash');
+// window._ = require('lodash');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -6,12 +6,19 @@ window._ = require('lodash');
  * code may be modified to fit the specific needs of your application.
  */
 
-try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+// try {
+//     window.Popper = require('popper.js').default;
+//     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
-} catch (e) {}
+//     require('bootstrap');
+// } catch (e) {}
+
+
+/**
+ * We'll load vue
+ */
+ window.Vue = require('vue');
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -22,6 +29,15 @@ try {
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+import Form from './core/Form';
+window.Form = Form;
+
+
+
+
+
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

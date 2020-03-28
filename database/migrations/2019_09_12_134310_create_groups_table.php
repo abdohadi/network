@@ -18,7 +18,7 @@ class CreateGroupsTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->string('name');
             $table->text('description');
-            $table->string('cover')->default('default.jpg');
+            $table->string('cover')->default('default.png');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

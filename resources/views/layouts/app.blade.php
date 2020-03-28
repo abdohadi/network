@@ -9,12 +9,18 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    
-
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @if (app()->getLocale() == 'ar')
+        <style>
+            body {
+                font-size: .8em;
+            }
+        </style>
+    @endif
 
 </head>
 <body class="bg-main">

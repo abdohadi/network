@@ -1,9 +1,56 @@
+import './bootstrap';
+
+/**
+ * vue section
+ */
+
+// Form component
+import FormComponent from './components/FormComponent.vue';
+Vue.component('form-component', FormComponent);
+
+const app = new Vue({
+    el: '#app'
+});
+
+// Form handling
+// new Vue({
+// 	el: '#form',
+
+// 	data: {
+// 		form: new Form()
+// 	},
+
+// 	methods: {
+// 		onSubmit(url, method) {
+// 			var formData = new FormData(this.$el);
+
+// 			var data = {};
+// 			formData.forEach(function(val, key) {
+// 				if (key != '_method' && key != '_token')
+// 			  		data[key] = val;
+// 			});
+
+// 			this.form.setData(data);
+
+// 			axios[method](url, data)
+// 				.then(response => {console.log(response.data);
+// 					if (response.data.hasOwnProperty('redirect')) {
+// 						window.location = response.data['redirect'];
+// 					}
+// 				})
+// 				.catch(error => {
+// 					this.form.errors.record(error.response.data.errors);
+// 				});
+// 		}
+// 	}
+// });
+
 
 
 
 /**
-* Our custom javascript & jquery
-*/
+ * Our custom javascript & jquery
+ */
 $(document).ready(function() {
 	/**
 	 *	Posts Section
@@ -16,9 +63,11 @@ $(document).ready(function() {
 
 	// Hide post options when clicking anywhere
 	$(document).click(function (e) {
-		if (! e.target.classList.contains('show-options') && ! e.target.classList.contains('options') && ! e.target.parentElement.classList.contains('show-options')) {
-			$('div.options').fadeOut(100);
-		} 
+		if (e.target.parentElement) {
+			if (! e.target.classList.contains('show-options') && ! e.target.classList.contains('options') && ! e.target.parentElement.classList.contains('show-options')) {
+				$('div.options').fadeOut(100);
+			} 
+		}
 	});
 
 	// Show post data in modal to edit the post

@@ -14,7 +14,7 @@ class ManageGroupsTest extends TestCase
     /** @test */
     public function a_user_can_create_a_group()
     {
-        $this->WithoutExceptionHandling();
+        // $this->WithoutExceptionHandling();
         $user = $this->signIn();
 
         $group = factory(Group::class)->raw(['user_id' => $user->id]);
@@ -47,7 +47,6 @@ class ManageGroupsTest extends TestCase
     /** @test */
     public function a_user_can_join_a_group()
     {
-        $this->WithoutExceptionHandling();
         $user = $this->signIn();
 
         $group = factory(Group::class)->create();

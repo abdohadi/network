@@ -43,9 +43,9 @@
             </li>
 
             <li class="mt-4 mb-4">
-                <a href=""><i class="fa fa-flag"></i> @lang('site.language')</a>
+                <span><i class="fa fa-flag"></i> @lang('site.language')</a></span>
 
-                <ul class="pl-6">
+                <ul class="pl-8">
                     <li><a class="text-sm" href="{{ LaravelLocalization::getLocalizedURL('en') }}">English</a></li>
                     <li><a class="text-sm" href="{{ LaravelLocalization::getLocalizedURL('ar') }}">العربيه</a></li>
                 </ul>

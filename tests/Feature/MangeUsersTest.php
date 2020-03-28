@@ -96,6 +96,44 @@ class MangeUsersTest extends TestCase
         $this->signIn();
 
         $user = factory(User::class)->create();
+
         $this->get(localizeURL("users/{$user->id}/friends"))->assertOk();
+    }
+
+    /** @test */
+    public function a_user_cannot_update_other_users_info()
+    {
+        $this->signIn();
+        $user = factory('App\User')->create();
+
+        $this->get(localizeURL($user->path()))->assertDontSee('Edit Your Info');
+        $this->get(localizeURL($user->path() . '/edit_info'))->assertStatus(403);
+        $this->patch(localizeURL($user->path() . '/update_info'), [])->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_update_their_info()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $this->get(localizeURL($user->path() . '/edit_info'))->assertOk();
+
+        $info = [
+            'name' => 'John Doe',
+            'email' => 'example@example.com',
+            'birth_date' => '2020-03-17',
+            'address' => 'Cairo',
+            'phone' => '1111111111',
+            'gender' => 'male',
+            'college' => 'Harvard',
+            'bio' => 'I am John Doe' 
+        ];
+
+        $this->patch(localizeURL($user->path() . '/update_info'), $info);
+
+        $this->assertDatabaseHas('users', $info);
+
+        $this->get(localizeURL($user->path()))->assertSee('I am John Doe');
     }
 }
