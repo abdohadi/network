@@ -28,7 +28,7 @@
 
         <div class="flex items-center">
             <a href="{{ $post->sharedPost->owner->path() }}">
-                <img src="{{ gravatar($post->sharedPost->owner->email) }}" class="rounded-full w-12 mr-2">
+                <img src="{{ getProfilePicture($post->sharedPost->owner) }}" class="rounded-full w-12 mr-2">
             </a> 
 
             <a href="{{ $post->sharedPost->owner->path() }}">

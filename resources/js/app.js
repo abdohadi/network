@@ -12,52 +12,83 @@ const app = new Vue({
     el: '#app'
 });
 
-// Form handling
-// new Vue({
-// 	el: '#form',
-
-// 	data: {
-// 		form: new Form()
-// 	},
-
-// 	methods: {
-// 		onSubmit(url, method) {
-// 			var formData = new FormData(this.$el);
-
-// 			var data = {};
-// 			formData.forEach(function(val, key) {
-// 				if (key != '_method' && key != '_token')
-// 			  		data[key] = val;
-// 			});
-
-// 			this.form.setData(data);
-
-// 			axios[method](url, data)
-// 				.then(response => {console.log(response.data);
-// 					if (response.data.hasOwnProperty('redirect')) {
-// 						window.location = response.data['redirect'];
-// 					}
-// 				})
-// 				.catch(error => {
-// 					this.form.errors.record(error.response.data.errors);
-// 				});
-// 		}
-// 	}
-// });
 
 
 
 
-/**
+
+
+/****************************************************************************************************
  * Our custom javascript & jquery
  */
 $(document).ready(function() {
+	/** 
+	 * Profile page section
+	 */
+	// Show profile picture overlay 
+	$('.profile-pic-parent-overlay').hover(function() {
+	  	$(this).children('.profile-pic-overlay').show();
+	  	$(this).children('.show-pic-overlay').show();
+
+	  	$(this).find('.profile-pic-overlay .fa-camera').animate({fontSize: '2rem'}, 100, function() {
+          $(this).animate({fontSize: '1.5rem'}, 400);
+      });
+
+      if (window.profilePicChanged) {
+		  	$(this).children('.profile-form-pic-overlay').show();
+	  		$(this).children('.show-pic-overlay').hide();
+      }
+	}, function() {
+	  	$(this).children('.profile-pic-overlay').hide();
+	  	$(this).children('.show-pic-overlay').hide();
+
+      if (window.profilePicChanged) {
+		  	$(this).children('.profile-form-pic-overlay').hide();
+      }
+	});
+
+	// click on profile picture input when clicking on profile pic overlay 
+	$('.profile-pic-overlay').on('click', function() {
+		$('.profile-picture-input').click();
+	});
+
+	// Profile pic preview when choosing a pic
+	$('.profile-picture-input').on('change', function() {
+		if ($(this)[0].files && $(this)[0].files[0]) {
+			let reader = new FileReader();
+
+			reader.onload = function(e) {
+			  	$('.profile-picture').attr('src', e.target.result);
+			}
+
+			reader.readAsDataURL($(this)[0].files[0]);
+		}
+
+		window.profilePicChanged = true;
+	});
+
+	// Get the original user's profile picture when clicking on cancel btn
+	$('.cancel-profile-pic-btn').on('click', function(e) {
+		e.preventDefault();
+
+		// Get the picture src back
+		$('.profile-picture').attr('src', $(this).data('pic-src'));
+
+		// Hide profile-form-pic-overlay
+		window.profilePicChanged = false;
+		$('.profile-form-pic-overlay').hide();
+	  	$('.show-pic-overlay').show();
+	});
+
+
+
 	/**
 	 *	Posts Section
 	 */
 	// Show post options
 	$(document).on('click', '.show-options', function () {
 		$(this).siblings('div.options').fadeToggle(100);
+
 		$('div.options').not($(this).parent().find('div.options')).fadeOut(100);
 	});
 
@@ -248,7 +279,12 @@ $(document).ready(function() {
 		}
 
 		if (e.target.parentElement) {
-			if (e.target.parentElement.id == 'friend-requests-dropdown' || e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
+			if (e.target.parentElement.id == 'friend-requests-dropdown') {
+				return;
+			}
+		}
+		if (e.target.parentNode.offsetParent) {
+			if (e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
 				return;
 			}
 		}
@@ -294,25 +330,25 @@ $(document).ready(function() {
 		$('.login-card form input[type=email]').val('');
 	}
 	
-	// Hello there login page
-	window.onload = () => {
+	// Hello there login page loader 
+	// window.onload = () => {
 		let container = document.querySelector('.hello-there'),
-			text = "Hello there! You are gonna join my website now. I hope you keep silent here because it's not some kind of memes-website. It's ok to share memes but keep your fu*kin mouth shut up. Sorry, dude for my language and have fun",
-			i = 0;
+			text = "Hello there!.... You are going to join our website now. I hope you keep silent here because it's not some kind of memes-website. It's ok to share memes but keep your fu*kin mouth shut up..../Sorry! for my language. Have fun",
+			i = 0;console.log(container)
 		if (container) {
 			let writer = setInterval(() => {
 				container.innerHTML += text[i++];
 
-				if (text[i - 1] === '.') {
+				if (text[i - 1] === '/') {
 					container.innerHTML += '<br>';
 				}
 
 				if (i == text.length) {
 					clearInterval(writer);
 				}
-			}, 100);
+			}, 150);
 		}
-	};
+	// };
 
 });
 

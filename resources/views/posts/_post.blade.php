@@ -29,7 +29,7 @@
 
             <div class="flex items-center">
                 <a href="{{ $post->owner->path() }}">
-                    <img src="{{ gravatar($post->owner->email) }}" class="rounded-full w-12 mr-2">
+                    <img src="{{ getProfilePicture($post->owner) }}" class="rounded-full w-12 mr-2" style="width: 43px;height: 43px;">
                 </a> 
 
                 <a href="{{ $post->owner->path() }}">
@@ -121,7 +121,7 @@
             <div class="flex pt-2">
                 <div class="w-1/12">
                     <a href="{{ auth()->user()->path() }}">
-                        <img src="{{ gravatar(auth()->user()->email) }}" class="rounded-full w-10 border mt-1">
+                        <img src="{{ getProfilePicture(auth()->user()) }}" class="rounded-full w-10 border mt-1" style="width: 40px;height: 40px;">
                     </a>
                 </div>
 
@@ -133,7 +133,7 @@
                         data-user-name="{{ auth()->user()->name }}"
                         data-post-id="{{ $post->id }}"
                         data-user-path="{{ auth()->user()->path() }}"
-                        data-user-img-src="{{ gravatar(auth()->user()->email) }}"
+                        data-user-img-src="{{ getProfilePicture(auth()->user()) }}"
                         data-edit-trans="@lang('site.edit')"
                         data-delete-trans="@lang('site.delete')"
                     >
@@ -172,7 +172,7 @@
                                 <div class="flex">
                                     <div class="w-1/12">
                                         <a href="{{ $comment->owner->path() }}">
-                                            <img src="{{ gravatar($comment->owner->email) }}" class="rounded-full w-10 border">
+                                            <img src="{{ getProfilePicture($comment->owner) }}" class="rounded-full w-10 border">
                                         </a>
                                     </div>
                                     

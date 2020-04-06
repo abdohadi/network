@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('college')->nullable();
             $table->string('bio')->nullable();
+            $table->string('profile_picture')->default('default.jpg');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -4,18 +4,66 @@
 	
 	<div class="lg:px-32">
 		<div class="relative">
+			{{-- Profile cover --}}
 			<img 
 				src="/uploads/images/user_images/covers/default.png" 
 				class="w-full" 
 				style="height:300px;">
 
-			<div class="absolute flex items-center" style="left:52px;bottom:-15px;">
-				<img 
-					src="{{ gravatar($user->email) }}" 
-					class="bg-gray-100 p-1 rounded-full"
-					style="width:170px;">
+			<div class="flex items-center">
+				<div class="profile-pic-parent-overlay" style="width: 166px; overflow: hidden; border-radius: 50%; position: absolute; height: 166px; z-index: 10; bottom: -17px; left: 54px;">
+					<div class="profile-pic-overlay hidden text-gray-200 text-center cursor-pointer absolute" style="width: 165px;background: #000000c9;height: 109px;border-radius: 0px 0 50% 50%;top: 91px;">
+						<div><i class="fa fa-camera mt-4 text-2xl mb-1"></i></div>
 
-				<span class="text-2xl text-white font-bold ml-8 mt-16">{{ $user->name }}</span>
+						<div class="font-bold">@lang('site.update')</div>
+					</div>
+					
+					<div 
+						class="show-pic-overlay text-gray-200 text-center absolute hidden" 
+						style="width: 165px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
+					>
+						<span class="font-bold py-2 px-3 border rounded-full relative" style="top: 53px;">
+							<a href="{{ getProfilePicture($user, 60) }}" target="_blank">@lang('site.show')</a>
+						</span>
+					</div>
+
+					{{-- Update profile picture form --}}
+					<div 
+						class="profile-form-pic-overlay text-gray-200 text-center absolute hidden" 
+						style="width: 167px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
+					>
+						<form 
+							class="profile-picture-form" 
+							action="{{ localizeURL(auth()->user()->path() . '/update_picture') }}" 
+							method="POST" 
+							enctype="multipart/form-data"
+						>
+							@csrf
+							@method('PATCH')
+
+							<input class="hidden profile-picture-input" type="file" name="profile_picture">
+
+							<button 
+								class="button-outline-primary submit-profile-pic-btn block m-auto mt-10" 
+								style="font-size: 11px"
+							>@lang('site.save')</button>
+						</form>
+
+						<button 
+							class="button-outline-secondary cancel-profile-pic-btn mt-1" 
+							style="font-size: 11px" 
+							data-pic-src="{{ getProfilePicture($user) }}"
+						>@lang('site.cancel')</button>
+					</div>
+				</div>
+
+				{{-- Profile picture --}}
+				<img 
+					class="profile-picture bg-gray-100 p-1 rounded-full absolute"
+					src="{{ getProfilePicture($user, 60) }}" 
+					style="width: 170px;height: 170px;left: 52px;bottom: -19px;">
+
+				<span class="text-2xl text-white font-bold ml-8 mt-16 absolute" style="left: 222px; bottom: 30px;">{{ $user->name }}</span>
 			</div>
 
 			@if(auth()->check())
@@ -147,7 +195,7 @@
 						@forelse(array_slice($user->friends->toArray(), 0, 3) as $friend)
 							<div class="m-auto text-center mx-1" style="height:150px;">
             		<a href="{{ "/users/".$friend['id'] }}">
-  	            	<img src="{{ gravatar($friend['email']) }}" class="border my-2 w-full" style="padding:1px">
+  	            	<img src="{{ getProfilePicture($friend, 60) }}" class="border my-2 w-full" style="padding:1px">
            	 		</a>
            	 		<a href="{{ "/users/".$friend['id'] }}">
 	             		<div>{{ substr($friend['name'], 0, 15) }}</div>

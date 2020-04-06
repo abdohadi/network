@@ -40,4 +40,23 @@ class UsersController extends Controller
 
 		return ["redirect" => localizeURL(auth()->user()->path())];
 	}
+
+	public function updatePicture()
+	{
+		request()->validate([
+			'profile_picture' => 'mimes:jpeg,jpg,png,gif|required|max:2000'
+		]);
+
+		\Image::make(request()->profile_picture)
+			->resize(300, null, function($constraint) {
+				$constraint->aspectRatio();
+			})
+			->save(public_path('uploads/images/user_images/profile_pictures/' . request()->profile_picture->hashName()));
+
+		auth()->user()->update([
+			'profile_picture' => request()->profile_picture->hashName()
+		]);
+
+		return redirect(auth()->user()->path());
+	}
 }

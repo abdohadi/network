@@ -25,6 +25,8 @@ return [
  'find_more' => 'اﻟﻤﺰﻳﺪ',
  'sent' => 'ﺗﻢ',
  'save' => 'ﺣﻔﻆ',
+ 'cancel' => 'الغاء',
+ 'show' => 'عرض',
  'about' => 'ﺣﻮﻝ',
 
  
@@ -38,6 +40,7 @@ return [
  'share_now' => 'ﻣﺸﺎﺭﻛﻪ اﻻﻥ',
  'add_comment' => 'اﺿﻒ',
  'edit' => 'ﺗﻌﺪﻳﻝ',
+ 'update' => 'تعديل',
  'delete' => 'ﺣﺬﻑ',
  'view_other_comments' => 'ﻋﺮﺽ :count ﻣﻦ اﻟﺘﻌﻠﻴﻘﺎﺕ اﻻﺧﺮﻱ',
  'edit_your_comment' => 'ﺗﻌﺪﻳﻞ اﻟﺘﻌﻠﻴﻖ',

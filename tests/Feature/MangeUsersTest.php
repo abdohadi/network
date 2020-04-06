@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 
 class MangeUsersTest extends TestCase
@@ -114,7 +116,6 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_can_update_their_info()
     {
-        $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $this->get(localizeURL($user->path() . '/edit_info'))->assertOk();
@@ -122,7 +123,7 @@ class MangeUsersTest extends TestCase
         $info = [
             'name' => 'John Doe',
             'email' => 'example@example.com',
-            'birth_date' => '2020-03-17',
+            'birth_date' => '2020-03-17 00:00:00',
             'address' => 'Cairo',
             'phone' => '1111111111',
             'gender' => 'male',
@@ -135,5 +136,21 @@ class MangeUsersTest extends TestCase
         $this->assertDatabaseHas('users', $info);
 
         $this->get(localizeURL($user->path()))->assertSee('I am John Doe');
+    }
+
+    /** @test */
+    public function a_user_can_update_their_profile_picture()
+    {
+        $user = $this->signIn();
+
+        $pic = UploadedFile::fake()->image('profile.jpg');
+
+        $this->json('PATCH', localizeURL($user->path() . '/update_picture'), [
+            'profile_picture' => $pic
+        ])->assertRedirect($user->path());
+
+        Storage::disk('public_uploads')->assertExists('images/user_images/profile_pictures/' . $pic->hashName());
+
+        $this->assertDatabaseHas('users', ['profile_picture' => $pic->hashName()]);
     }
 }

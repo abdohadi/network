@@ -6,11 +6,11 @@
 		<form-component 
 			class="m-auto w-1/2" 
 			url="{{ localizeURL(auth()->user()->path() . '/update_info') }}"
-			method="patch"
+			method="post"
 		>
 			<template slot-scope="{ form }">
-				@csrf
 				@method('PATCH')
+				@csrf
 
 				<div class="flex mb-4">
 					<div class="mb-2 w-3/12 mt-2 text-center">

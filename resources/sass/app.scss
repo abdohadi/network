@@ -21,17 +21,6 @@
 /**
 * My custom css 
 */
-/** {
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}*/
-/*
-a {
- 	@apply .text-primary;
-}*/
-
 .close-modal {
 	display: none;
 }
@@ -63,10 +52,6 @@ a {
 .button-outline-secondary {
 	@apply .border .border-gray-500 .text-gray-600 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .shadow-lg;
 }
-
-// .button-outline-secondary:hover {
-// 	@apply .border-blue-400;
-// }
 
 .button-outline-primary:hover,
 .button-outline-secondary:hover {
@@ -130,47 +115,6 @@ a {
 	backface-visibility: hidden;
 }
 
-/* Start loader */
-/*
-.lds-facebook {
-  display: inline-block;
-  position: relative;
-  top: -48px;
-  left: -34px;
-}
-.lds-facebook div {
-  display: inline-block;
-  position: absolute;
-  width: 11px;
-  background: #aeacac;
-  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
-}
-.lds-facebook div:nth-child(1) {
-  left: 12px;
-  animation-delay: -0.24s;
-}
-.lds-facebook div:nth-child(2) {
-  left: 29px;
-  animation-delay: -0.12s;
-}
-.lds-facebook div:nth-child(3) {
-  left: 46px;
-  animation-delay: 0;
-}
-@keyframes lds-facebook {
-  0% {
-    top: 32px;
-    height: 26px;
-  }
-  50%, 100% {
-    top: 40px;
-    height: 8px;
-  }
-}
-*/
-/* End loader */
-
-
 // left side section
 .left-side-ul {
 	@apply .mt-8;
@@ -183,3 +127,5 @@ a {
 		}
 	}
 }
+
+

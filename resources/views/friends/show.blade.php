@@ -12,7 +12,7 @@
 
 			<div class="absolute flex items-center" style="left:52px;bottom:-15px;">
 				<img 
-					src="{{ gravatar($user->email) }}" 
+					src="{{ getProfilePicture($user) }}" 
 					class="bg-gray-100 border border-gray-700 p-1 rounded-full"
 					style="width:170px;">
 
@@ -62,7 +62,7 @@
 						<div class="flex items-center mb-4 border border-gray-200">
 							<a href="{{ '/users/'.$friend->id }}" style="margin: 2px;border:1px solid #f9f9f9;">
 								<img 
-									src="{{ gravatar($friend->email) }}"
+									src="{{ getProfilePicture($friend) }}"
 									style="width:140px;height:140px;">
 							</a>
 

@@ -1,7 +1,8 @@
 @extends('layouts.app', ['nav_visiblity' => 'hidden'])
 
 @section('content')
-    <div class="login-register-parent">
+    <div class="login-register-parent flex">
+        <div class="w-3/5 text-center text-gray-600 hello-there mt-20 text-4xl px-10 italic font-bold" style="text-shadow: rgba(148, 46, 46, 0.75) 1px -7px 4px;color: #a19191;"></div>
         {{-- <div class="w-3/5 text-center">
             <h1 class="text-center text-4xl font-bold mt-20 mr-20" style="color: rgba(133, 143, 158, 0.98);">Join our network and have fun</h1>
             <ul class="text-3xl font-bold mt-16 mr-20" style="color:rgba(133, 143, 158, 0.98)"> 
@@ -16,7 +17,7 @@
             </ul>
         </div> --}}
 
-        <div class="login-register w-2/5 m-auto">
+        <div class="login-register w-2/5">
             {{-- Register card --}}
             <div class="card register-card" data-request="{{ old('register-request') ? 'register-request' : '' }}">
                 <div class="card-header"><h3 class="text-2xl text-center mb-8">{{ __('site.register') }}</h3></div>

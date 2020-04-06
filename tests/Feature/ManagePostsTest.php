@@ -99,7 +99,6 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_user_can_share_a_post()
     {
-        // $this->WithoutExceptionHandling();
         $this->signIn();
 
         $shared_post = factory(Post::class)->create();

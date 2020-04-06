@@ -27,7 +27,7 @@
                                     <li class="flex items-center justify-between mb-4" id="friend-request">
                                         <div class="flex items-center">
                                             <a href="{{ $user->path() }}">
-                                                <img src="{{ gravatar($user->email) }}" class="rounded-full w-10 mr-2">
+                                                <img src="{{ getProfilePicture($user) }}" class="rounded-full w-10 mr-2">
                                             </a> 
                                             <a href="{{ $user->path() }}">
                                                 <span>{{ $user->name }}</span>
@@ -72,7 +72,7 @@
                         <li class="mx-3">
                             <a href="{{ auth()->user()->path() }}" class="flex items-center cursor-pointer">
                                 <span class="text-sm text-gray-800">{{ Auth::user()->name }}</span>
-                                <img src="{{ gravatar(auth()->user()->email) }}" class="rounded-full w-8 ml-2 h-8 text-sm"> 
+                                <img src="{{ getProfilePicture(auth()->user()) }}" class="rounded-full w-8 ml-2 h-8 text-sm"> 
                             </a>
                         </li>
 

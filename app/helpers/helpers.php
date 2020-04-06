@@ -10,11 +10,31 @@ use App\Group;
  *****************/
 
 /**
+ * Get user's profile picture
+ * 
+ * @param User $user
+ * @return String
+ */
+function getProfilePicture($user, $size = 40)
+{
+	if ((is_array($user) ? $user['profile_picture'] : $user->profile_picture) != 'default.jpg') {
+		return '/uploads/images/user_images/profile_pictures/' . $user->profile_picture;
+	}
+
+	$email = is_array($user) ? $user['email'] : $user->email;
+
+	return gravatar($email, $size);
+}
+
+/**
  * Get the gravatar
  *
+ * @param String $email
+ * @param int $size
  * @return string
  */
-function gravatar($email, $size = 40) {
+function gravatar($email, $size) 
+{
 	$default = "http://www.moonparks.org/images/blank-user.jpg";
 	
 	return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=" . $size;
@@ -27,7 +47,8 @@ function gravatar($email, $size = 40) {
  *
  * @return array
  */
-function peopleYouMayKnow() {
+function peopleYouMayKnow() 
+{
 	$friends = auth()->user()->friends()->pluck('friend_id')->toArray();
 	$sent = auth()->user()->sentFriendRequests()->pluck('to_user_id')->toArray();
 	$received = auth()->user()->receivedFriendRequests()->pluck('from_user_id')->toArray();
@@ -42,7 +63,8 @@ function peopleYouMayKnow() {
  *
  * @return array
  */
-function groupsYouMayJoin() {
+function groupsYouMayJoin() 
+{
 	return Group::latest()->whereNotIn('user_id', [auth()->id()])->get()->toArray();		// we will need to except our groups 
 }
 
@@ -50,7 +72,11 @@ function groupsYouMayJoin() {
 /**
  * Get localized URL
  * If current locale is en, it returns `/en/url`
+ *
+ * @param String $url
+ * @return String
  */
-function localizeURL($url) {
+function localizeURL($url) 
+{
 	return \LaravelLocalization::localizeURL($url);
 }

@@ -1,6 +1,6 @@
 <div class="flex items-center mb-4">
   <a href="{{ '/users/'.$user['id'] }}">
-    <img src="{{ gravatar($user['email']) }}" class="rounded-full w-16 mr-2" style="border:1px solid rgb(241, 239, 239);border-radius:50%">
+    <img src="{{ getProfilePicture($user) }}" class="rounded-full w-16 mr-2" style="border:1px solid rgb(241, 239, 239);border-radius:50%">
   </a> 
 
   <a href="{{ '/users/'.$user['id'] }}">
