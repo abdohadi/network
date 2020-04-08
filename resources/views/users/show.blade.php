@@ -2,6 +2,31 @@
 
 @section('content')
 	
+	@if ($errors->has('profile_picture') || $errors->has('profile_cover'))
+		<ul 
+			class="bg-white border absolute z-10 r-0 right-0 pl-2 pr-6 pt-6 pb-2" 
+			style="border-top: 6px solid red;top: 105px;max-width: 396px;">
+			<span 
+				class='absolute text-gray-500 cursor-pointer text-sm hover:font-bold' 
+				style='right: 17px;top: 7px;' 
+				title='Close'
+				onclick='script: this.parentElement.style.display = "none"' 
+			>X</span>
+
+			@foreach ($errors->all() as $error)
+				<div class="flex py-4 ">
+					<div class="text-center" style="width: 31px;">
+						<span class="rounded-full text-red-700 bg-red-200 text-sm" style="padding: 1px 6px">x</span>
+					</div>
+
+					<div class="break-normal px-4 text-red-600">
+						<li>{{ $error }}</li>
+					</div>
+				</div>
+			@endforeach
+		</ul>
+	@endif
+
 	<div class="lg:px-32">
 		<div class="relative" style="height:300px;">
 			{{-- Profile cover section --}}
