@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('college')->nullable();
             $table->string('bio')->nullable();
             $table->string('profile_picture')->default('default.jpg');
+            $table->string('profile_cover')->default('default.png');
             $table->rememberToken();
             $table->timestamps();
         });

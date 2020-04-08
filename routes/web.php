@@ -27,6 +27,7 @@ Route::group(
 	Route::get('/users/{user}/edit_info', 'UsersController@editInfo');
 	Route::patch('/users/{user}/update_info', 'UsersController@updateInfo');
 	Route::patch('/users/{user}/update_picture', 'UsersController@updatePicture');
+	Route::patch('/users/{user}/update_cover', 'UsersController@updateCover');
 
 	// post routes
 	Route::resource('posts', 'PostsController');

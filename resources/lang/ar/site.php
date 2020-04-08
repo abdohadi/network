@@ -40,7 +40,7 @@ return [
  'share_now' => 'ﻣﺸﺎﺭﻛﻪ اﻻﻥ',
  'add_comment' => 'اﺿﻒ',
  'edit' => 'ﺗﻌﺪﻳﻝ',
- 'update' => 'تعديل',
+ 'change' => 'تغير',
  'delete' => 'ﺣﺬﻑ',
  'view_other_comments' => 'ﻋﺮﺽ :count ﻣﻦ اﻟﺘﻌﻠﻴﻘﺎﺕ اﻻﺧﺮﻱ',
  'edit_your_comment' => 'ﺗﻌﺪﻳﻞ اﻟﺘﻌﻠﻴﻖ',
@@ -81,5 +81,6 @@ return [
  'your_address' => 'اضف عنوانك',
  'your_phone' => 'اضف رقم هاتفك',
  'edit_your_info' => 'ﺗﻌﺪﻳﻞ ﻣﻌﻠﻮﻣﺎﺗﻚ',
+ 'change_cover' => 'تغير صورة الغلاف',
 
 ];

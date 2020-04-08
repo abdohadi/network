@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use App\User;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MangeUsersTest extends TestCase
 {
@@ -147,10 +147,29 @@ class MangeUsersTest extends TestCase
 
         $this->json('PATCH', localizeURL($user->path() . '/update_picture'), [
             'profile_picture' => $pic
-        ])->assertRedirect($user->path());
+        ])
+        ->assertRedirect($user->path());
 
         Storage::disk('public_uploads')->assertExists('images/user_images/profile_pictures/' . $pic->hashName());
 
         $this->assertDatabaseHas('users', ['profile_picture' => $pic->hashName()]);
+    }
+
+    /** @test */
+    public function a_user_can_update_their_profile_cover()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $cover = UploadedFile::fake()->image('profile.png');
+
+        $this->json('PATCH', localizeURL($user->path() . '/update_cover'), [
+            'profile_cover' => $cover
+        ])
+        ->assertRedirect($user->path());
+
+        Storage::disk('public_uploads')->assertExists('images/user_images/covers/' . $cover->hashName());
+
+        $this->assertDatabaseHas('users', ['profile_cover' => $cover->hashName()]);
     }
 }

@@ -15348,6 +15348,33 @@ $(document).ready(function () {
     window.profilePicChanged = false;
     $('.profile-form-pic-overlay').hide();
     $('.show-pic-overlay').show();
+  }); // click on cover input when clicking on profile pic overlay 
+
+  $('.change-cover-btn').on('click', function (e) {
+    e.preventDefault();
+    $('.cover-input').click();
+  }); // cover preview when choosing a pic
+
+  $('.cover-input').on('change', function () {
+    if ($(this)[0].files && $(this)[0].files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('.cover-img').attr('src', e.target.result);
+      };
+
+      reader.readAsDataURL($(this)[0].files[0]);
+    }
+
+    $('.profile-cover-form').css('display', 'inline');
+  }); // Get the original user's cover when clicking on cancel btn
+
+  $('.cancel-cover-btn').on('click', function (e) {
+    e.preventDefault(); // Get the picture src back
+
+    $('.cover-img').attr('src', $(this).data('cover-src')); // Hide profile-cover-form
+
+    $('.profile-cover-form').hide();
   });
   /**
    *	Posts Section
@@ -15571,7 +15598,6 @@ $(document).ready(function () {
   var container = document.querySelector('.hello-there'),
       text = "Hello there!.... You are going to join our website now. I hope you keep silent here because it's not some kind of memes-website. It's ok to share memes but keep your fu*kin mouth shut up..../Sorry! for my language. Have fun",
       i = 0;
-  console.log(container);
 
   if (container) {
     var writer = setInterval(function () {

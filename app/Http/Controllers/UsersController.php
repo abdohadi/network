@@ -59,4 +59,22 @@ class UsersController extends Controller
 
 		return redirect(auth()->user()->path());
 	}
+
+	public function updateCover()
+	{
+		request()->validate([
+			'profile_cover' => 'mimes:jpeg,jpg,png,gif|required|max:2000'
+		]);
+
+		\Image::make(request()->profile_cover)
+			->resize(800, null, function($constraint) {
+				$constraint->aspectRatio();
+			})
+			->save(public_path('uploads/images/user_images/covers/' . request()->profile_cover->hashName()));
+
+		auth()->user()->profile_cover = request()->profile_cover->hashName();
+		auth()->user()->save();
+
+		return redirect(auth()->user()->path());
+	}
 }

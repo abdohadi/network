@@ -3,68 +3,112 @@
 @section('content')
 	
 	<div class="lg:px-32">
-		<div class="relative">
+		<div class="relative" style="height:300px;">
+			{{-- Profile cover section --}}
 			{{-- Profile cover --}}
-			<img 
-				src="/uploads/images/user_images/covers/default.png" 
-				class="w-full" 
-				style="height:300px;">
+			<a href="{{ asset('/uploads/images/user_images/covers/' . $user->profile_cover) }}" target="_blank">
+				<img 
+					src="{{ '/uploads/images/user_images/covers/' . $user->profile_cover }}" 
+					class="cover-img w-full h-full" >
+			</a>
 
-			<div class="flex items-center">
-				<div class="profile-pic-parent-overlay" style="width: 166px; overflow: hidden; border-radius: 50%; position: absolute; height: 166px; z-index: 10; bottom: -17px; left: 54px;">
-					<div class="profile-pic-overlay hidden text-gray-200 text-center cursor-pointer absolute" style="width: 165px;background: #000000c9;height: 109px;border-radius: 0px 0 50% 50%;top: 91px;">
-						<div><i class="fa fa-camera mt-4 text-2xl mb-1"></i></div>
+			@if(auth()->check())
+				<div class="absolute p-2" style="top: 13px;left: 13px;background: #333">
+					<button class="change-cover-btn border border-gray-500 text-gray-500 py-2 rounded-full px-4 hover:border-blue-400 hover:text-blue-400">@lang('site.change_cover')</button>
 
-						<div class="font-bold">@lang('site.update')</div>
-					</div>
-					
-					<div 
-						class="show-pic-overlay text-gray-200 text-center absolute hidden" 
-						style="width: 165px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
+					<form 
+						class="profile-cover-form hidden ml-2" 
+						action="{{ localizeURL(auth()->user()->path() . '/update_cover') }}" 
+						method="POST" 
+						enctype="multipart/form-data"
 					>
-						<span class="font-bold py-2 px-3 border rounded-full relative" style="top: 53px;">
-							<a href="{{ getProfilePicture($user, 60) }}" target="_blank">@lang('site.show')</a>
-						</span>
-					</div>
+						@csrf
+						@method('PATCH')
 
-					{{-- Update profile picture form --}}
-					<div 
-						class="profile-form-pic-overlay text-gray-200 text-center absolute hidden" 
-						style="width: 167px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
-					>
-						<form 
-							class="profile-picture-form" 
-							action="{{ localizeURL(auth()->user()->path() . '/update_picture') }}" 
-							method="POST" 
-							enctype="multipart/form-data"
-						>
-							@csrf
-							@method('PATCH')
-
-							<input class="hidden profile-picture-input" type="file" name="profile_picture">
-
-							<button 
-								class="button-outline-primary submit-profile-pic-btn block m-auto mt-10" 
-								style="font-size: 11px"
-							>@lang('site.save')</button>
-						</form>
+						<input class="cover-input hidden" type="file" name="profile_cover">
 
 						<button 
-							class="button-outline-secondary cancel-profile-pic-btn mt-1" 
-							style="font-size: 11px" 
-							data-pic-src="{{ getProfilePicture($user) }}"
+							class="cancel-cover-btn button-outline-secondary mt-1" 
+							style="font-size: 12px" 
+							data-cover-src="{{ '/uploads/images/user_images/covers/' . $user->profile_cover }}"
 						>@lang('site.cancel')</button>
-					</div>
+						<button 
+							class="submit-cover-btn button-outline-primary" 
+							style="font-size: 12px"
+						>@lang('site.save')</button>
+					</form>
 				</div>
+			@endif
 
-				{{-- Profile picture --}}
+
+			{{-- Profile Picture section --}}
+			@if(auth()->check())
+				<div class="flex items-center">
+					<div 
+						class="profile-pic-parent-overlay" 
+						style="width: 163px; overflow: hidden; border-radius: 50%; position: absolute; height: 164px; z-index: 10; bottom: -16px; left: 57px;">
+						<div 
+							class="profile-pic-overlay hidden text-gray-200 text-center cursor-pointer absolute" style="width: 166px;background: #000000c9;height: 109px;border-radius: 0px 0 50% 50%;top: 91px;">
+							<div><i class="fa fa-camera mt-4 text-2xl mb-1"></i></div>
+
+							<div class="font-bold">@lang('site.change')</div>
+						</div>
+						
+						<div 
+							class="show-pic-overlay text-gray-200 text-center absolute hidden" 
+							style="width: 165px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
+						>
+							<span 
+								class="py-2 px-3 border border-gray-500 text-gray-500 rounded-full relative hover:border-blue-400 hover:text-blue-400"
+								style="top: 53px;">
+								<a href="{{ getProfilePicture($user, 60) }}" target="_blank">@lang('site.show')</a>
+							</span>
+						</div>
+
+						{{-- Update profile picture form --}}
+						<div 
+							class="profile-form-pic-overlay text-gray-200 text-center absolute hidden" 
+							style="width: 164px;background: #000000c9;height: 105px;border-radius: 50% 50% 0 0;top: -14px;"
+						>
+							<form 
+								class="profile-picture-form" 
+								action="{{ localizeURL(auth()->user()->path() . '/update_picture') }}" 
+								method="POST" 
+								enctype="multipart/form-data"
+							>
+								@csrf
+								@method('PATCH')
+
+								<input class="hidden profile-picture-input" type="file" name="profile_picture">
+
+								<button 
+									class="button-outline-primary submit-profile-pic-btn block m-auto mt-10" 
+									style="font-size: 11px"
+								>@lang('site.save')</button>
+							</form>
+
+							<button 
+								class="button-outline-secondary cancel-profile-pic-btn mt-1" 
+								style="font-size: 11px" 
+								data-pic-src="{{ getProfilePicture($user) }}"
+							>@lang('site.cancel')</button>
+						</div>
+					</div>
+
+					{{-- Profile picture --}}
+					<img 
+						class="profile-picture bg-gray-100 p-1 rounded-full absolute"
+						src="{{ getProfilePicture($user, 60) }}" 
+						style="width: 170px;height: 170px;left: 53px;bottom: -19px;">
+
+					<span class="text-2xl text-white font-bold ml-8 mt-16 absolute" style="left: 222px; bottom: 30px;">{{ $user->name }}</span>
+				</div>
+			@else
 				<img 
 					class="profile-picture bg-gray-100 p-1 rounded-full absolute"
 					src="{{ getProfilePicture($user, 60) }}" 
 					style="width: 170px;height: 170px;left: 52px;bottom: -19px;">
-
-				<span class="text-2xl text-white font-bold ml-8 mt-16 absolute" style="left: 222px; bottom: 30px;">{{ $user->name }}</span>
-			</div>
+			@endif
 
 			@if(auth()->check())
 				@if ($user->isNot(auth()->user()))
@@ -213,7 +257,7 @@
 				</div>
 			</div>
 
-			<div class="lg:w-2/3 lg:ml-4">
+			<div class="lg:w-2/3 lg:ml-4 pl-10">
 				{{-- Create New Post --}}
 				@if ($user->is(auth()->user()))
 					<div class="card mb-4">
