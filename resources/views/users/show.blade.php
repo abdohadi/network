@@ -2,34 +2,35 @@
 
 @section('content')
 	
-	@if ($errors->has('profile_picture') || $errors->has('profile_cover'))
-		<ul 
-			class="bg-white border absolute z-10 r-0 right-0 pl-2 pr-6 pt-6 pb-2" 
-			style="border-top: 6px solid red;top: 105px;max-width: 396px;">
-			<span 
-				class='absolute text-gray-500 cursor-pointer text-sm hover:font-bold' 
-				style='right: 17px;top: 7px;' 
-				title='Close'
-				onclick='script: this.parentElement.style.display = "none"' 
-			>X</span>
+	@if (auth()->user()->is($user))
+		@if ($errors->has('profile_picture') || $errors->has('profile_cover'))
+			<ul 
+				class="bg-white border absolute z-10 r-0 right-0 pl-2 pr-6 pt-6 pb-2" 
+				style="border-top: 6px solid red;top: 105px;max-width: 396px;">
+				<span 
+					class='absolute text-gray-500 cursor-pointer text-sm hover:font-bold' 
+					style='right: 17px;top: 7px;' 
+					title='Close'
+					onclick='script: this.parentElement.style.display = "none"' 
+				>X</span>
 
-			@foreach ($errors->all() as $error)
-				<div class="flex py-4 ">
-					<div class="text-center" style="width: 31px;">
-						<span class="rounded-full text-red-700 bg-red-200 text-sm" style="padding: 1px 6px">x</span>
-					</div>
+				@foreach ($errors->all() as $error)
+					<div class="flex py-4 ">
+						<div class="text-center" style="width: 31px;">
+							<span class="rounded-full text-red-700 bg-red-200 text-sm" style="padding: 1px 6px">x</span>
+						</div>
 
-					<div class="break-normal px-4 text-red-600">
-						<li>{{ $error }}</li>
+						<div class="break-normal px-4 text-red-600">
+							<li>{{ $error }}</li>
+						</div>
 					</div>
-				</div>
-			@endforeach
-		</ul>
+				@endforeach
+			</ul>
+		@endif
 	@endif
 
 	<div class="lg:px-32">
 		<div class="relative" style="height:300px;">
-			{{-- Profile cover section --}}
 			{{-- Profile cover --}}
 			<a href="{{ asset('/uploads/images/user_images/covers/' . $user->profile_cover) }}" target="_blank">
 				<img 
@@ -37,7 +38,8 @@
 					class="cover-img w-full h-full" >
 			</a>
 
-			@if(auth()->check())
+			@if(auth()->user()->is($user))
+				{{-- Change cover --}}
 				<div class="absolute p-2" style="top: 13px;left: 13px;background: #333">
 					<button class="change-cover-btn border border-gray-500 text-gray-500 py-2 rounded-full px-4 hover:border-blue-400 hover:text-blue-400">@lang('site.change_cover')</button>
 
@@ -67,7 +69,7 @@
 
 
 			{{-- Profile Picture section --}}
-			@if(auth()->check())
+			@if(auth()->user()->is($user))
 				<div class="flex items-center">
 					<div 
 						class="profile-pic-parent-overlay" 
@@ -79,15 +81,17 @@
 							<div class="font-bold">@lang('site.change')</div>
 						</div>
 						
+						{{-- Show profile pic --}}
 						<div 
 							class="show-pic-overlay text-gray-200 text-center absolute hidden" 
 							style="width: 165px;background: #000000c9;height: 109px;border-radius: 50% 50% 0 0;top: -18px;"
 						>
-							<span 
-								class="py-2 px-3 border border-gray-500 text-gray-500 rounded-full relative hover:border-blue-400 hover:text-blue-400"
-								style="top: 53px;">
-								<a href="{{ getProfilePicture($user, 60) }}" target="_blank">@lang('site.show')</a>
-							</span>
+							<a href="{{ getProfilePicture($user, 60) }}" target="_blank">
+								<span 
+									class="py-2 px-3 border border-gray-500 text-gray-500 rounded-full relative hover:border-blue-400 hover:text-blue-400"
+									style="top: 53px;"
+								>@lang('site.show')</span>
+							</a>
 						</div>
 
 						{{-- Update profile picture form --}}
@@ -98,7 +102,7 @@
 							<form 
 								class="profile-picture-form" 
 								action="{{ localizeURL(auth()->user()->path() . '/update_picture') }}" 
-								method="POST" 
+								method="post" 
 								enctype="multipart/form-data"
 							>
 								@csrf
@@ -129,23 +133,18 @@
 					<span class="text-2xl text-white font-bold ml-8 mt-16 absolute" style="left: 222px; bottom: 30px;">{{ $user->name }}</span>
 				</div>
 			@else
-				<img 
-					class="profile-picture bg-gray-100 p-1 rounded-full absolute"
-					src="{{ getProfilePicture($user, 60) }}" 
-					style="width: 170px;height: 170px;left: 52px;bottom: -19px;">
+				<a href="{{ getProfilePicture($user, 60) }}" target="_blank">
+					<img 
+						class="profile-picture bg-gray-100 p-1 rounded-full absolute"
+						src="{{ getProfilePicture($user, 60) }}" 
+						style="width: 170px;height: 170px;left: 52px;bottom: -19px;">
+				</a>
 			@endif
 
-			@if(auth()->check())
-				@if ($user->isNot(auth()->user()))
-					<div class="absolute px-5 py-2 bg-white rounded-sm" style="right:15px;bottom:20px">
-						@if (auth()->user()->sentFriendRequests->contains($user))
-						{{-- <button 
-							data-user-id="{{ $user->id }}" 
-							id="cancel_friend_request" 
-							class="button-outline-secondary ml-auto"
-							title="Click to cancel the request"
-						><i class="fa fa-check"></i> Sent</button> --}}
-						<button 
+			@if ($user->isNot(auth()->user()))
+				<div class="absolute px-5 py-2 bg-white rounded-sm" style="right:15px;bottom:20px">
+					@if (auth()->user()->sentFriendRequests->contains($user))
+						<button
 							data-user-id="{{ $user['id'] }}" 
 							data-btn-add="{{ __('site.add') }}" 
 							data-btn-sent="{{ __('site.sent') }}" 
@@ -163,9 +162,8 @@
 							title="{{ __('site.click_to_send_a_friend_request') }}"
 						><i class="fa fa-user-plus"></i> @lang('site.add')</button>
 			      @endif
-			    </div>
-			  @endif
-			@endif
+		    	</div>
+		  	@endif
 		</div>
 
 		<div class="lg:flex mt-5">
@@ -263,14 +261,15 @@
 					<div class="flex">
 						@forelse(array_slice($user->friends->toArray(), 0, 3) as $friend)
 							<div class="m-auto text-center mx-1" style="height:150px;">
-            		<a href="{{ "/users/".$friend['id'] }}">
-  	            	<img src="{{ getProfilePicture($friend, 60) }}" class="border my-2 w-full" style="padding:1px">
-           	 		</a>
-           	 		<a href="{{ "/users/".$friend['id'] }}">
-	             		<div>{{ substr($friend['name'], 0, 15) }}</div>
-	             	</a>
-							</div>
+			            		<a href="{{ "/users/".$friend['id'] }}">
+			  	            		<img src="{{ getProfilePicture($friend, 60) }}" 
+			  	            			class="border my-2 w-full" 
+			  	            			style="padding:1pxwidth: 100px;height: 100px;">
+			           	 		</a>
 
+			           	 		<a href="{{ "/users/".$friend['id'] }}" class="text-gray-700">{{ substr($friend['name'], 0, 12) }}
+				             	</a>
+							</div>
 						@empty
 							@lang('site.no_friends')
 						@endforelse

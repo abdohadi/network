@@ -1,5 +1,6 @@
 <?php
 
+use App\Group;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,12 +14,30 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
 
-        $user = factory('App\User')->create(['email'=>'a@a.com', 'password'=>bcrypt('aaaaaaaa'), 'name'=>'user']);
-        $user->posts()->save(factory('App\Post')->create());
+        $me = factory('App\User')->create(['email'=>'a@a.com', 'password'=>bcrypt('aaaaaaaa'), 'name'=>'user']);
+        factory('App\Post', 10)->create(['user_id' => $me->id]);
+        factory('App\Group', 5)->create(['user_id' => $me->id])->each(function ($group) use ($me) {
+            $group->assignAdmin($me);
+        });
         
-        factory('App\User', 10)->create()->each(function ($user) {
-            $user->posts()->save(factory('App\Post')->create());
-            $user->groups()->save(factory('App\Group')->create());
+        $users = factory('App\User', 40)->create()->each(function ($user) use ($me) {
+            factory('App\Post', 5)->create(['user_id' => $user->id]);
+           
+            if ($user->id <= 20) {
+                $group = factory('App\Group')->create(['user_id' => $user->id]);
+                $group->assignAdmin($user);
+
+                $group->join($me);
+                if ($user->id <= 10) {
+                    $group->acceptRequest($me);
+                }
+                
+                $user->sendFriendRequest($me);
+            }
+
+            $me->ownedGroups->each(function ($group) use ($user) {
+                $group->addMember($user);
+            });
         });
     }
 }

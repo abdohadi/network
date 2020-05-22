@@ -34,7 +34,8 @@ class ManageCommentsTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_cannot_update_other_users_comments() {
+    public function an_authorized_user_cannot_update_other_users_comments() 
+    {
         $this->signIn();
 
         $comment = factory('App\Comment')->create();
@@ -44,7 +45,8 @@ class ManageCommentsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_delete_their_comments() {
+    public function a_user_can_delete_their_comments() 
+    {
         $comment = factory('App\Comment')->create();
         
         $this->actingAs($comment->owner)

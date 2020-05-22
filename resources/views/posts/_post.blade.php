@@ -2,7 +2,7 @@
     <div class="card post">
         <div class="relative">
             @can('update', $post)
-                <i class="show-options fa fa-ellipsis-h text-xl absolute right-0 mr-2 text-2xl text-gray-500 hover:text-gray-600 cursor-pointer"></i>
+                <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-2xl text-gray-500 hover:text-gray-600 cursor-pointer" style="font-size: 19px;"></i>
             @endcan
 
             {{-- Post options --}}
@@ -99,14 +99,14 @@
                     style="top:-17px;right: 147px;display:none">
                     <ul>
                         {{-- Share the post wihtout adding a body --}}
-                        <a href="{{ localizeURL(($post->isSharing() ? $post->sharedPost->path() : $post->path()) . '/shared') }}">
+                        <a href="{{ $post->isSharing() ? route('posts.share', $post->sharedPost) : route('posts.share', $post) }}">
                             <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1">@lang('site.share_now')</li>
                         </a>
                         
                         {{-- Link to open the share-post modal to add a body --}}
                         <a href="#share-post-modal" rel="modal:open" 
                            class="open-share-post-modal" 
-                           data-post-path="{{ localizeURL(($post->isSharing() ? $post->sharedPost->path() : $post->path()) . '/shared') }}"
+                           data-post-path="{{ $post->isSharing() ? route('posts.share', $post->sharedPost) : route('posts.share', $post) }}"
                         >
                             <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-post-modal">@lang('site.add_something')</li>
                         </a>
@@ -179,7 +179,7 @@
                                     <div class="w-11/12 bg-main py-2 px-4 border border-gray-200 ml-2 relative"
                                          style="word-wrap: break-word;border-radius: 1.25rem;">
                                         @can('update', $comment)
-                                            <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-lg"></i>
+                                            <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4" style="font-size: 15px"></i>
 
                                             {{-- Comment options --}}
                                             <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10" style="top:-8px;display:none">

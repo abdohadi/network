@@ -1,12 +1,16 @@
 import './bootstrap';
 
-/**
+/*****************************************************************************
  * vue section
  */
 
 // Form component
 import FormComponent from './components/FormComponent.vue';
 Vue.component('form-component', FormComponent);
+
+// Button component
+import ButtonComponent from './components/ButtonComponent.vue';
+Vue.component('button-component', ButtonComponent);
 
 const app = new Vue({
     el: '#app'
@@ -364,24 +368,22 @@ $(document).ready(function() {
 	}
 	
 	// Hello there login page loader 
-	// window.onload = () => {
-		let container = document.querySelector('.hello-there'),
-			text = "Hello there!.... You are going to join our website now. I hope you keep silent here because it's not some kind of memes-website. It's ok to share memes but keep your fu*kin mouth shut up..../Sorry! for my language. Have fun",
-			i = 0;
-		if (container) {
-			let writer = setInterval(() => {
-				container.innerHTML += text[i++];
+	// let container = document.querySelector('.hello-there'),
+	// 	text = "Hello there!.... You are going to join our website now. I hope you keep silent here because it's not some kind of memes-website. It's ok to share memes but keep your fu*kin mouth shut up..../Sorry! for my language. Have fun",
+	// 	i = 0;
+	// if (container) {
+	// 	let writer = setInterval(() => {
+	// 		container.innerHTML += text[i++];
 
-				if (text[i - 1] === '/') {
-					container.innerHTML += '<br>';
-				}
+	// 		if (text[i - 1] === '/') {
+	// 			container.innerHTML += '<br>';
+	// 		}
 
-				if (i == text.length) {
-					clearInterval(writer);
-				}
-			}, 150);
-		}
-	// };
+	// 		if (i == text.length) {
+	// 			clearInterval(writer);
+	// 		}
+	// 	}, 150);
+	// }
 
 });
 
@@ -418,7 +420,7 @@ async function handleFriendRequest(el) {
 		let btnVal = $(el).data('btn-sent');
 
 		// send the request
-		await $.get('/users/request/send/' + $(el).data('user-id'));
+		await $.get('/users/' + $(el).data('user-id') + '/send');
 
 		$(el).attr('id', 'cancel_friend_request');
 		$(el).attr('title', 'Click to cancel the request');
@@ -434,13 +436,13 @@ async function handleFriendRequest(el) {
 		$(el).html(`<i class="fa fa-user-plus"></i> ${btnVal}`);
 	} else if ($(el).attr('id') == 'accept_friend_request') {
 		// accept the request
-		await $.get('/users/request/accept/' + $(el).data('user-id'));
+		await $.get('/users/' + $(el).data('user-id') + '/accept');
 
 		$(el).attr('class', 'button-outline-primary ml-auto');
 		$(el).parents('#friend-request').fadeOut(500);
 	} else if ($(el).attr('id') == 'delete_friend_request') {
 		// delete the request
-		await $.get('/users/request/delete/' + $(el).data('user-id'));
+		await $.get('/users/' + $(el).data('user-id') + '/delete');
 
 		$(el).attr('class', 'button-outline-primary ml-auto');
 		$(el).parents('#friend-request').fadeOut(500);
@@ -450,7 +452,7 @@ async function handleFriendRequest(el) {
 // handle post likes
 async function handlePostLikes() {
 	// like or dislike post
-	let likesCount = await $.get('/posts/' + $(this).data('post-id') + '/liked');
+	let likesCount = await $.get('/posts/' + $(this).data('post-id') + '/like');
 	$(this).toggleClass('text-primary text-gray-500 hover:text-gray-600');
 
 	// display & update likes count on post

@@ -5,11 +5,10 @@
 	<div class="mt-20 card">
 		<form-component 
 			class="m-auto w-1/2" 
-			url="{{ localizeURL(auth()->user()->path() . '/update_info') }}"
-			method="post"
+			cur-action="{{ route('users.update_info', auth()->user()) }}"
+			cur-method="patch"
 		>
 			<template slot-scope="{ form }">
-				@method('PATCH')
 				@csrf
 
 				<div class="flex mb-4">
@@ -21,7 +20,7 @@
 						<input 
 							type="text" id="name" name="name" placeholder="@lang('site.your_name')" 
 							value="{{ auth()->user()->name }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('name') }" 
 						>
 
@@ -38,7 +37,7 @@
 						<input 
 							type="email" id="email" name="email" placeholder="@lang('site.your_email_address')" 
 							value="{{ auth()->user()->email }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('email') }"
 						>
 						
@@ -55,7 +54,7 @@
 						<input 
 							type="date" id="Birth Date" name="birth_date" 
 							value="{{ auth()->user()->birth_date }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('birth_date') }"
 						>
 
@@ -72,7 +71,7 @@
 						<input 
 							type="text" id="address" name="address" placeholder="@lang('site.your_address')" 
 							value="{{ auth()->user()->address }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('address') }"
 						>
 
@@ -89,7 +88,7 @@
 						<input 
 							type="text" id="phone" name="phone" placeholder="@lang('site.your_phone')" 
 							value="{{ auth()->user()->phone }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('phone') }"
 						>
 
@@ -105,7 +104,7 @@
 					<div class="w-5/6">
 						<select 
 							name="gender" id="gender" 
-							class="border rounded py-2 px-4 w-full focus:border-blue-300"
+							class="border rounded py-2 px-4 w-full"
 							:class="{ 'border-red-300':form.errors.has('gender') }"
 						>
 							<option value="" {{ auth()->user()->gender == '' ? 'selected' : '' }}>@lang('site.choose_your_gender')</option>
@@ -126,7 +125,7 @@
 						<input 
 							type="text" id="college" name="college" placeholder="@lang('site.your_college')" 
 							value="{{ auth()->user()->college }}"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('college') }"
 						>
 
@@ -142,7 +141,7 @@
 					<div class="w-5/6">
 						<textarea 
 							id="bio" name="bio" placeholder="@lang('site.your_bio')"
-							class="border rounded py-2 px-4 w-full focus:border-blue-300" 
+							class="border rounded py-2 px-4 w-full" 
 							:class="{ 'border-red-300':form.errors.has('bio') }"
 						>{{ auth()->user()->bio }}</textarea>
 

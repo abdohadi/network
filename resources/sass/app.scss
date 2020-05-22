@@ -21,6 +21,10 @@
 /**
 * My custom css 
 */
+input:focus, textarea:focus, select:focus {
+	@apply .shadow-outline;
+}
+
 .close-modal {
 	display: none;
 }
@@ -30,7 +34,7 @@
 }
 
 .button-primary {
-	@apply .bg-blue-500 .text-white .font-bold .py-2 .rounded-full .cursor-pointer .text-sm .px-5 .shadow-lg;
+	@apply .bg-blue-500 .text-white .text-sm .font-bold .px-5 .py-2 .rounded-full .cursor-pointer .shadow-lg;
 }
 
 .button-primary:hover {
@@ -38,7 +42,7 @@
 }
 
 .button-secondary {
-	@apply .text-white .px-3 .py-2 .rounded-lg .text-xs .cursor-pointer .shadow-lg .bg-gray-500;
+	@apply .bg-gray-700 .text-white .text-sm .font-bold .px-3 .py-2 .rounded-full .cursor-pointer .shadow-lg;
 }
 
 .button-secondary:hover {
@@ -46,28 +50,31 @@
 }
 
 .button-outline-primary {
-	@apply .border .border-blue-500 .text-blue-500 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .shadow-lg;
+	@apply .border .border-blue-400 .text-blue-500 .font-bold .py-2 .px-3 .rounded-full .cursor-pointer .text-xs;
 }
 
 .button-outline-secondary {
-	@apply .border .border-gray-500 .text-gray-600 .font-bold .py-1 .rounded-full .cursor-pointer .text-xs .shadow-lg;
+	@apply .border .border-gray-500 .text-gray-600 .font-bold .py-2 .px-3 .rounded-full .cursor-pointer .text-xs;
 }
 
-.button-outline-primary:hover,
+.button-outline-primary:hover {
+	@apply .border-blue-500;
+}
+
 .button-outline-secondary:hover {
-	@apply .shadow;
+	@apply .border-gray-600;
 }
 
 .button-outline-primary,
 .button-outline-secondary {
-	width: 75px;
 	-webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
 }
 
 
+// login page
 .login-register-parent {
 	-webkit-perspective: 600px;
 	-moz-perspective: 600px;

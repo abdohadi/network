@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Posts;
 
 use Illuminate\Http\Request;
 use App\Post;
 use App\User;
 use App\Like;
+use App\Http\Controllers\Controller;
 
 class PostsController extends Controller
 {
-	public function index()
-	{
-		abort(404);
-	}
-
 	public function show(Post $post)
 	{
 		return view('posts.show', compact('post'));
@@ -34,11 +30,7 @@ class PostsController extends Controller
 	{
 		$this->authorize('update', $post);
 
-		$attributes = request()->validate([
-			'body' => 'required'
-		]);
-
-		$post->update($attributes);
+		$post->update(request()->only('body'));
 
 		return ['redirect' => $post->path()];
 	}
@@ -61,7 +53,7 @@ class PostsController extends Controller
 	{
 		$shared_post = $post;
 
-		$post = auth()->user()->posts()->create(request()->all());
+		$post = auth()->user()->posts()->create(request()->only('body'));
 
 		$post->sharePost($shared_post);
 

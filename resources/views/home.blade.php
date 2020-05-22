@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="lg:flex mt-16">
         {{-- Left side --}}
         <div class="lg:w-1/5 mx-2 sm:hidden lg:block">
@@ -23,7 +24,11 @@
 
         {{-- Right side --}}
         <div class="lg:w-2/6 mx-2 sm:hidden lg:block">
-            @include('layouts._right_side')
+            {{-- Make new friends --}}
+            @include('users._people_you_may_know')
+
+            {{-- Join new groups --}}
+            @include('groups._suggested_groups')
         </div>
     </div>
 

@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Like;
+use App\Post;
+use App\User;
+use App\Group;
+use App\Comment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Post;
-use App\Group;
-use App\Like;
-use App\Comment;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,10 @@ class User extends Authenticatable
         'birth_date'
     ];
 
+    public function getNameAttribute($value) {
+        return ucfirst($value);
+    }
+
     public function path()
     {
         return '/users/'.$this->id;
@@ -60,9 +65,39 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
-    public function groups()
+    /**
+     * Groups created by the user
+     */
+    public function ownedGroups()
     {
         return $this->hasMany(Group::class);
+    }
+
+    /**
+     * Groups of which the user is a member or an admin
+     */
+    public function joinedGroups()
+    {
+        return $this->groups()
+                    ->wherePivot('member_status', 'accepted');
+    }
+
+    /**
+     * Groups of which the user is a member or an admin
+     */
+    public function requestedGroups()
+    {
+        return $this->groups()
+                    ->wherePivot('member_status', 'pending');
+    }
+
+    /**
+     * All groups related to a user
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_member', 'member_id', 'group_id')
+                    ->withPivot('member_status', 'member_position');
     }
 
     public function comments()
@@ -85,6 +120,7 @@ class User extends Authenticatable
         $this->friends()->attach($user);
         $user->friends()->attach($this);
         $this->receivedFriendRequests()->detach($user);
+        $user->sentFriendRequests()->detach($this);
     }
 
     public function deleteFriendRequest(self $user)
@@ -107,7 +143,13 @@ class User extends Authenticatable
         return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
     }
 
-    public function getNameAttribute($value) {
-        return ucfirst($value);
+    public function hasFriend(User $user)
+    {
+        return $this->friends->contains($user);
+    }
+
+    public function hasFriendRequest(User $user)
+    {
+        return $this->receivedFriendRequests->contains($user);
     }
 }

@@ -36,6 +36,7 @@ class ManagePostsTest extends TestCase
     /** @test */
     public function a_user_can_update_their_posts()
     {
+        $this->WithoutExceptionHandling();
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)

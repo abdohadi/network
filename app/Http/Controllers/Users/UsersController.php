@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
@@ -21,15 +22,13 @@ class UsersController extends Controller
 
 	public function updateInfo(User $user)
 	{
-		abort_if(auth()->user()->isNot($user), 403);
-
 		$attributes = request()->validate([
 			'name' => 'required|max:50',
-			'email' => 'required|email|max:50',
+			'email' => 'required|email|unique:users,email,' . $user->id,
 			'address' => 'max:100',
 			'phone' => 'max:50',
 			'birth_date' => 'nullable|date',
-			'gender' => 'max:10',
+			'gender' => 'max:10|in:male,female',
 			'college' => 'max:50',
 			'bio' => 'max:120'
 		]);
@@ -38,10 +37,10 @@ class UsersController extends Controller
 
 		session()->flash('success', 'Your info has been updated successfully');
 
-		return ["redirect" => localizeURL(auth()->user()->path())];
+		return ["redirect" => route('users.show', auth()->user())];
 	}
 
-	public function updatePicture()
+	public function updatePicture(User $user)
 	{
 		request()->validate([
 			'profile_picture' => 'mimes:jpeg,jpg,png,gif|required|max:2000'
@@ -60,7 +59,7 @@ class UsersController extends Controller
 		return redirect(auth()->user()->path());
 	}
 
-	public function updateCover()
+	public function updateCover(User $user)
 	{
 		request()->validate([
 			'profile_cover' => 'mimes:jpeg,jpg,png,gif|required|max:2000'
@@ -76,5 +75,10 @@ class UsersController extends Controller
 		auth()->user()->save();
 
 		return redirect(auth()->user()->path());
+	}
+
+	public function destroy()
+	{
+		
 	}
 }

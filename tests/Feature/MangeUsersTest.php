@@ -14,15 +14,13 @@ class MangeUsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_guest_can_access_the_login_page()
+    public function an_authenticated_user_can_view_the_home_page()
     {
         // $this->withoutExceptionHandling();
+        // a guest cannot view the home page
         $this->get(localizeURL('/login'))->assertOk();
-    }
 
-    /** @test */
-    public function a_user_can_view_the_home_page()
-    {
+        // authenticated user
         $this->signIn();
         
         $this->get(localizeURL('/'))->assertOk();
@@ -31,25 +29,21 @@ class MangeUsersTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_a_profile_of_any_user()
+    public function an_authenticated_user_can_view_the_profile_of_any_user()
     {
-        // a user can view their profiles
+        // a guest cannot view profiles
+        $user = factory(User::class)->create();
+        $this->get(localizeURL($user->path()))->assertRedirect(localizeURL('login'));
+
+        // an authenticated user can view their profiles
         $user = factory(User::class)->create();
         $this->be($user)
             ->get(localizeURL($user->path()))
             ->assertOk();
 
-        // a user can view profiles of others
+        // an authenticated user can view profiles of others
         $this->signIn();
         $this->get(localizeURL($user->path()))->assertOk();
-    }
-
-    /** @test */
-    public function a_gust_cannot_view_a_profile_of_any_user()
-    {
-        // guest
-        $user = factory(User::class)->create();
-        $this->get(localizeURL($user->path()))->assertRedirect(localizeURL('login'));
     }
 
     /** @test */
@@ -93,8 +87,13 @@ class MangeUsersTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_friends_list_of_another_user()
+    public function an_authenticated_user_can_view_friends_list_of_another_user()
     {
+        // a guest cannot view friends list
+        $user = factory(User::class)->create();
+        $this->get(localizeURL("users/{$user->id}/friends"))->assertRedirect(localizeURL('login'));
+
+        // an authenticated user
         $this->signIn();
 
         $user = factory(User::class)->create();
@@ -103,14 +102,68 @@ class MangeUsersTest extends TestCase
     }
 
     /** @test */
-    public function a_user_cannot_update_other_users_info()
+    public function an_unauthorized_and_unauthenticated_user_cannot_edit_other_users_info()
     {
-        $this->signIn();
-        $user = factory('App\User')->create();
+        // an unauthenticated user
+        $user = factory(User::class)->create();
+        $this->get(localizeURL($user->path() . '/edit_info'))->assertRedirect(localizeURL('login'));
 
+        // an unauthorized user
+        $this->signIn();
         $this->get(localizeURL($user->path()))->assertDontSee('Edit Your Info');
         $this->get(localizeURL($user->path() . '/edit_info'))->assertStatus(403);
-        $this->patch(localizeURL($user->path() . '/update_info'), [])->assertStatus(403);
+    }
+
+    /** @test */
+    public function updating_user_info_validation()
+    {
+        $user = $this->signIn();
+
+        $info = [
+            'name' => '',
+            'email' => '',
+            'address' => \Str::random(101),
+            'phone' => \Str::random(51),
+            'birth_date' => 'invalid date',
+            'gender' => 'other',
+            'college' => \Str::random(51),
+            'bio' => \Str::random(121)
+        ];
+
+        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+            ->assertSessionHasErrors('name')
+            ->assertSessionHasErrors('email')
+            ->assertSessionHasErrors('address')
+            ->assertSessionHasErrors('phone')
+            ->assertSessionHasErrors('birth_date')
+            ->assertSessionHasErrors('gender')
+            ->assertSessionHasErrors('college')
+            ->assertSessionHasErrors('bio');
+
+        $info = [
+            'email' => 'invalid email'
+        ];
+
+        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+            ->assertSessionHasErrors('email');
+
+        // check for unique email
+        $user2 = factory(User::class)->create();
+        $info = [
+            'email' => $user2->email
+        ];
+
+        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+            ->assertSessionHasErrors('email');
+
+        // a user can update their info whithout changing their email address 
+        $info = [
+            'name' => 'name',
+            'email' => $user->email
+        ];
+
+        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+            ->assertSessionHasNoErrors('email');
     }
 
     /** @test */

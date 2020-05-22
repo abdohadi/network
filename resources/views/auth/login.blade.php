@@ -1,23 +1,10 @@
 @extends('layouts.app', ['nav_visiblity' => 'hidden'])
 
 @section('content')
-    <div class="login-register-parent flex">
-        <div class="w-3/5 text-center text-gray-600 hello-there mt-20 text-4xl px-10 italic font-bold" style="text-shadow: rgba(148, 46, 46, 0.75) 1px -7px 4px;color: #a19191;"></div>
-        {{-- <div class="w-3/5 text-center">
-            <h1 class="text-center text-4xl font-bold mt-20 mr-20" style="color: rgba(133, 143, 158, 0.98);">Join our network and have fun</h1>
-            <ul class="text-3xl font-bold mt-16 mr-20" style="color:rgba(133, 143, 158, 0.98)"> 
-                <li class="mb-6">Share your posts with your friends</li>
-                <li class="mb-6">Enjoy chating with other people</li>
-                <li>Make new friends</li>
-            </ul>
+    <div class="login-register-parent m-auto w-2/5">
+        {{-- <div class="w-3/5 text-center text-gray-600 hello-there mt-20 text-4xl px-10 italic font-bold" style="text-shadow: rgba(148, 46, 46, 0.75) 1px -7px 4px;color: #a19191;"></div> --}}
 
-            <ul class="mt-10 text-primary text-lg mr-20" style="color:rgba(133, 143, 158, 0.98)">
-                <li class="mb-2">High level of security and privacy</li>
-                <li>We will never share your data</li>
-            </ul>
-        </div> --}}
-
-        <div class="login-register w-2/5">
+        <div class="login-register">
             {{-- Register card --}}
             <div class="card register-card" data-request="{{ old('register-request') ? 'register-request' : '' }}">
                 <div class="card-header"><h3 class="text-2xl text-center mb-8">{{ __('site.register') }}</h3></div>
@@ -138,8 +125,7 @@
                                 <input 
                                     id="email" 
                                     type="email" 
-                                    class="w-full py-2 px-2 border rounded mt-2 @error('email') is-invalid border border-red-300 @enderror" 
-                                    name="email" 
+                                    class="w-full py-2 px-2 border rounded mt-2 @error('email') is-invalid border border-red-300 @enderror"name="email" 
                                     value="{{ old('email') }}" 
                                     required 
                                     autocomplete="email" 
@@ -202,7 +188,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button class="button-outline-secondary create-account-button mt-10 px-10" style="padding:.4rem 2rem;">{{ __('site.create_new_account') }}</button>
+                    <button class="create-account-button mt-10 border rounded-full text-gray-800 border-gray-500 px-10 py-2">{{ __('site.create_new_account') }}</button>
                 </div>
             </div>
         </div>

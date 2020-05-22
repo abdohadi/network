@@ -6,30 +6,107 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'description', 'cover'];
+    protected $fillable = ['name', 'description', 'visibility', 'cover', 'user_id'];
+
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function path()
+    {
+        return '/groups/'.$this->id;
+    }
 
     public function owner()
     {
     	return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function path()
+    /**
+     * Accepted and not accepted users but not admins
+     */
+    public function members()
     {
-    	return '/groups/'.$this->id;
+        return $this->belongsToMany(User::class, 'group_member', 'group_id', 'member_id')
+                    ->withPivot('member_status', 'member_position')
+                    ->withTimestamps();
+    }
+
+    public function admins()
+    {
+        return $this->members()
+                    ->wherePivot('member_position', 'admin');
+    }
+
+    public function joinRequests()
+    {
+        return $this->members()
+                    ->wherePivot('member_status', 'pending');
+    }
+
+    public function acceptedMembers()
+    {
+        return $this->members()
+                    ->wherePivot('member_status', 'accepted');
     }
 
     public function join(User $user)
     {
-    	$this->groupJoinRequests()->attach($user);
+    	$this->joinRequests()->attach($user, ['member_status' => 'pending']);
     }
 
-    public function groupJoinRequests()
+    public function acceptRequest(User $user)
     {
-    	return $this->belongsToMany(User::class, 'join_group_requests');
+        $this->joinRequests()
+            ->find($user->id)
+            ->pivot
+            ->update(['member_status' => 'accepted']);
     }
 
-    public function getNameAttribute($value)
+    public function removeRequest(User $user)
     {
-        return ucfirst($value);
+        $this->joinRequests()->detach($user);
+    }
+
+    public function addMember(User $user)
+    {
+        $this->acceptedMembers()->attach($user, ['member_status' => 'accepted']);
+    }
+
+    public function removeMember(User $user)
+    {
+        $this->acceptedMembers()->detach($user);
+    }
+
+    public function assignAdmin(User $member)
+    {
+        $this->acceptedMembers()
+            ->find($member->id)
+            ->pivot
+            ->update(['member_position' => 'admin']);
+    }
+
+    public function dismissAdmin(User $admin)
+    {
+        $this->admins()
+            ->find($admin->id)
+            ->pivot
+            ->update(['member_position' => 'regular_member']);
+    }
+
+    public function hasAdmin(User $member)
+    {
+        return $this->admins->contains($member);
+    }
+
+    public function hasAcceptedMember(User $member)
+    {
+        return $this->acceptedMembers->contains($member);
+    }
+
+    public function hasRequest(User $user)
+    {
+        return $this->joinRequests->contains($user);
     }
 }

@@ -17,13 +17,11 @@ use App\Group;
  */
 function getProfilePicture($user, $size = 40)
 {
-	if ((is_array($user) ? $user['profile_picture'] : $user->profile_picture) != 'default.jpg') {
-		return '/uploads/images/user_images/profile_pictures/' . $user->profile_picture;
-	}
+	return '/uploads/images/user_images/profile_pictures/' . (is_array($user) ? $user['profile_picture'] : $user->profile_picture);
 
-	$email = is_array($user) ? $user['email'] : $user->email;
+	// $email = is_array($user) ? $user['email'] : $user->email;
 
-	return gravatar($email, $size);
+	// return gravatar($email, $size);
 }
 
 /**
@@ -35,9 +33,7 @@ function getProfilePicture($user, $size = 40)
  */
 function gravatar($email, $size) 
 {
-	$default = "http://www.moonparks.org/images/blank-user.jpg";
-	
-	return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=" . $size;
+	return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?s=" . $size;
 }
 
 
@@ -63,9 +59,20 @@ function peopleYouMayKnow()
  *
  * @return array
  */
-function groupsYouMayJoin() 
+function suggestedGroups(int $count) 
 {
-	return Group::latest()->whereNotIn('user_id', [auth()->id()])->get()->toArray();		// we will need to except our groups 
+	$except = array_merge(
+			auth()->user()->ownedGroups->pluck('id')->toArray(), 
+			auth()->user()->joinedGroups->pluck('id')->toArray(), 
+			auth()->user()->requestedGroups->pluck('id')->toArray()
+		);
+
+	$groups = Group::latest()
+				->whereNotIn('id', $except)
+				->get()
+				->toArray();	
+
+	return array_slice($groups, 0, $count);	
 }
 
 

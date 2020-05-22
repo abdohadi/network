@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Comments;
 
-use App\Comment;
-use App\Post;
 use Image;
 use Storage;
+use App\Post;
+use App\Comment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CommentsController extends Controller
 {
@@ -22,20 +23,6 @@ class CommentsController extends Controller
         $request->validate([
             'body' => 'required',
         ]);
-
-        // if we want to add image to comments
-        // $attributes = ['body' => $request->body];
-
-        // // resize & save image
-        // if ($request->image) {
-        //     Image::make($request->image)
-        //         ->resize(300, null, function ($constraint) {
-        //         $constraint->aspectRatio();
-        //     })
-        //     ->save(public_path('uploads/images/comment_images/' .$request->image->hashName()));
-
-        //     $attributes['image'] = $request->image->hashName();
-        // }
 
         // create comment
         $comment = $post->addComment($request->all());
@@ -74,11 +61,6 @@ class CommentsController extends Controller
      */
     public function destroy(Post $post, Comment $comment)
     {
-        // delete the image if exists
-        // if ($comment->image) {
-        //     Storage::disk('public_uploads')->delete("images/commment_images/{$comment->image}");
-        // }
-
         abort_if(auth()->user()->cannot('update', $comment), 403);
 
         $comment->delete();
