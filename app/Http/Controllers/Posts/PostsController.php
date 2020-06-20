@@ -10,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 class PostsController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('can:manage,post')->only(['update', 'destroy']);
+	}
+
 	public function show(Post $post)
 	{
 		return view('posts.show', compact('post'));
@@ -28,8 +33,6 @@ class PostsController extends Controller
 
 	public function update(Post $post)
 	{
-		$this->authorize('update', $post);
-
 		$post->update(request()->only('body'));
 
 		return ['redirect' => $post->path()];
@@ -37,19 +40,17 @@ class PostsController extends Controller
 
 	public function destroy(Post $post)
 	{
-		$this->authorize('update', $post);
-
 		$post->delete();
 
 		return redirect('/');
 	}
 
-	public function liked(Post $post)
+	public function like(Post $post)
 	{
 		return $post->toggleLike();
 	}
 
-	public function shared(Post $post)
+	public function share(Post $post)
 	{
 		$shared_post = $post;
 

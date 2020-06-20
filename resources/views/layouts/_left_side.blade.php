@@ -1,11 +1,8 @@
-<div class="fixed sm:hidden lg:block">
+<div class="fixed hidden hidden lg:block">
     <ul class="left-side-ul">
         <li>
-            <a class="mt-4 mb-4" href="#">
+            <a class="mt-4 mb-4" href="{{ route('users.friends.index', auth()->user()) }}">
                 <i class="fas fa-user-friends"></i> @lang('site.friends') 
-                @if (count(auth()->user()->friends))
-                    <small>{{ count(auth()->user()->friends) }}</small>
-                @endif
             </a>
         </li>
 
@@ -16,7 +13,7 @@
         </li>
 
         <li class="mt-4 mb-4">
-            <a href=""><i class="fa fa-cog"></i> @lang('site.settings')</a>
+            <a href="#" title="In progress"><i class="fa fa-cog"></i> @lang('site.settings')</a>
         </li>
 
         <li class="mt-4 mb-4">

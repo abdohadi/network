@@ -3883,6 +3883,10 @@ video {
   height: 1px;
 }
 
+.h-c-450 {
+  height: 450px;
+}
+
 .h-full {
   height: 100%;
 }
@@ -9787,6 +9791,13 @@ video {
   left: 0;
 }
 
+.inset-c-187 {
+  top: 187px;
+  right: 187px;
+  bottom: 187px;
+  left: 187px;
+}
+
 .inset-auto {
   top: auto;
   right: auto;
@@ -9802,6 +9813,16 @@ video {
 .inset-x-0 {
   right: 0;
   left: 0;
+}
+
+.inset-y-c-187 {
+  top: 187px;
+  bottom: 187px;
+}
+
+.inset-x-c-187 {
+  right: 187px;
+  left: 187px;
 }
 
 .inset-y-auto {
@@ -9828,6 +9849,22 @@ video {
 
 .left-0 {
   left: 0;
+}
+
+.top-c-187 {
+  top: 187px;
+}
+
+.right-c-187 {
+  right: 187px;
+}
+
+.bottom-c-187 {
+  bottom: 187px;
+}
+
+.left-c-187 {
+  left: 187px;
 }
 
 .top-auto {
@@ -9887,7 +9924,7 @@ video {
 }
 
 .shadow-outline {
-  box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+  box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
 }
 
 .shadow-none {
@@ -9919,7 +9956,7 @@ video {
 }
 
 .hover\:shadow-outline:hover {
-  box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+  box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
 }
 
 .hover\:shadow-none:hover {
@@ -9951,7 +9988,7 @@ video {
 }
 
 .focus\:shadow-outline:focus {
-  box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+  box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
 }
 
 .focus\:shadow-none:focus {
@@ -11607,8 +11644,9 @@ video {
 * My custom css 
 */
 
-input:focus, textarea:focus, select:focus {
-  box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+input:not(.border-red-300):focus, textarea:not(.border-red-300):focus, select:not(.border-red-300):focus {
+  box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
+  border-color: #63b3ed;
 }
 
 .close-modal {
@@ -14995,6 +15033,10 @@ input:focus, textarea:focus, select:focus {
 
   .sm\:h-px {
     height: 1px;
+  }
+
+  .sm\:h-c-450 {
+    height: 450px;
   }
 
   .sm\:h-full {
@@ -20901,6 +20943,13 @@ input:focus, textarea:focus, select:focus {
     left: 0;
   }
 
+  .sm\:inset-c-187 {
+    top: 187px;
+    right: 187px;
+    bottom: 187px;
+    left: 187px;
+  }
+
   .sm\:inset-auto {
     top: auto;
     right: auto;
@@ -20916,6 +20965,16 @@ input:focus, textarea:focus, select:focus {
   .sm\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .sm\:inset-y-c-187 {
+    top: 187px;
+    bottom: 187px;
+  }
+
+  .sm\:inset-x-c-187 {
+    right: 187px;
+    left: 187px;
   }
 
   .sm\:inset-y-auto {
@@ -20942,6 +21001,22 @@ input:focus, textarea:focus, select:focus {
 
   .sm\:left-0 {
     left: 0;
+  }
+
+  .sm\:top-c-187 {
+    top: 187px;
+  }
+
+  .sm\:right-c-187 {
+    right: 187px;
+  }
+
+  .sm\:bottom-c-187 {
+    bottom: 187px;
+  }
+
+  .sm\:left-c-187 {
+    left: 187px;
   }
 
   .sm\:top-auto {
@@ -21001,7 +21076,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .sm\:shadow-outline {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .sm\:shadow-none {
@@ -21033,7 +21108,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .sm\:hover\:shadow-outline:hover {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .sm\:hover\:shadow-none:hover {
@@ -21065,7 +21140,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .sm\:focus\:shadow-outline:focus {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .sm\:focus\:shadow-none:focus {
@@ -25967,6 +26042,10 @@ input:focus, textarea:focus, select:focus {
 
   .md\:h-px {
     height: 1px;
+  }
+
+  .md\:h-c-450 {
+    height: 450px;
   }
 
   .md\:h-full {
@@ -31873,6 +31952,13 @@ input:focus, textarea:focus, select:focus {
     left: 0;
   }
 
+  .md\:inset-c-187 {
+    top: 187px;
+    right: 187px;
+    bottom: 187px;
+    left: 187px;
+  }
+
   .md\:inset-auto {
     top: auto;
     right: auto;
@@ -31888,6 +31974,16 @@ input:focus, textarea:focus, select:focus {
   .md\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .md\:inset-y-c-187 {
+    top: 187px;
+    bottom: 187px;
+  }
+
+  .md\:inset-x-c-187 {
+    right: 187px;
+    left: 187px;
   }
 
   .md\:inset-y-auto {
@@ -31914,6 +32010,22 @@ input:focus, textarea:focus, select:focus {
 
   .md\:left-0 {
     left: 0;
+  }
+
+  .md\:top-c-187 {
+    top: 187px;
+  }
+
+  .md\:right-c-187 {
+    right: 187px;
+  }
+
+  .md\:bottom-c-187 {
+    bottom: 187px;
+  }
+
+  .md\:left-c-187 {
+    left: 187px;
   }
 
   .md\:top-auto {
@@ -31973,7 +32085,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .md\:shadow-outline {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .md\:shadow-none {
@@ -32005,7 +32117,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .md\:hover\:shadow-outline:hover {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .md\:hover\:shadow-none:hover {
@@ -32037,7 +32149,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .md\:focus\:shadow-outline:focus {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .md\:focus\:shadow-none:focus {
@@ -36939,6 +37051,10 @@ input:focus, textarea:focus, select:focus {
 
   .lg\:h-px {
     height: 1px;
+  }
+
+  .lg\:h-c-450 {
+    height: 450px;
   }
 
   .lg\:h-full {
@@ -42845,6 +42961,13 @@ input:focus, textarea:focus, select:focus {
     left: 0;
   }
 
+  .lg\:inset-c-187 {
+    top: 187px;
+    right: 187px;
+    bottom: 187px;
+    left: 187px;
+  }
+
   .lg\:inset-auto {
     top: auto;
     right: auto;
@@ -42860,6 +42983,16 @@ input:focus, textarea:focus, select:focus {
   .lg\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .lg\:inset-y-c-187 {
+    top: 187px;
+    bottom: 187px;
+  }
+
+  .lg\:inset-x-c-187 {
+    right: 187px;
+    left: 187px;
   }
 
   .lg\:inset-y-auto {
@@ -42886,6 +43019,22 @@ input:focus, textarea:focus, select:focus {
 
   .lg\:left-0 {
     left: 0;
+  }
+
+  .lg\:top-c-187 {
+    top: 187px;
+  }
+
+  .lg\:right-c-187 {
+    right: 187px;
+  }
+
+  .lg\:bottom-c-187 {
+    bottom: 187px;
+  }
+
+  .lg\:left-c-187 {
+    left: 187px;
   }
 
   .lg\:top-auto {
@@ -42945,7 +43094,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .lg\:shadow-outline {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .lg\:shadow-none {
@@ -42977,7 +43126,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .lg\:hover\:shadow-outline:hover {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .lg\:hover\:shadow-none:hover {
@@ -43009,7 +43158,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .lg\:focus\:shadow-outline:focus {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .lg\:focus\:shadow-none:focus {
@@ -47911,6 +48060,10 @@ input:focus, textarea:focus, select:focus {
 
   .xl\:h-px {
     height: 1px;
+  }
+
+  .xl\:h-c-450 {
+    height: 450px;
   }
 
   .xl\:h-full {
@@ -53817,6 +53970,13 @@ input:focus, textarea:focus, select:focus {
     left: 0;
   }
 
+  .xl\:inset-c-187 {
+    top: 187px;
+    right: 187px;
+    bottom: 187px;
+    left: 187px;
+  }
+
   .xl\:inset-auto {
     top: auto;
     right: auto;
@@ -53832,6 +53992,16 @@ input:focus, textarea:focus, select:focus {
   .xl\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .xl\:inset-y-c-187 {
+    top: 187px;
+    bottom: 187px;
+  }
+
+  .xl\:inset-x-c-187 {
+    right: 187px;
+    left: 187px;
   }
 
   .xl\:inset-y-auto {
@@ -53858,6 +54028,22 @@ input:focus, textarea:focus, select:focus {
 
   .xl\:left-0 {
     left: 0;
+  }
+
+  .xl\:top-c-187 {
+    top: 187px;
+  }
+
+  .xl\:right-c-187 {
+    right: 187px;
+  }
+
+  .xl\:bottom-c-187 {
+    bottom: 187px;
+  }
+
+  .xl\:left-c-187 {
+    left: 187px;
   }
 
   .xl\:top-auto {
@@ -53917,7 +54103,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .xl\:shadow-outline {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .xl\:shadow-none {
@@ -53949,7 +54135,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .xl\:hover\:shadow-outline:hover {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .xl\:hover\:shadow-none:hover {
@@ -53981,7 +54167,7 @@ input:focus, textarea:focus, select:focus {
   }
 
   .xl\:focus\:shadow-outline:focus {
-    box-shadow: 0px 0px 4px 0px rgba(47, 155, 250, 0.66);
+    box-shadow: 0px 0px 12px -1px rgba(47, 155, 250, 0.66);
   }
 
   .xl\:focus\:shadow-none:focus {

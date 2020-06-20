@@ -21,7 +21,7 @@ class UserTest extends TestCase
         // $this->withoutExceptionHandling();
     	$user = factory(User::class)->create();
 
-    	$this->assertEquals('/users/'.$user->id, $user->path());
+    	$this->assertEquals(route('users.show', $user), $user->path());
     }
 
     /** @test */
@@ -39,7 +39,7 @@ class UserTest extends TestCase
         $user = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $user->id]);
 
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store'), $group);
 
         $this->assertInstanceOf(Group::class, $user->ownedGroups->first());
     }
@@ -49,12 +49,12 @@ class UserTest extends TestCase
     {
         $admin = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $admin->id]);
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store'), $group);
         $this->assertInstanceOf(Group::class, $admin->groups->first());
 
         $user = $this->signIn();
         $group = factory(Group::class)->raw();
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store'), $group);
         $this->assertInstanceOf(Group::class, $user->groups->first());
     }
 
@@ -95,6 +95,7 @@ class UserTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
+        $user->sendFriendRequest($anotherUser);
         $user->cancelFriendRequest($anotherUser);
 
         $this->assertFalse($user->sentFriendRequests->contains($anotherUser));

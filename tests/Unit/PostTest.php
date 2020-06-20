@@ -43,7 +43,7 @@ class PostTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-    	$this->assertEquals('/posts/' . $post->id, $post->path());
+    	$this->assertEquals(route('posts.show', $post), $post->path());
     }
 
     /** @test */

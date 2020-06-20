@@ -14,7 +14,7 @@
 
 		{{-- Right side --}}
 		<div class="lg:w-2/6 mx-2 sm:hidden lg:block">
-			@include('layouts._right_side')
+			@include('users._people_you_may_know')
 	   </div>
 	</div>
 

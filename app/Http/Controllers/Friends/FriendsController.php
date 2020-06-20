@@ -8,8 +8,17 @@ use App\Http\Controllers\Controller;
 
 class FriendsController extends Controller
 {
-    public function show(User $user)
+    public function index(User $user)
     {
-    	return view('friends.show', compact(['user']));
+    	return view('friends.index', compact(['user']));
+    }
+
+    public function destroy(User $user)
+    {
+    	abort_if(! auth()->user()->hasFriend($user), 404);
+
+    	auth()->user()->unfriend($user);
+
+    	return back();
     }
 }

@@ -12,23 +12,25 @@ class ManageCommentsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_create_a_comment() {
+    public function a_user_can_create_a_comment() 
+    {
         // $this->WithoutExceptionHandling();
         $this->signIn();
 
         $comment = factory('App\Comment')->make();
 
-        $this->post(localizeURL("posts/{$comment->post_id}/comments"), $comment->toArray());
+        $this->post(route('posts.comments.store', $comment->post), $comment->toArray());
 
         $this->assertDatabaseHas('comments', ['body' => $comment->body]);
     }
 
     /** @test */
-    public function a_user_can_update_their_comments() {
+    public function a_user_can_update_their_comments() 
+    {
         $comment = factory('App\Comment')->create();
 
         $this->actingAs($comment->owner)
-             ->patch(localizeURL($comment->path()), $attributes = ['body' => 'new comment']);
+             ->patch(route('posts.comments.update', [$comment->post, $comment]), $attributes = ['body' => 'new comment']);
         
         $this->assertDatabaseHas('comments', $attributes);
     }
@@ -40,7 +42,7 @@ class ManageCommentsTest extends TestCase
 
         $comment = factory('App\Comment')->create();
 
-        $this->patch(localizeURL($comment->path()), $attributes = ['body' => 'new comment'])
+        $this->patch(route('posts.comments.update', [$comment->post, $comment]), $attributes = ['body' => 'new comment'])
              ->assertStatus(403);
     }
 
@@ -50,27 +52,29 @@ class ManageCommentsTest extends TestCase
         $comment = factory('App\Comment')->create();
         
         $this->actingAs($comment->owner)
-            ->get(localizeURL($comment->path()));
+            ->get(route('posts.comments.destroy', [$comment->post, $comment]));
         
         $this->assertDatabaseMissing('comments', ['id' => $comment->id, 'body' => $comment->body]);
     }
 
     /** @test */
-    public function an_authorized_user_cannot_delete_other_users_comments() {
+    public function an_authorized_user_cannot_delete_other_users_comments() 
+    {
         $this->signIn();
 
         $comment = factory('App\Comment')->create();
 
-        $this->get(localizeURL($comment->path()), $attributes = ['body' => 'new comment'])
+        $this->get(route('posts.comments.destroy', [$comment->post, $comment]))
              ->assertStatus(403);
     }
 
     /** @test */
-    public function comments_validation() {
+    public function comments_validation() 
+    {
         $comment = factory('App\Comment')->create(['body' => '']);
         
         $this->actingAs($comment->owner)
-             ->post(localizeURL("{$comment->post->path()}/comments"), $comment->toArray())
+             ->post(route('posts.comments.store', $comment->post), $comment->toArray())
             ->assertSessionHasErrors('body');
     }
 }

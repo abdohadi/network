@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class MangeUsersTest extends TestCase
+class ManageUsersTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -18,14 +18,14 @@ class MangeUsersTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // a guest cannot view the home page
-        $this->get(localizeURL('/login'))->assertOk();
+        $this->get(route('login'))->assertOk();
 
         // authenticated user
         $this->signIn();
         
-        $this->get(localizeURL('/'))->assertOk();
+        $this->get(route('/'))->assertOk();
 
-        $this->get(localizeURL('/home'))->assertOk();
+        $this->get(route('home'))->assertOk();
     }
 
     /** @test */
@@ -33,17 +33,17 @@ class MangeUsersTest extends TestCase
     {
         // a guest cannot view profiles
         $user = factory(User::class)->create();
-        $this->get(localizeURL($user->path()))->assertRedirect(localizeURL('login'));
+        $this->get(route('users.show', $user))->assertRedirect(route('login'));
 
         // an authenticated user can view their profiles
         $user = factory(User::class)->create();
         $this->be($user)
-            ->get(localizeURL($user->path()))
+            ->get(route('users.show', $user))
             ->assertOk();
 
         // an authenticated user can view profiles of others
         $this->signIn();
-        $this->get(localizeURL($user->path()))->assertOk();
+        $this->get(route('users.show', $user))->assertOk();
     }
 
     /** @test */
@@ -53,37 +53,84 @@ class MangeUsersTest extends TestCase
 
         $anotherUser = factory(User::class)->create();
 
-        $this->get(localizeURL('users/request/send/'.$anotherUser->id));
+        $this->post(route('users.send_request', $anotherUser));
 
         $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+        $this->assertTrue($anotherUser->receivedFriendRequests->contains($user));
     }
 
     /** @test */
     public function a_user_can_cancel_a_friend_request()
     {
+        // A user has a friend
         $user = $this->signIn();
-
         $anotherUser = factory(User::class)->create();
 
-        $this->get(localizeURL('users/request/cancel/'.$anotherUser->id));
+        $this->post(route('users.send_request', $anotherUser));
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+        $this->assertTrue($anotherUser->receivedFriendRequests->contains($user));
 
+        // The user can cancel the request
+        $this->delete(route('users.cancel_request', $anotherUser));
         $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
+        $this->assertFalse($anotherUser->receivedFriendRequests->contains($user));
     }
 
     /** @test */
     public function a_user_can_accept_a_friend_request()
     {
+        // A user has a friend
         $user = $this->signIn();
-
         $anotherUser = factory(User::class)->create();
 
-        $this->get(localizeURL('users/request/send/'.$anotherUser->id));
+        $this->post(route('users.send_request', $anotherUser));
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+        $this->assertTrue($anotherUser->receivedFriendRequests->contains($user));
 
-        $this->signIn($anotherUser);
-
-        $this->get(localizeURL('users/request/accept/'.$user->id));
+        // The user can accept the request
+        $this->be($anotherUser)->post(route('users.accept_request', $user));
 
         $this->assertTrue($anotherUser->friends->contains($user));
+        $this->assertTrue($user->friends->contains($anotherUser));
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_friend_request()
+    {
+        // A user has a friend
+        $user = $this->signIn();
+        $anotherUser = factory(User::class)->create();
+
+        $this->post(route('users.send_request', $anotherUser));
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+        $this->assertTrue($anotherUser->receivedFriendRequests->contains($user));
+
+        // The user can delete the request
+        $this->be($anotherUser)->delete(route('users.delete_request', $user));
+
+        $this->assertFalse($anotherUser->receivedFriendRequests->contains($user));
+        $this->assertFalse($user->sentFriendRequests->contains($anotherUser));
+    }
+
+    /** @test */
+    public function a_user_can_unfriend_a_friend()
+    {
+        // A user has a friend
+        $user = $this->signIn();
+        $anotherUser = factory(User::class)->create();
+
+        $this->post(route('users.send_request', $anotherUser));
+        $this->assertTrue($user->sentFriendRequests->contains($anotherUser));
+
+        $this->be($anotherUser)->post(route('users.accept_request', $user));
+        $this->assertTrue($anotherUser->friends->contains($user));
+        $this->assertTrue($user->friends->contains($anotherUser));
+
+        // the user can unfriend their friend
+        $this->be($user)->delete(route('users.unfriend', $anotherUser));
+
+        $this->assertFalse($user->friends->contains($anotherUser));
+        $this->assertFalse($anotherUser->friends->contains($user));
     }
 
     /** @test */
@@ -91,14 +138,14 @@ class MangeUsersTest extends TestCase
     {
         // a guest cannot view friends list
         $user = factory(User::class)->create();
-        $this->get(localizeURL("users/{$user->id}/friends"))->assertRedirect(localizeURL('login'));
+        $this->get(route('users.friends.index', $user))->assertRedirect(route('login'));
 
-        // an authenticated user
+        // an authenticated user can view friends list
         $this->signIn();
 
         $user = factory(User::class)->create();
 
-        $this->get(localizeURL("users/{$user->id}/friends"))->assertOk();
+        $this->get(route('users.friends.index', $user))->assertOk();
     }
 
     /** @test */
@@ -106,12 +153,12 @@ class MangeUsersTest extends TestCase
     {
         // an unauthenticated user
         $user = factory(User::class)->create();
-        $this->get(localizeURL($user->path() . '/edit_info'))->assertRedirect(localizeURL('login'));
+        $this->get(route('users.edit_info', $user))->assertRedirect(route('login'));
 
         // an unauthorized user
         $this->signIn();
-        $this->get(localizeURL($user->path()))->assertDontSee('Edit Your Info');
-        $this->get(localizeURL($user->path() . '/edit_info'))->assertStatus(403);
+        $this->get(route('users.show', $user))->assertDontSee('Edit Your Info');
+        $this->get(route('users.edit_info', $user))->assertStatus(403);
     }
 
     /** @test */
@@ -130,7 +177,7 @@ class MangeUsersTest extends TestCase
             'bio' => \Str::random(121)
         ];
 
-        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+        $this->patch(route('users.update_info', $user), $info)
             ->assertSessionHasErrors('name')
             ->assertSessionHasErrors('email')
             ->assertSessionHasErrors('address')
@@ -144,7 +191,7 @@ class MangeUsersTest extends TestCase
             'email' => 'invalid email'
         ];
 
-        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+        $this->patch(route('users.update_info', $user), $info)
             ->assertSessionHasErrors('email');
 
         // check for unique email
@@ -153,7 +200,7 @@ class MangeUsersTest extends TestCase
             'email' => $user2->email
         ];
 
-        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+        $this->patch(route('users.update_info', $user), $info)
             ->assertSessionHasErrors('email');
 
         // a user can update their info whithout changing their email address 
@@ -162,7 +209,7 @@ class MangeUsersTest extends TestCase
             'email' => $user->email
         ];
 
-        $this->patch(localizeURL($user->path() . '/update_info'), $info)
+        $this->patch(route('users.update_info', $user), $info)
             ->assertSessionHasNoErrors('email');
     }
 
@@ -171,7 +218,7 @@ class MangeUsersTest extends TestCase
     {
         $user = $this->signIn();
 
-        $this->get(localizeURL($user->path() . '/edit_info'))->assertOk();
+        $this->get(route('users.edit_info', $user))->assertOk();
 
         $info = [
             'name' => 'John Doe',
@@ -184,11 +231,11 @@ class MangeUsersTest extends TestCase
             'bio' => 'I am John Doe' 
         ];
 
-        $this->patch(localizeURL($user->path() . '/update_info'), $info);
+        $this->patch(route('users.update_info', $user), $info);
 
         $this->assertDatabaseHas('users', $info);
 
-        $this->get(localizeURL($user->path()))->assertSee('I am John Doe');
+        $this->get(route('users.show', $user))->assertSee('I am John Doe');
     }
 
     /** @test */
@@ -198,7 +245,7 @@ class MangeUsersTest extends TestCase
 
         $pic = UploadedFile::fake()->image('profile.jpg');
 
-        $this->json('PATCH', localizeURL($user->path() . '/update_picture'), [
+        $this->json('PATCH', route('users.update_picture', $user), [
             'profile_picture' => $pic
         ])
         ->assertRedirect($user->path());
@@ -211,12 +258,11 @@ class MangeUsersTest extends TestCase
     /** @test */
     public function a_user_can_update_their_profile_cover()
     {
-        $this->withoutExceptionHandling();
         $user = $this->signIn();
 
         $cover = UploadedFile::fake()->image('profile.png');
 
-        $this->json('PATCH', localizeURL($user->path() . '/update_cover'), [
+        $this->json('PATCH', route('users.update_cover', $user), [
             'profile_cover' => $cover
         ])
         ->assertRedirect($user->path());

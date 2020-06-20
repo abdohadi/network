@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Comments;
+namespace App\Http\Controllers\Posts;
 
 use Image;
 use Storage;
@@ -9,8 +9,13 @@ use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CommentsController extends Controller
+class PostsCommentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:manage,comment')->only(['update', 'destroy']);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -20,17 +25,18 @@ class CommentsController extends Controller
     public function store(Request $request, Post $post)
     {
         // validation
-        $request->validate([
+        $attributes = $request->validate([
             'body' => 'required',
         ]);
 
         // create comment
-        $comment = $post->addComment($request->all());
+        $comment = $post->addComment($attributes);
 
         return [
             'commentBody' => $comment->body,
             'commentId' => $comment->id,
-            'commentPath' => $comment->path(),
+            'deleteCommentUrl' => route('posts.comments.destroy', [$post, $comment]),
+            'updateCommentUrl' => route('posts.comments.update', [$post, $comment]),
             'message' => 'Your comment was added successfully'
         ];
     }
@@ -44,13 +50,11 @@ class CommentsController extends Controller
      */
     public function update(Request $request, Post $post, Comment $comment)
     {
-        request()->validate([
+        $attributes = request()->validate([
             'body' => 'required'
         ]);
 
-        abort_if(auth()->user()->cannot('update', $comment), 403);
-
-        $comment->update($request->all());
+        $comment->update($attributes);
     }
 
     /**
@@ -61,8 +65,6 @@ class CommentsController extends Controller
      */
     public function destroy(Post $post, Comment $comment)
     {
-        abort_if(auth()->user()->cannot('update', $comment), 403);
-
         $comment->delete();
     }
 }

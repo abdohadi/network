@@ -2,16 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use App\User;
 use App\Like;
+use App\User;
+use App\Group;
 use App\Comment;
+use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
     use likeablity;
     
-    protected $fillable = ['body'];
+    protected $fillable = ['group_id', 'body'];
 
     public function owner()
     {
@@ -20,7 +21,7 @@ class Post extends Model
 
     public function path()
     {
-    	return '/posts/'.$this->id;
+    	return route('posts.show', $this);
     }
 
     public function likes()
@@ -31,6 +32,11 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class)->latest();
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 
     public function current_user_comments($comments)

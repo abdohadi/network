@@ -1,6 +1,6 @@
 <form id="submit-create-post" 
-		action="{{ localizeURL('/posts') }}" 
-		method="POST"
+	action="{{ $action }}" 
+	method="post"
 >
 	@csrf
 
@@ -8,7 +8,7 @@
   		<textarea 
 			name="body" 
 			id="body" 
-			placeholder="What's in your mind?" 
+			placeholder="@lang('site.what_is_in_your_mind')" 
 			class="border w-full p-2 rounded"
 			rows="2"></textarea>
 

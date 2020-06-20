@@ -19,9 +19,9 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->actingAs($post->owner)
-             ->post(localizeURL('/posts'), $post->toArray());
+             ->post(route('posts.store'), $post->toArray());
 
-        $this->get(localizeURL($post->path()))->assertSee($post['body']);
+        $this->get(route('posts.show', $post))->assertSee($post['body']);
     }
 
     /** @test */
@@ -29,18 +29,17 @@ class ManagePostsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(localizeURL('/posts'), factory(Post::class)->raw(['body' => '']))
+        $this->post(route('posts.store'), factory(Post::class)->raw(['body' => '']))
              ->assertSessionHasErrors('body');
     }
 
     /** @test */
     public function a_user_can_update_their_posts()
     {
-        $this->WithoutExceptionHandling();
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-             ->patch(localizeURL($post->path()), $attributes = ['body' => 'updated body']);
+             ->patch(route('posts.update', $post), $attributes = ['body' => 'updated body']);
 
         $this->assertDatabaseHas('posts', $attributes);
     }
@@ -51,7 +50,7 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-             ->delete(localizeURL($post->path()))
+             ->delete(route('posts.destroy', $post))
              ->assertRedirect('/');
     }
 
@@ -59,11 +58,12 @@ class ManagePostsTest extends TestCase
     public function authenticated_users_cannot_manage_posts_of_others()
     {
         $this->signIn();
+        $post = factory(Post::class)->create();
 
-        $this->patch(localizeURL(factory(Post::class)->create()->path()))
+        $this->patch(route('posts.update', $post))
              ->assertStatus(403);
 
-        $this->delete(localizeURL(factory(Post::class)->create()->path()))
+        $this->delete(route('posts.destroy', $post))
              ->assertStatus(403);
     }
 
@@ -73,7 +73,7 @@ class ManagePostsTest extends TestCase
         $post = factory(Post::class)->create();
 
         $this->be($post->owner)
-             ->get(localizeURL($post->path()))
+             ->get(route('posts.show', $post))
              ->assertOk();
     }
 
@@ -82,19 +82,19 @@ class ManagePostsTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-        $this->get(localizeURL($post->path()))->assertRedirect(localizeURL('login'));
+        $this->get(route('posts.show', $post))->assertRedirect(route('login'));
     }
 
     /** @test */
     public function a_guest_cannot_manage_posts()
     {
-        $path = factory(Post::class)->create()->path();
+        $post = factory(Post::class)->create();
 
-        $this->post(localizeURL('/posts'))->assertRedirect(localizeURL('login'));
+        $this->post(route('posts.store', $post))->assertRedirect(route('login'));
 
-        $this->patch(localizeURL($path))->assertRedirect(localizeURL('login'));
+        $this->patch(route('posts.update', $post))->assertRedirect(route('login'));
 
-        $this->delete(localizeURL($path))->assertRedirect(localizeURL('login'));
+        $this->delete(route('posts.destroy', $post))->assertRedirect(route('login'));
     }
 
     /** @test */
@@ -105,13 +105,13 @@ class ManagePostsTest extends TestCase
         $shared_post = factory(Post::class)->create();
 
         // share a post without adding a body
-        $this->get(localizeURL($shared_post->path() . '/shared'));
+        $this->post(route('posts.share', $shared_post));
         
         $this->assertDatabaseHas('posts', ['user_id' => auth()->id(), 'shared_post_id' => $shared_post->id]);
 
         // share a post with adding a body
         $this->followingRedirects()
-             ->post(localizeURL($shared_post->path() . '/shared'), ['body' => 'post body'])
+             ->post(route('posts.share', $shared_post), ['body' => 'post body'])
              ->assertSee('post body')
              ->assertSee($shared_post['body']);
         

@@ -20,8 +20,8 @@ Route::group(
 ], function () {
 
 	// home routes
-	Route::get('/', 'HomeController@index');
-	Route::get('/home', 'HomeController@index');
+	Route::get('/', 'HomeController@index')->name('/');
+	Route::get('/home', 'HomeController@index')->name('home');
 	
 
 	// user routes
@@ -36,12 +36,15 @@ Route::group(
 	// post routes
 	Route::resource('posts', 'Posts\PostsController')->except(['index', 'create', 'edit']);
 	Route::get('/posts/{post}/like', 'Posts\PostsController@like')->name('posts.like');
-	Route::get('/posts/{post}/share', 'Posts\PostsController@share')->name('posts.share');
+	Route::post('/posts/{post}/share', 'Posts\PostsController@share')->name('posts.share');
+	// comment routes
+	Route::resource('posts.comments', 'Posts\PostsCommentsController')->only(['store', 'update']);
+	Route::get('/posts/{post}/comments/{comment}/delete', 'Posts\PostsCommentsController@destroy')->name('posts.comments.destroy');
 
 
 	// group routes
 	Route::resource('groups', 'Groups\GroupsController')->except(['index', 'edit', 'create']);
-	// group users routes
+	// group users
 	Route::patch('/groups/{group}/assign_admin/{user}', 'Groups\GroupsUsersController@assignAdmin')->name('groups.assign_admin');
 	Route::patch('/groups/{group}/dismiss_admin/{user}', 'Groups\GroupsUsersController@dismissAdmin')->name('groups.dismiss_admin');
 	Route::post('/groups/{group}/join', 'Groups\GroupsUsersController@join')->name('groups.join');
@@ -55,18 +58,18 @@ Route::group(
 	Route::get('/groups/{group}/admins', 'Groups\GroupsUsersController@viewAdmins')->name('groups.admins');
 	Route::get('/groups/{group}/members', 'Groups\GroupsUsersController@viewMembers')->name('groups.members');
 	Route::get('/groups/{group}/requests', 'Groups\GroupsUsersController@viewRequests')->name('groups.requests');
+	// group posts
+	Route::resource('groups.posts', 'Groups\GroupsPostsController')->except(['index', 'create', 'edit']);
+
 
 	// friend request routes
-	Route::get('/users/{user}/send', 'Friends\FriendRequestsController@send')->name('users.send');
-	Route::get('/users/{user}/cancel', 'Friends\FriendRequestsController@cancel')->name('users.cancel');
-	Route::get('/users/{user}/accept', 'Friends\FriendRequestsController@accept')->name('users.accept');
-	Route::get('/users/{user}/delete', 'Friends\FriendRequestsController@delete')->name('users.delete');
+	Route::post('/users/{user}/send_friend_request', 'Friends\FriendRequestsController@send')->name('users.send_request');
+	Route::delete('/users/{user}/cancel_friend_request', 'Friends\FriendRequestsController@cancel')->name('users.cancel_request');
+	Route::post('/users/{user}/accept_friend_request', 'Friends\FriendRequestsController@accept')->name('users.accept_request');
+	Route::delete('/users/{user}/delete_friend_request', 'Friends\FriendRequestsController@delete')->name('users.delete_request');
 	// friends routes
-	Route::get('/users/{user}/friends', 'Friends\FriendsController@show')->name('users.friends');
-
-
-	// comment routes
-	Route::resource('posts.comments', 'Comments\CommentsController')->only(['store', 'update', 'destroy']);
+	Route::get('/users/{user}/friends', 'Friends\FriendsController@index')->name('users.friends.index');
+	Route::delete('/users/{user}/unfriend', 'Friends\FriendsController@destroy')->name('users.unfriend');
 
 });
 

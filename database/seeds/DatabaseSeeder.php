@@ -14,9 +14,14 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
 
-        $me = factory('App\User')->create(['email'=>'a@a.com', 'password'=>bcrypt('aaaaaaaa'), 'name'=>'user']);
+        $me = factory('App\User')->create([
+            'email' => 'a@a.com', 
+            'password' => bcrypt('aaaaaaaa'), 
+            'name' => 'user'
+        ]);
         factory('App\Post', 10)->create(['user_id' => $me->id]);
         factory('App\Group', 5)->create(['user_id' => $me->id])->each(function ($group) use ($me) {
+            $group->addMember($me);
             $group->assignAdmin($me);
         });
         
@@ -25,6 +30,7 @@ class DatabaseSeeder extends Seeder
            
             if ($user->id <= 20) {
                 $group = factory('App\Group')->create(['user_id' => $user->id]);
+                $group->addMember($user);
                 $group->assignAdmin($user);
 
                 $group->join($me);

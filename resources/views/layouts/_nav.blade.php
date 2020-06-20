@@ -20,43 +20,59 @@
                         </li>
 
                         {{-- Friend requests menue --}}
-                        <div id="friend-requests-dropdown" class="absolute bg-white border p-4 shadow-2xl w-2/6 z-10 hidden" style="right:187px;height:600px;overflow: scroll;">
-                            <h4 class="mb-3 text-gray-500">Friend Requests</h4>
+                        <div 
+                            id="friend-requests-dropdown" 
+                            class="absolute bg-white border p-4 shadow-2xl z-10 hidden md:right-c-187 h-screen sm:h-c-450 inset-0 sm:inset-auto overflow-scroll">
+                            <h4 class="mb-3 text-gray-500">@lang('site.friend_requests')</h4>
+
                             <ul>
                                 @forelse(auth()->user()->receivedFriendRequests as $user)
                                     <li class="flex items-center justify-between mb-4" id="friend-request">
                                         <div class="flex items-center">
-                                            <a href="{{ $user->path() }}">
+                                            <a href="{{ route('users.show', $user) }}">
                                                 <img src="{{ getProfilePicture($user) }}" class="rounded-full w-10 mr-2">
                                             </a> 
-                                            <a href="{{ $user->path() }}">
+
+                                            <a href="{{ route('users.show', $user) }}">
                                                 <span>{{ $user->name }}</span>
                                             </a>
                                         </div>
-                                        <div>
-                                            <button 
-                                                data-user-id="{{ $user->id }}" 
-                                                id="accept_friend_request" 
-                                                class="button-outline-secondary ml-auto"
-                                            >Accept</button>
-                                            <button 
-                                                data-user-id="{{ $user->id }}" 
-                                                id="delete_friend_request" 
-                                                class="button-outline-primary ml-auto"
-                                            >Delete</button>
+
+                                        <div class="flex">
+                                            <div>
+                                                {{-- Accept Friend Request Form --}}
+                                                @include('users._accept_request_form')
+                                            </div>
+
+                                            <div class="ml-1">
+                                                {{-- Delete Friend Request Form --}}
+                                                @include('users._delete_request_form')
+                                            </div>
                                         </div>
                                     </li>
                                 @empty
-                                    <li class="text-sm ml-6">No Friend Requests</li>
+                                    <li class="text-sm ml-6">@lang('site.no_friend_requests')</li>
                                 @endforelse
                             </ul>
 
-                            <h4 class="mb-3 text-gray-500 mt-8">Make New Friends</h4>
+                            <h4 class="mb-3 text-gray-500 mt-8">@lang('site.make_new_friends')</h4>
+
                             <ul>
                                 @forelse(peopleYouMayKnow() as $user)
-                                    @include('users._people_you_may_know')
+                                    <div class="flex items-center mb-4">
+                                        <a href="{{ route('users.show', $user['id']) }}">
+                                          <img src="{{ getProfilePicture($user) }}" class="rounded-full w-16 mr-2" style="border:1px solid rgb(241, 239, 239);border-radius:50%">
+                                        </a> 
+
+                                        <a href="{{ route('users.show', $user['id']) }}">
+                                            <span title="{{ $user['name'] }}" class="text-gray-700">{{ substr($user['name'], 0, 15) }}</span>
+                                        </a>
+
+                                        {{-- Send Friend Request Form --}}
+                                        @include('users._send_request_form')
+                                    </div>
                                 @empty
-                                    <div class="text-sm ml-6">No users yet</div>
+                                    <div class="text-sm ml-6">@lang('site.no_users_yet')</div>
                                 @endforelse
                             </ul>
                         </div>
@@ -70,7 +86,7 @@
                         </li>
 
                         <li class="mx-3">
-                            <a href="{{ auth()->user()->path() }}" class="flex items-center cursor-pointer">
+                            <a href="{{ route('users.show', auth()->user()) }}" class="flex items-center cursor-pointer">
                                 <span class="text-sm text-gray-800">{{ Auth::user()->name }}</span>
                                 <img src="{{ getProfilePicture(auth()->user()) }}" class="rounded-full w-8 ml-2 h-8 text-sm"> 
                             </a>

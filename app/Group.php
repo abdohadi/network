@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Post;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
@@ -15,7 +16,7 @@ class Group extends Model
 
     public function path()
     {
-        return '/groups/'.$this->id;
+        return route('groups.show', $this);
     }
 
     public function owner()
@@ -108,5 +109,10 @@ class Group extends Model
     public function hasRequest(User $user)
     {
         return $this->joinRequests->contains($user);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class)->latest();
     }
 }

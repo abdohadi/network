@@ -9,14 +9,16 @@ return [
  'no_posts_yet' => 'ﻻ ﺕﻮﺟﺪ ﻣﻨﺸﻮﺭاﺕ ﺣﺘﻲ اﻻﻥ',
  'no_pages_yet' => 'ﻻ ﺕﻮﺟﺪ ﺻﻔﺤﺎﺕ ﺣﺘﻲ اﻻﻥ',
  'no_friends' => 'ﻻ ﻳﻮﺟﺪ اﺻﺪﻗﺎء',
+ 'no_requests_have_been_sent' => 'ﻻ ﺗﻮﺟﺪ ﻃﻠﺒﺎﺕ ﻣﺮﺳﻠﻪ',
+ 'no_requests_have_been_received' => 'ﻻ ﺗﻮﺟﺪ ﻃﻠﺒﺎﺕ ﻣﺴﺘﻠﻤﻪ',
  'see_all_friends' => 'ﺭﺅﻳﺔ ﺟﻤﻴﻊ اﻻﺻﺪﻗﺎء',
  'notifications' => 'اﻻﺷﻌﺎﺭاﺕ',
  'messages' => 'اﻟﺮﺳﺎﺋﻞ',
  'friend_requests' => 'ﻃﻠﺒﺎﺕ اﻟﺼﺪاﻗﻪ',
- 'click_to_cancel_the_request' => 'اﺿﻐﻂ ﻻﻟﻐﺎء اﻟﻄﻠﺐ',
- 'click_to_send_a_friend_request' => 'اﺿﻐﻂ ﻻﺭﺳﺎﻝ ﻃﻠﺐ ﺻﺪاﻗﻪ',
- 'click_to_join_this_group' => 'اﺿﻐﻂ ﻻﺭﺳﺎﻝ ﻃﻠﺐ اﻻﻧﻀﻤﺎﻡ',
  'friends' => 'اﻻﺻﺪﻗﺎء',
+ 'all_friends' => 'ﺟﻤﻴﻊ اﻻﺻﺪﻗﺎء',
+ 'sent_requests' => 'اﻟﻄﻠﺒﺎﺕ اﻟﻤﺮﺳﻟﻪ',
+ 'received_requests' => 'اﻟﻄﻠﺒﺎﺕ اﻟﻤﺴﺘﻠﻤﻪ',
  'groups' => 'اﻟﻤﺠﻤﻮﻋﺎﺕ',
  'pages' => 'اﻟﺼﻔﺤﺎﺕ',
  'settings' => 'اﻻﻋﺪاﺩاﺕ',
@@ -26,6 +28,8 @@ return [
  'sent' => 'ﺗﻢ',
  'save' => 'ﺣﻔﻆ',
  'cancel' => 'اﻟﻐﺎء',
+ 'unfriend' => 'اﻟﻐﺎء اﻟﺼﺪاﻗﻪ',
+ 'confirm' => 'تأكيد',
  'show' => 'ﻋﺮﺽ',
  'about' => 'ﺣﻮﻝ',
 
@@ -46,6 +50,7 @@ return [
  'edit_your_comment' => 'ﺗﻌﺪﻳﻞ اﻟﺘﻌﻠﻴﻖ',
  'edit_your_post' => 'ﺗﻌﺪﻳﻞ اﻟﻤﻨﺸﻮﺭ',
  'add_something' => 'اﺿﻒ ﺷﻴﺌﺎ',
+ 'what_is_in_your_mind' => 'ﻣﺎ اﻟﺬﻱ ﻳﺪﻭﺭ ﻓﻲ ﻋﻘﻠﻚ',
 
 
 
@@ -82,11 +87,14 @@ return [
  'your_phone' => 'اﺿﻒ ﺭﻗﻢ ﻫﺎﺗﻔﻚ',
  'edit_your_info' => 'ﺗﻌﺪﻳﻞ ﻣﻌﻠﻮﻣﺎﺗﻚ',
  'change_cover' => 'ﺗﻐﻴﺮ ﺻﻮﺭﺓ اﻟﻐﻼﻑ',
+ 'no_friend_requests' => 'ﻻ ﺗﻮﺟﺪ ﻃﻠﺒﺎﺕ ﺻﺪاﻗﻪ',
+ 'make_new_friends' => 'اﺿﻒ اﺻﺪﻗﺎء ﺟﺪﺩ',
+ 'no_users_yet' => 'ﻻ ﻳﻮﺟﺪ اﺻﺪﻗﺎء ﺣﺘﻲ اﻻﻥ',
 
 
  // groups
- 'group_name' => 'اسم المجموعه',
- 'group_description' => 'وصف المجموعه',
+ 'group_name' => 'اﺳﻢ اﻟﻤﺠﻤﻮﻋﻪ',
+ 'group_description' => 'ﻭﺻﻒ اﻟﻤﺠﻤﻮﻋﻪ',
  'group_owner' => 'ﻣﻨﺸﺊ اﻟﻤﺠﻤﻮﻋﻪ',
  'admins' => 'اﻟﻤﺪﺭاء',
  'members' => 'اﻻﻋﻀﺎء',
@@ -97,6 +105,7 @@ return [
  'delete_your_group' => 'ﺣﺬﻑ اﻟﻤﺠﻤﻮﻋﻪ',
  'are_you_sure_you_want_to_delete_this_group' => 'ﻫﻞ اﻧﺖ ﻣﺘﺄﻛﺪ اﻧﻚ ﺗﺮﻳﺪ ﺣﺬﻑ ﻫﺬﻩ اﻟﻤﺠﻤﻮﻋﻪ؟',
  'are_you_sure_you_want_to_leave_this_group' => 'ﻫﻞ اﻧﺖ ﻣﺘﺄﻛﺪ اﻧﻚ ﺗﺮﻳﺪ ﻣﻐﺎﺩﺭﺓ ﻫﺬﻩ اﻟﻤﺠﻤﻮﻋﻪ؟',
+ 'are_you_sure_you_want_to_remove_this_friend' => 'ﻫﻞ اﻧﺖ ﻣﺘﺄﻛﺪ اﻧﻚ ﺗﺮﻳﺪ ﺣﺬﻑ ﻫﺬا اﻟﺸﺨﺺ ﻣﻦ ﻗﺎﺋﻤﺔ اﻻﺻﺪﻗﺎء؟',
  'create_group' => 'اﻧﺸﺎء ﻣﺠﻤﻮﻋﻪ',
  'edit_group' => 'ﺗﻌﺪﻳﻞ اﻟﻤﺠﻤﻮﻋﻪ',
  'delete_group' => 'ﺣﺬﻑ اﻟﻤﺠﻤﻮﻋﻪ',
@@ -120,19 +129,24 @@ return [
  'assign' => 'ﺗﻌﻴﻴﻦ',
  'assign_admin' => 'ﺗﻌﻴﻴﻦ ﺃﺩﻣﻦ',
  'dismiss' => 'ﻋﺰﻝ',
- 'accept' => 'قبول',
- 'remove' => 'حذف',
+ 'accept' => 'ﻗﺒﻮﻝ',
+ 'remove' => 'ﺣﺬﻑ',
  'dismiss_admin' => 'ﻋﺰﻝ ﺃﺩﻣﻦ',
  'no_join_requests' => 'ﻻ ﻳﻮﺟﺪ ﺃﻱ ﻃﻠﺒﺎﺕ اﻧﻀﻤﺎﻡ',
- 'add_member_from_friends' => 'اضف عضو من قائمة الاصدقاء',
+ 'add_member_from_friends' => 'اﺿﻒ ﻋﻀﻮ ﻣﻦ ﻗﺎﺋﻤﺔ اﻻﺻﺪﻗﺎء',
 
 
  // titles
+ 'click_to_send_a_friend_request' => 'اﺿﻐﻂ ﻻﺭﺳﺎﻝ ﻃﻠﺐ ﺻﺪاﻗﻪ',
+ 'click_to_cancel_the_request' => 'اﺿﻐﻂ ﻻﻟﻐﺎء اﻟﻄﻠﺐ',
+ 'click_to_accept_the_request' => 'اﺿﻐﻂ ﻻﻟﻐﺎء اﻟﻄﻠﺐ',
+ 'click_to_delete_the_request' => 'اﺿﻐﻂ ﻻﻟﻐﺎء اﻟﻄﻠﺐ',
+ 'click_to_remove_this_friend' => 'اﺿﻐﻂ ﻻﻟﻐﺎء اﻟﺼﺪاﻗﻪ',
  'click_to_send_a_join_request' => 'اﺿﻌﻂ ﻻﺭﺳﺎﻝ ﻃﻠﺐ اﻧﻀﻤﺎﻡ',
  'click_to_remove_from_admins_list' => 'اﺿﻐﻂ ﻟﻠﺤﺬﻑ ﻣﻦ ﻗﺎﺋﻤﺔ اﻟﻤﺪﺭاء',
  'click_to_add_to_admins_list' => 'اﺿﻐﻂ ﻟﻠﺤﺬﻑ ﻣﻦ ﻗﺎﺋﻤﺔ اﻟﻤﺪﺭاء',
  'click_to_remove_member' => 'اﺿﻐﻂ ﻠﺤﺬﻑ اﻟﻌﻀﻮ',
  'click_to_add_member' => 'اﺿﻐﻂ ﻷﺿﺎﻓﺔ اﻟﻌﻀﻮ',
- 'click_to_accept_join_request' => 'اﺿﻐﻂ لقبول طلب انضمام',
+ 'click_to_accept_join_request' => 'اﺿﻐﻂ ﻟﻘﺒﻮﻝ ﻃﻠﺐ اﻧﻀﻤﺎﻡ',
  
 ];

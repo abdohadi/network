@@ -15,12 +15,12 @@
     <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    @if (app()->getLocale() == 'ar')
+    {{-- @if (app()->getLocale() == 'ar')
         <style>
             body {
             }
         </style>
-    @endif
+    @endif --}}
 
 </head>
 <body class="bg-main">

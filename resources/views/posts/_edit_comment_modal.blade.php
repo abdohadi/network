@@ -10,14 +10,14 @@
 				name="body" 
 				id="body" 
 				placeholder="Edit your comment"
-				class="border w-full p-2 rounded"
+				class="border border-gray-300 w-full p-2 rounded"
 				rows="2"></textarea>
 
 			<span class="comment-error text-red-500 italic text-sm hidden"></span>
 		</div>
 
 		<div class="flex justify-between items-center">
-			<button class="button-primary ml-auto">Save</button>
+			<button class="button-primary ml-auto">@lang('site.save')</button>
 		</div>
 	</form>
 </div>

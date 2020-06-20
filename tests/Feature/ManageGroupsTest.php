@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Post;
 use App\User;
 use App\Group;
 use Tests\TestCase;
@@ -19,7 +20,7 @@ class ManageGroupsTest extends TestCase
         $this->signIn();
         $group = factory(Group::class)->raw(['name' => '']);
 
-        $this->post(localizeURL('/groups'), $group)
+        $this->post(route('groups.store'), $group)
             ->assertSessionHasErrors('name');
     }
 
@@ -29,7 +30,7 @@ class ManageGroupsTest extends TestCase
         $group = factory(Group::class)->create(['description' => '']);
 
         $this->actingAs($group->owner)
-            ->post(localizeURL('/groups'), $group->toArray())
+            ->post(route('groups.store'), $group->toArray())
             ->assertSessionHasErrors('description');
     }
 
@@ -39,7 +40,7 @@ class ManageGroupsTest extends TestCase
         $user = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $user->id]);
 
-        $this->post(localizeURL('/groups'), $group)
+        $this->post(route('groups.store'), $group)
             ->assertRedirect(Group::first()->path());
 
         $this->assertDatabaseHas('groups', $group);
@@ -63,7 +64,7 @@ class ManageGroupsTest extends TestCase
         $joinedGroup = Group::where('user_id', $admin->id)->first();
         $this->makeAndAcceptJoinRequestToGroup($joinedGroup, $admin, $user);
 
-        $this->be($user)->get(localizeURL(route('users.groups.index', $user)))
+        $this->be($user)->get(route('users.groups.index', $user))
             ->assertOk()
             ->assertSee($ownedGroup->name)
             ->assertSee($joinedGroup->name)
@@ -78,7 +79,7 @@ class ManageGroupsTest extends TestCase
 
         $this->makeAndAcceptJoinRequestToGroup($joinedGroup, $admin, $user2);
 
-        $this->be($user)->get(localizeURL(route('users.groups.index', $user2)))
+        $this->be($user)->get(route('users.groups.index', $user2))
             ->assertOk()
             ->assertSee($ownedGroup->name)
             ->assertSee($joinedGroup->name);
@@ -90,7 +91,7 @@ class ManageGroupsTest extends TestCase
         $this->signIn();  
         $group = factory(Group::class)->create();
 
-        $this->patch(localizeURL($group->path()), $attributes = [
+        $this->patch(route('groups.update', $group), $attributes = [
             'name' => 'Lorem',
             'description' => 'Lorem'
         ])
@@ -105,11 +106,10 @@ class ManageGroupsTest extends TestCase
         $user = $this->signIn();
         $group = factory(Group::class)->create(['user_id' => $user->id]);
 
-        $this->patch(localizeURL($group->path()), $attributes = [
+        $this->patch(route('groups.update', $group), $attributes = [
             'name' => 'Lorem',
             'description' => 'Lorem'
-        ])
-        ->assertRedirect($group->path());
+        ]);
 
         $this->assertDatabaseHas('groups', $attributes);
     }
@@ -120,7 +120,7 @@ class ManageGroupsTest extends TestCase
         $user = $this->signIn();
         $group = factory(Group::class)->create();
 
-        $this->delete(localizeURL($group->path()))
+        $this->delete(route('groups.destroy', $group))
             ->assertStatus(403);
 
         $this->assertDatabaseMissing('groups', $group->toArray());
@@ -132,7 +132,7 @@ class ManageGroupsTest extends TestCase
         $user = $this->signIn();
         $group = factory(Group::class)->create(['user_id' => $user->id]);
 
-        $this->delete(localizeURL($group->path()))
+        $this->delete(route('groups.destroy', $group))
             ->assertRedirect('/');
 
         $this->assertDatabaseMissing('groups', $group->toArray());
@@ -152,13 +152,13 @@ class ManageGroupsTest extends TestCase
         $admin = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $admin->id]);
 
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store', $group));
         $this->assertDatabaseHas('groups', $group);
 
         $group = Group::first();
         $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
         $this->signIn();
-        $this->patch(localizeURL(route('groups.assign_admin', [$group, $member])))
+        $this->patch(route('groups.assign_admin', [$group, $member]))
             ->assertStatus(403);
 
         $this->assertFalse($group->hasAdmin($member));
@@ -170,12 +170,12 @@ class ManageGroupsTest extends TestCase
         $admin = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $admin->id]);
 
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store', $group), $group);
         $this->assertDatabaseHas('groups', $group);
 
         $group = Group::first();
         $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
-        $this->patch(localizeURL(route('groups.assign_admin', [$group, $member])));
+        $this->patch(route('groups.assign_admin', [$group, $member]));
 
         $this->assertTrue($group->hasAdmin($member));
     }
@@ -193,7 +193,7 @@ class ManageGroupsTest extends TestCase
         $admin2 = $this->makeAndAcceptJoinRequestToGroup($group, $owner);
         $group->assignAdmin($admin2);
 
-        $this->be($admin1)->patch(localizeURL(route('groups.dismiss_admin', [$group, $admin2])))
+        $this->be($admin1)->patch(route('groups.dismiss_admin', [$group, $admin2]))
             ->assertStatus(403);
 
         $this->assertTrue($group->hasAdmin($admin2));
@@ -222,7 +222,7 @@ class ManageGroupsTest extends TestCase
         $admin = $this->makeAndAcceptJoinRequestToGroup($group, $owner);
         $group->assignAdmin($admin);
 
-        $this->be($admin)->patch(localizeURL(route('groups.dismiss_admin', [$group, $admin])));
+        $this->be($admin)->patch(route('groups.dismiss_admin', [$group, $admin]));
 
         $this->assertFalse($group->hasAdmin($admin));
     }
@@ -233,7 +233,7 @@ class ManageGroupsTest extends TestCase
         $group = factory(Group::class)->create();
         $user = $this->signIn();
 
-        $this->delete(localizeURL(route('groups.cancel_request', $group)))
+        $this->delete(route('groups.cancel_request', $group))
             ->assertStatus(403);
     }
 
@@ -245,7 +245,7 @@ class ManageGroupsTest extends TestCase
         $user = $this->makeJoinRequestToGroup($group);
         $group = Group::first();
 
-        $this->delete(localizeURL(route('groups.cancel_request', $group)));
+        $this->delete(route('groups.cancel_request', $group));
 
         $this->assertFalse($group->hasRequest($user));
     }
@@ -261,7 +261,7 @@ class ManageGroupsTest extends TestCase
         // and a member of this group
         $member = factory(User::class)->create();
         $this->makeFriends($admin, $member);
-        $this->post(localizeURL(route('groups.add_member', [$group, $member])));
+        $this->post(route('groups.add_member', [$group, $member]));
         $this->assertTrue($group->hasAcceptedMember($member));
 
         // we also have a join request
@@ -269,9 +269,9 @@ class ManageGroupsTest extends TestCase
 
         // that member cannot remove the join request
         $this->signIn($member);
-        $this->get(localizeURL(route('groups.requests', $group)))
+        $this->get(route('groups.requests', $group))
             ->assertStatus(403);
-        $this->patch(localizeURL(route('groups.accept_request', [$group, $user])))
+        $this->patch(route('groups.accept_request', [$group, $user]))
             ->assertStatus(403);
     }
 
@@ -282,7 +282,7 @@ class ManageGroupsTest extends TestCase
         $group = Group::first();
         $this->assertTrue($group->hasAdmin($admin));
 
-        $this->get(localizeURL(route('groups.requests', $group)))
+        $this->get(route('groups.requests', $group))
             ->assertOk();
 
         $this->makeAndAcceptJoinRequestToGroup($group, $admin);
@@ -299,14 +299,14 @@ class ManageGroupsTest extends TestCase
         // and a member of this group
         $member = factory(User::class)->create();
         $this->makeFriends($admin, $member);
-        $this->post(localizeURL(route('groups.add_member', [$group, $member])));
+        $this->post(route('groups.add_member', [$group, $member]));
         $this->assertTrue($group->hasAcceptedMember($member));
 
         // we also have a join request
         $user = $this->makeJoinRequestToGroup($group);
 
         // that member cannot remove the join request
-        $this->be($member)->delete(localizeURL(route('groups.remove_request', [$group, $user])))
+        $this->be($member)->delete(route('groups.remove_request', [$group, $user]))
             ->assertStatus(403);
     }
 
@@ -324,7 +324,7 @@ class ManageGroupsTest extends TestCase
         // when the admin removes their request
         $this->signIn($admin);
         $group = Group::first();
-        $this->delete(localizeURL(route('groups.remove_request', [$group, $user])));
+        $this->delete(route('groups.remove_request', [$group, $user]));
 
         // then their request is no longer exist
         $this->assertFalse($group->hasRequest($user));
@@ -348,9 +348,9 @@ class ManageGroupsTest extends TestCase
         $this->makeFriends($member, $friend);
 
         // when the member tries to add their friend they get 403 error
-        $this->get(localizeURL(route('groups.friends', $group)))
+        $this->get(route('groups.view_friends', $group))
             ->assertStatus(403);
-        $this->post(localizeURL(route('groups.add_member', [$group, $friend])))
+        $this->post(route('groups.add_member', [$group, $friend]))
             ->assertStatus(403);
     }
 
@@ -366,8 +366,8 @@ class ManageGroupsTest extends TestCase
         $user = factory(User::class)->create();
 
         // when the admin tries to add this user to the group
-        $this->get(localizeURL(route('groups.friends', $group)))->assertOk();
-        $this->post(localizeURL(route('groups.add_member', [$group, $user])))
+        $this->get(route('groups.view_friends', $group))->assertOk();
+        $this->post(route('groups.add_member', [$group, $user]))
             ->assertStatus(404);
 
         // then the user won't become a member
@@ -387,8 +387,8 @@ class ManageGroupsTest extends TestCase
         $this->makeFriends($admin, $user);
 
         // when the admin tries to add thier friend to the group
-        $this->get(localizeURL(route('groups.friends', $group)))->assertOk();
-        $this->post(localizeURL(route('groups.add_member', [$group, $user])));
+        $this->get(route('groups.view_friends', $group))->assertOk();
+        $this->post(route('groups.add_member', [$group, $user]));
         
         // then the friend becomes a member
         $this->assertTrue($group->hasAcceptedMember($user));
@@ -408,7 +408,7 @@ class ManageGroupsTest extends TestCase
         $member2 = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
 
         // when a member tries to remove another member from the group they fail
-        $this->be($member1)->delete(localizeURL($group->path() . '/remove_member/' . $member2->id))
+        $this->be($member1)->delete(route('groups.remove_member', [$group, $member2]))
             ->assertStatus(403);
     }
 
@@ -418,7 +418,7 @@ class ManageGroupsTest extends TestCase
         $this->signIn();
         $group = factory(Group::class)->create();
 
-        $this->get(localizeURL(route('groups.admins', $group)))->assertStatus(403);
+        $this->get(route('groups.admins', $group))->assertStatus(403);
     }
 
     /** @test */
@@ -427,7 +427,7 @@ class ManageGroupsTest extends TestCase
         $member = $this->createMember();
         $group = Group::first();
 
-        $this->be($member)->get(localizeURL(route('groups.admins', $group)))->assertOk();
+        $this->be($member)->get(route('groups.admins', $group))->assertOk();
     }
 
     /** @test */
@@ -436,7 +436,7 @@ class ManageGroupsTest extends TestCase
         $this->signIn();
         $group = factory(Group::class)->create();
 
-        $this->get(localizeURL(route('groups.members', $group)))->assertStatus(403);
+        $this->get(route('groups.members', $group))->assertStatus(403);
     }
 
     /** @test */
@@ -445,7 +445,7 @@ class ManageGroupsTest extends TestCase
         $member = $this->createMember();
         $group = Group::first();
 
-        $this->be($member)->get(localizeURL(route('groups.members', $group)))->assertOk();
+        $this->be($member)->get(route('groups.members', $group))->assertOk();
     }
 
     /** @test */
@@ -454,7 +454,7 @@ class ManageGroupsTest extends TestCase
         $group = factory(Group::class)->create();
         $user = $this->signIn();
 
-        $this->delete(localizeURL(route('groups.leave', $group)))
+        $this->delete(route('groups.leave', $group))
             ->assertStatus(403);
     }
 
@@ -467,11 +467,94 @@ class ManageGroupsTest extends TestCase
 
         $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
 
-        $this->be($member)->delete(localizeURL(route('groups.leave', $group)))
-            ->assertRedirect(localizeURL(route('groups.show', $group)));
+        $this->be($member)->delete(route('groups.leave', $group))
+            ->assertRedirect(route('groups.show', $group));
 
         $group = Group::first();
         $this->assertFalse($group->hasAcceptedMember($member));
+    }
+
+    /** @test */
+    public function a_non_member_user_cannot_create_a_post()
+    {
+        $admin = $this->createGroupAndOwner();
+        $group = Group::first();
+
+        $user = factory(User::class)->create();
+
+        $post = factory(Post::class)->raw(['user_id' => $user->id, 'group_id' => $group->id]);
+
+        $this->be($user)->post(route('groups.posts.store', $group), $post)
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_member_can_create_a_post()
+    {
+        $this->WithoutExceptionHandling();
+        $admin = $this->createGroupAndOwner();
+        $group = Group::first();
+
+        $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
+
+        $post = factory(Post::class)->raw(['user_id' => $member->id, 'group_id' => $group->id]);
+
+        $this->be($member)->post(route('groups.posts.store', $group), $post)
+            ->assertRedirect(route('groups.show', $group));
+
+        $this->assertDatabaseHas('posts', $post);
+    }
+
+    /** @test */
+    public function a_post_of_a_group_requires_a_body()
+    {
+        $admin = $this->createGroupAndOwner();
+        $group = Group::first();
+
+        $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
+
+        $post = factory(Post::class)->raw([
+            'user_id' => $member->id, 
+            'group_id' => $group->id,
+            'body' => ''
+        ]);
+
+        $this->post(route('groups.posts.store', $group), $post)
+             ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function a_user_can_update_their_posts_of_a_group()
+    {
+        // Create a post
+        $admin = $this->createGroupAndOwner();
+        $group = Group::first();
+
+        $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
+
+        $post = factory(Post::class)->create(['user_id' => $member->id, 'group_id' => $group->id]);
+
+        // Update it
+        $this->be($member)->patch(route('groups.posts.update', [$group, $post]), ['body' => 'updated']);
+
+        $this->assertDatabaseHas('posts', ['body' => 'updated']);
+    }
+
+    /** @test */
+    public function a_user_can_delete_their_posts_of_a_group()
+    {
+        // Create a post
+        $admin = $this->createGroupAndOwner();
+        $group = Group::first();
+
+        $member = $this->makeAndAcceptJoinRequestToGroup($group, $admin);
+
+        $post = factory(Post::class)->create(['user_id' => $member->id, 'group_id' => $group->id]);
+
+        // Delete it
+        $this->be($member)->delete(route('groups.posts.destroy', [$group, $post]));
+
+        $this->assertDatabaseMissing('posts', $post->toArray());
     }
 
     public function createMember()
@@ -496,7 +579,7 @@ class ManageGroupsTest extends TestCase
         $admin = $this->signIn();
         $group = factory(Group::class)->raw(['user_id' => $admin->id]);
 
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store', 1), $group);
         
         $this->assertDatabaseHas('groups', $group);
 
@@ -518,7 +601,7 @@ class ManageGroupsTest extends TestCase
     {
         $user = $user ? $this->signIn($user) : $this->signIn();
 
-        $this->post(localizeURL(route('groups.join', $group)));
+        $this->post(route('groups.join', $group));
         
         $this->assertTrue($group->hasRequest($user));
 

@@ -4,7 +4,6 @@ namespace App;
 
 use App\Like;
 use App\Post;
-use App\User;
 use App\Group;
 use App\Comment;
 use Illuminate\Notifications\Notifiable;
@@ -52,7 +51,7 @@ class User extends Authenticatable
 
     public function path()
     {
-        return '/users/'.$this->id;
+        return route('users.show', $this);
     }
 
     public function posts()
@@ -105,29 +104,6 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function sendFriendRequest(self $user)
-    {
-        $this->sentFriendRequests()->attach($user);
-    }
-
-    public function cancelFriendRequest(self $user)
-    {
-        $this->sentFriendRequests()->detach($user);
-    }
-
-    public function acceptFriendRequest(self $user)
-    {
-        $this->friends()->attach($user);
-        $user->friends()->attach($this);
-        $this->receivedFriendRequests()->detach($user);
-        $user->sentFriendRequests()->detach($this);
-    }
-
-    public function deleteFriendRequest(self $user)
-    {
-        $this->receivedFriendRequests()->detach($user);
-    }
-
     public function sentFriendRequests()
     {
         return $this->belongsToMany(self::class, 'friend_requests', 'from_user_id', 'to_user_id')->withTimestamps();
@@ -143,12 +119,40 @@ class User extends Authenticatable
         return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
     }
 
-    public function hasFriend(User $user)
+    public function sendFriendRequest(self $user)
+    {
+        $this->sentFriendRequests()->attach($user);
+    }
+
+    public function cancelFriendRequest(self $user)
+    {
+        $this->sentFriendRequests()->detach($user);
+    }
+
+    public function acceptFriendRequest(self $user)
+    {
+        $this->friends()->attach($user);
+        $user->friends()->attach($this);
+        $this->receivedFriendRequests()->detach($user);
+    }
+
+    public function deleteFriendRequest(self $user)
+    {
+        $this->receivedFriendRequests()->detach($user);
+    }
+
+    public function unfriend(self $user)
+    {
+        $this->friends()->detach($user);
+        $user->friends()->detach($this);
+    }
+
+    public function hasFriend(self $user)
     {
         return $this->friends->contains($user);
     }
 
-    public function hasFriendRequest(User $user)
+    public function hasFriendRequest(self $user)
     {
         return $this->receivedFriendRequests->contains($user);
     }

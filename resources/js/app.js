@@ -2,7 +2,7 @@ import './bootstrap';
 
 /*****************************************************************************
  * vue section
- */
+ ******************/
 
 // Form component
 import FormComponent from './components/FormComponent.vue';
@@ -13,8 +13,13 @@ import ButtonComponent from './components/ButtonComponent.vue';
 Vue.component('button-component', ButtonComponent);
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+	data: {
+		selectedList: 'friends-list',			// Toggle between friends and requests menues
+	}
 });
+
 
 
 
@@ -24,7 +29,7 @@ const app = new Vue({
 
 /****************************************************************************************************
  * Our custom javascript & jquery
- */
+ ***********************************/
 $(document).ready(function() {
 	/** 
 	 * Profile page section
@@ -211,17 +216,14 @@ $(document).ready(function() {
 
 	// Show comment data in modal to edit the comment
 	$(document).on('click', '.open-comment-modal', function () {
-		let commentId = $(this).data('comment-id');
+		let commentUpdateUrl = $(this).data('update-comment-url');
 		let commentBody = $(this).parents('.user-comment').find('.comment-body').text();
-		let postId = $(this).data('post-id');
 
 		window.commentToEdit = $(this).parents('.user-comment').find('.comment-body');
 
 		$('.comment-modal').find('textarea').val(commentBody);
 
-		if ((window.location.pathname == '/') || (window.location.pathname == '/home')) {
-			$('.comment-modal').find('form').attr('action', `posts/${postId}/comments/${commentId}`);
-		}
+		$('.comment-modal').find('form').attr('action', commentUpdateUrl);
 	});
 
 	// Update comment
@@ -229,10 +231,10 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		let url = $(this).attr('action'),
-			 data = $(this).serializeArray().reduce((obj, item) => {
-			    obj[item.name] = item.value;
+			data = $(this).serializeArray().reduce((obj, item) => {
+			   	obj[item.name] = item.value;
 			    return obj;
-			 }, {});
+			}, {});
 
 		updateComment($(this), data, url);
 	});
@@ -242,7 +244,7 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		$.ajax({
-			url: $(this).data('comment-url'),
+			url: $(this).data('delete-comment-url'),
 			method: 'get',
 			success: () => {
 				$(this).parents('.user-comment').remove();			
@@ -290,17 +292,6 @@ $(document).ready(function() {
 		}
 	});
 
-
-	/**
-	 *	Friend Requests Section
-	 */
-	// Friend requests event handler
-	$('button#send_friend_request, button#cancel_friend_request, button#accept_friend_request, button#delete_friend_request').click(function(e) {
-		e.preventDefault();
-
-		handleFriendRequest(this);
-	});
-
 	// Show friend requests menue
 	$('#friend-requests-dropdown').css('top', $('nav').innerHeight());
 
@@ -320,9 +311,12 @@ $(document).ready(function() {
 				return;
 			}
 		}
-		if (e.target.parentNode.offsetParent) {
-			if (e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
-				return;
+
+		if (e.target.parentNode) {
+			if (e.target.parentNode.offsetParent) {
+				if (e.target.parentNode.offsetParent.id == 'friend-requests-dropdown') {
+					return;
+				}
 			}
 		}
 
@@ -412,43 +406,6 @@ async function createOrUpdatePost(textarea, url, data, method) {
 		});
 }
 
-// Send / cancel / delete / accept friend requests
-async function handleFriendRequest(el) {
-	$(el).toggleClass('button-outline-primary button-outline-secondary');
-	
-	if ($(el).attr('id') == 'send_friend_request') {
-		let btnVal = $(el).data('btn-sent');
-
-		// send the request
-		await $.get('/users/' + $(el).data('user-id') + '/send');
-
-		$(el).attr('id', 'cancel_friend_request');
-		$(el).attr('title', 'Click to cancel the request');
-		$(el).html(`<i class="fa fa-check"></i> ${btnVal}`);
-	} else if ($(el).attr('id') == 'cancel_friend_request') {
-		let btnVal = $(el).data('btn-add');
-
-		// cancel the request
-		await $.get('/users/request/cancel/' + $(el).data('user-id'));
-
-		$(el).attr('id', 'send_friend_request');
-		$(el).attr('title', 'Click to send a friend request');
-		$(el).html(`<i class="fa fa-user-plus"></i> ${btnVal}`);
-	} else if ($(el).attr('id') == 'accept_friend_request') {
-		// accept the request
-		await $.get('/users/' + $(el).data('user-id') + '/accept');
-
-		$(el).attr('class', 'button-outline-primary ml-auto');
-		$(el).parents('#friend-request').fadeOut(500);
-	} else if ($(el).attr('id') == 'delete_friend_request') {
-		// delete the request
-		await $.get('/users/' + $(el).data('user-id') + '/delete');
-
-		$(el).attr('class', 'button-outline-primary ml-auto');
-		$(el).parents('#friend-request').fadeOut(500);
-	}
-}
-
 // handle post likes
 async function handlePostLikes() {
 	// like or dislike post
@@ -476,52 +433,52 @@ async function addComment(form, data, url) {
 			let editTrans = form.data('edit-trans');
 			let deleteTrans = form.data('delete-trans');
 			let commentId = success.commentId;
-			let commentPath = success.commentPath;
+			let updateCommentUrl = success.updateCommentUrl;
+			let deleteCommentUrl = success.deleteCommentUrl;
 			let userImgSrc = form.data('user-img-src');
 			let newComment = `
 				<div class="user-comment">
 					<div class="pl-4 mt-4">
-	             	<div class="flex">
+	             		<div class="flex">
 							<div class="w-1/12">
 							   <a href="${userPath}"><img src="${userImgSrc}" class="rounded-full w-10 border"></a>
 							</div>
 
 							<div class="w-11/12 bg-main py-2 px-4 border border-gray-200 rounded text-gray-600 ml-2 relative"
 								  style="word-wrap: break-word;border-radius: 1.25rem;">
-                         <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl"></i>
+                         		<i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4 text-xl"></i>
 
-                         <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10" style="top:-8px;display:none">
-                             <ul>
-                                 <a data-comment-id="${commentId}"
-                                    data-post-id="${postId}"
-                                    href="#comment-modal"
-                                    rel="modal:open" 
-                                    class="open-comment-modal"
-                                 >
-                                     <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">${editTrans}</li>
-                                 </a>
+		                        <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10" style="top:-8px;display:none">
+		                            <ul>
+		                                <a data-update-comment-url="${updateCommentUrl}"
+		                                    href="#comment-modal"
+		                                    rel="modal:open" 
+		                                    class="open-comment-modal"
+		                                >
+		                                    <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">${editTrans}</li>
+		                                </a>
 
-                                 <button class="delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1"
-                                         data-comment-url="${commentPath}"
-                                  >${deleteTrans}</button>
-                             </ul>
-                         </div>
+		                                <a class="delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1"
+		                                   data-delete-comment-url="${deleteCommentUrl}"
+		                                >${deleteTrans}</a>
+		                            </ul>
+		                        </div>
 
 								<p>
-	                        <a href="${userPath}" class="text-gray-700">
-	                           ${userName}
-	                        </a>
+			                        <a href="${userPath}" class="text-gray-700">
+			                           ${userName}
+			                        </a>
 
-	                        <span class="text-gray-500 text-xs ml-2">
-	                           just now
-	                        </span>
-	                     </p>
+			                        <span class="text-gray-500 text-xs ml-2">
+			                           just now
+			                        </span>
+			                    </p>
 
-								<p class="comment-body text-sm">${data.body}</p>
+								<p class="comment-body text-gray-800">${data.body}</p>
 							</div>
-	             	</div>
+		             	</div>
+		          	</div>
 	          	</div>
-          	</div>
 			`;
 			
 			form.parents('.comments-box').find('.user-comments').prepend(newComment);
@@ -542,26 +499,37 @@ async function addComment(form, data, url) {
 	});
 }
 
-// Update comment
+// Update comment function
 async function updateComment(form, data, url) {
 	await $.ajax({
 		url: url,
-		type: 'post',
+		type: 'patch',
 		data: data,
-		success: (success) => {
-			form.find('textarea').toggleClass('border-gray-300 border-red-300');
+		success: () => {
+			form.find('textarea').addClass('border-gray-300');
+			form.find('textarea').removeClass('border-red-300');
 			form.find('textarea').val('');
 
-			form.find('.comment-error').toggle()
+			form.find('.comment-error').hide()
 
 			form.siblings('.close-modal').click();
 
 			window.commentToEdit.text(data.body);
 		},
-		error: (error) => {
-			form.find('.comment-error').toggle().html(error.responseJSON.errors.body[0]);
+		error: (response) => {
+			let commentErrorSpan = form.find('.comment-error');
+			commentErrorSpan.html('');
+			
+			if (response.responseJSON.errors) {
+				response.responseJSON.errors.body.forEach(function(error) {
+					commentErrorSpan.show().append(error);
+				});
+			} else if (response.responseJSON.message) {
+				commentErrorSpan.show().append(response.responseJSON.message);
+			}
 
-			form.find('textarea').toggleClass('border-gray-300 border-red-300');
+			form.find('textarea').addClass('border-red-300');
+			form.find('textarea').removeClass('border-gray-300');
 		}
 	});
 }

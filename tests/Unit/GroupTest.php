@@ -2,11 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Post;
+use App\User;
+use App\Group;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Group;
-use App\User;
 
 class GroupTest extends TestCase
 {
@@ -18,7 +19,7 @@ class GroupTest extends TestCase
         // $this->WithoutExceptionHandling();
         $group = factory(Group::class)->create();
 
-        $this->assertEquals('/groups/'.$group->id, $group->path());
+        $this->assertEquals(route('groups.show', $group), $group->path());
     }
 
     /** @test */
@@ -60,7 +61,7 @@ class GroupTest extends TestCase
 
         $group = factory(Group::class)->raw();
 
-        $this->post(localizeURL('/groups'), $group);
+        $this->post(route('groups.store'), $group);
 
         $group = Group::first();
         $this->assertEquals($group->owner->id, $user->id);
@@ -177,5 +178,24 @@ class GroupTest extends TestCase
         $group->join($user);
 
         $this->assertTrue($group->hasRequest($user));
+    }
+
+    /** @test */
+    public function it_can_have_posts()
+    {
+        $user = $this->signIn();
+
+        $group = factory(Group::class)->create();
+     
+        $group->addMember($user);
+        $group = Group::first();
+
+        $post = factory(Post::class)->raw([
+            'group_id' => $group->id
+        ]);
+
+        $user->posts()->create($post);
+
+        $this->assertCount(1, $group->posts);
     }
 }

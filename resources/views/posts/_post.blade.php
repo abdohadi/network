@@ -1,7 +1,7 @@
 <div class="post-box rounded-lg m-auto mb-6">
     <div class="card post">
         <div class="relative">
-            @can('update', $post)
+            @can('manage', $post)
                 <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-2xl text-gray-500 hover:text-gray-600 cursor-pointer" style="font-size: 19px;"></i>
             @endcan
 
@@ -14,7 +14,7 @@
             		</a>
 
                     {{-- Delete Post --}}
-                    <form action="{{ localizeURL($post->path()) }}" method="post">
+                    <form action="{{ route('posts.destroy', $post) }}" method="post">
                         @method("DELETE")
                         @csrf
 
@@ -28,13 +28,21 @@
             </div>
 
             <div class="flex items-center">
-                <a href="{{ $post->owner->path() }}">
+                <a href="{{ route('users.show', $post->owner) }}">
                     <img src="{{ getProfilePicture($post->owner) }}" class="rounded-full w-12 mr-2" style="width: 43px;height: 43px;">
                 </a> 
 
-                <a href="{{ $post->owner->path() }}">
-                    <span class="font-medium text-gray-700 text-lg">{{ $post->owner->name }}</span>
+                <a href="{{ route('users.show', $post->owner) }}">
+                    <span class="font-medium text-gray-700 text-lg mr-2">{{ $post->owner->name }}</span>
                 </a>
+
+                @if ($post->group)
+                    <i class="fa fa-arrow-alt-circle-right text-gray-600 mr-2"></i>
+                    
+                    <a href="{{ route('groups.show', $post->group) }}">
+                        <span class="font-medium text-gray-700 text-lg">{{ $post->group->name }}</span>
+                    </a>
+                @endif
             </div>
 
             <span class="block text-gray-500 text-xs absolute"
@@ -99,9 +107,13 @@
                     style="top:-17px;right: 147px;display:none">
                     <ul>
                         {{-- Share the post wihtout adding a body --}}
-                        <a href="{{ $post->isSharing() ? route('posts.share', $post->sharedPost) : route('posts.share', $post) }}">
-                            <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1">@lang('site.share_now')</li>
-                        </a>
+                        <form id="share-post-form" action="{{ $post->isSharing() ? route('posts.share', $post->sharedPost) : route('posts.share', $post) }}" method="POST">
+                            @csrf
+
+                            <button>
+                                <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1">@lang('site.share_now')</li>
+                            </button>
+                        </form>
                         
                         {{-- Link to open the share-post modal to add a body --}}
                         <a href="#share-post-modal" rel="modal:open" 
@@ -128,11 +140,11 @@
                 <div class="w-11/12 ml-2">
                     <form 
                         class="flex add-comment-form" 
-                        action="{{ localizeURL($post->path() . '/comments') }}" 
+                        action="{{ route('posts.comments.store', $post) }}" 
                         method="post"
                         data-user-name="{{ auth()->user()->name }}"
                         data-post-id="{{ $post->id }}"
-                        data-user-path="{{ auth()->user()->path() }}"
+                        data-user-path="{{ route('users.show', auth()->user()) }}"
                         data-user-img-src="{{ getProfilePicture(auth()->user()) }}"
                         data-edit-trans="@lang('site.edit')"
                         data-delete-trans="@lang('site.delete')"
@@ -142,7 +154,7 @@
                         <div class="w-full">
                             <textarea 
                                 name="body" 
-                                class="comment-textarea w-full text-gray-600 px-3 py-2 border border-gray-300 focus:border-primary bg-main" 
+                                class="comment-textarea w-full text-gray-600 px-3 py-2 border border-gray-300 focus:border-primary bg-main"
                                 placeholder="Write your comment"
                                 style="border-radius: 1.25rem;"
                                 rows="1"
@@ -158,7 +170,7 @@
             @if (request()->path() != $post->path())
                 @if ($post->comments->count() > 3)
                     <p class="mt-4 ml-6">
-                        <a href="{{ $post->path() }}" class="text-primary">@lang('site.view_other_comments', ['count' => $post->comments->count() - 3])</a>
+                        <a href="{{ route('posts.show', $post) }}" class="text-primary">@lang('site.view_other_comments', ['count' => $post->comments->count() - 3])</a>
                     </p>
                 @endif
             @endif
@@ -171,37 +183,37 @@
                             <div class="pl-4 mt-4">
                                 <div class="flex">
                                     <div class="w-1/12">
-                                        <a href="{{ $comment->owner->path() }}">
+                                        <a href="{{ route('users.show', $comment->owner) }}">
                                             <img src="{{ getProfilePicture($comment->owner) }}" class="rounded-full w-10 border" style="width: 40px;height: 40px">
                                         </a>
                                     </div>
                                     
                                     <div class="w-11/12 bg-main py-2 px-4 border border-gray-200 ml-2 relative"
                                          style="word-wrap: break-word;border-radius: 1.25rem;">
-                                        @can('update', $comment)
+                                        @can('manage', $comment)
                                             <i class="show-options fa fa-ellipsis-h absolute right-0 mr-2 text-gray-500 hover:text-gray-600 cursor-pointer mr-4" style="font-size: 15px"></i>
 
                                             {{-- Comment options --}}
                                             <div class="options absolute card mr-10 right-0 text-center w-40 cursor-auto z-10" style="top:-8px;display:none">
                                                 <ul>
                                                     <!-- Link to open the modal -->
-                                                    <a data-comment-id="{{ $comment->id }}"
-                                                       data-post-id="{{ $post->id }}"
+                                                    <a data-update-comment-url="{{ route('posts.comments.update', [$post, $comment]) }}"
                                                        href="#comment-modal" 
                                                        rel="modal:open" 
-                                                       class="open-comment-modal">
+                                                       class="open-comment-modal"
+                                                    >
                                                         <li class="cursor-pointer hover:text-gray-900 text-gray-600 py-1" id="open-comment-modal">@lang('site.edit')</li>
                                                     </a>
 
                                                     <a class="delete-comment cursor-pointer hover:text-gray-900 text-gray-600 py-1"
-                                                        data-comment-url="{{ localizeURL($comment->path()) }}"
+                                                        data-delete-comment-url="{{ route('posts.comments.destroy', [$post, $comment]) }}"
                                                     >@lang('site.delete')</a>
                                                 </ul>
                                             </div>
                                         @endcan
 
                                         <p>
-                                            <a href="{{ $comment->owner->path() }}" class="text-gray-700">
+                                            <a href="{{ route('users.show', $comment->owner) }}" class="text-gray-700">
                                                 {{ $comment->owner->name }}
                                             </a>
 
@@ -210,7 +222,7 @@
                                             </span>
                                         </p>
 
-                                        <p class="comment-body text-sm">{{ $comment->body }}</p>
+                                        <p class="comment-body text-gray-800">{{ $comment->body }}</p>
                                     </div>
                                 </div>
                             </div>

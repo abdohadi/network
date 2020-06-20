@@ -18,7 +18,7 @@ class ManageLikesTest extends TestCase
         $post = factory(Post::class)->create();
 
         // like post
-        $this->get(localizeURL("/posts/{$post->id}/liked"));
+        $this->get(route('posts.like', $post));
             
         $this->assertDatabaseHas('likes', [
             'user_id' => $user->id,
@@ -34,9 +34,9 @@ class ManageLikesTest extends TestCase
         $post = factory(Post::class)->create();
 
         // like post
-        $this->get(localizeURL("/posts/{$post->id}/liked"));
+        $this->get(route('posts.like', $post));
         // unlike post
-        $this->get(localizeURL("/posts/{$post->id}/liked"));
+        $this->get(route('posts.like', $post));
 
         $this->assertDatabaseMissing('likes', [
             'user_id' => $user->id,
@@ -50,7 +50,7 @@ class ManageLikesTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-        $this->get(localizeURL("/posts/{$post->id}/liked"))
-            ->assertRedirect(localizeURL('login'));
+        $this->get(route('posts.like', $post))
+            ->assertRedirect(route('login'));
     }
 }

@@ -18,16 +18,22 @@ class FriendRequestsController extends Controller
 
     public function cancel(User $user)
     {
+        abort_if(! $user->hasFriendRequest(auth()->user()), 404);
+
     	auth()->user()->cancelFriendRequest($user);
     }
 
     public function accept(User $user)
     {
+        abort_if(! auth()->user()->hasFriendRequest($user), 404);
+
     	auth()->user()->acceptFriendRequest($user);
     }
 
     public function delete(User $user)
     {
+        abort_if(! auth()->user()->hasFriendRequest($user), 404);
+        
     	auth()->user()->deleteFriendRequest($user);
     }
 }

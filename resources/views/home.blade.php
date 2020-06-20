@@ -11,7 +11,9 @@
         <div class="lg:w-7/12 mx-2 xl:px-8">
             {{-- Create New Post --}}
             <div class="card mb-4">
-                @include('posts._create_post_form')
+                @include('posts._create_post_form', [
+                    'action' => route('posts.store'),
+                ])
             </div>
 
             {{-- Show Posts --}}

@@ -1,7 +1,7 @@
 @extends('layouts.app', ['nav_visiblity' => 'hidden'])
 
 @section('content')
-    <div class="login-register-parent m-auto w-2/5">
+    <div class="login-register-parent m-auto sm:w-full lg:w-2/5 md:w-4/6">
         {{-- <div class="w-3/5 text-center text-gray-600 hello-there mt-20 text-4xl px-10 italic font-bold" style="text-shadow: rgba(148, 46, 46, 0.75) 1px -7px 4px;color: #a19191;"></div> --}}
 
         <div class="login-register">
